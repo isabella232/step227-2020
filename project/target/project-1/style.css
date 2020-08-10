@@ -1,0 +1,51 @@
+/* Ensure proper box sizing */
+* {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Header properties */
+.header {
+  padding: 100px;
+  text-align: left;
+  background-image: url("pictures/header.jpg");
+  background-repeat: no-repeat;
+  color: white;
+}
+
+#navigation-bar {
+  padding: 10px;
+  height: 60px;
+  width: 100%;
+  background: black;
+  color: white;
+}
+
+.map-section {
+  padding: 30px;
+}
+
+/* Routes container properties */
+#routes-section {
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Left column properties */
+.routes-list {
+  flex: 40%;
+  background-color: #001a00;
+  padding: 20px;
+}
+
+/* Main column properties*/
+.comments {
+  flex: 60%;
+  background-color: #ccffcc;
+  padding: 20px;
+}

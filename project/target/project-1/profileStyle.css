@@ -1,0 +1,110 @@
+#content {
+  text-align: center;
+}
+
+#navigation-bar {
+  margin-top: 10px;
+  height: 60px;
+  width: 100%;
+  background: rgb(255, 0, 0);
+}
+
+#main-page-link {
+  float: left;
+  margin-left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+#logout-link {
+  float: right;
+  margin-right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgb(0, 0, 0);
+}
+
+#profile-picture {
+  margin-top: 10px;
+}
+
+#profile-picture img {
+  object-fit: cover; 
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  margin-bottom: 30px;
+}
+
+#friend-code {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  max-width: 100%;
+  background: rgb(255, 0, 0);
+}
+
+#profile-info {
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px;
+  max-width: 100%;
+  height: 200px;
+  background: rgb(0, 255, 0);
+}
+
+#routes {
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Design for cards's container. */
+.row {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 10px -5px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.column {
+  display: table-cell;
+  float: left;
+  width: 30%;
+  padding: 0 10px;
+}
+
+/* Cards design. */
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  text-align: center;
+  height:200px;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.container {
+  padding: 2px 16px;
+}
+
+.container .new-route-img {
+  height: 70px;
+  width: 70px;
+}
