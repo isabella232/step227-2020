@@ -4,33 +4,179 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <link rel="stylesheet" href="profileStyle.css">
-    
+    <script src="profileScript.js"></script>
+    <script 
+      src="https://kit.fontawesome.com/3beeeddc2b.js" crossorigin="anonymous">
+    </script>
   </head>
 
   <body>
     <div id="content">
-      <div id="navigation-bar"> 
-        <div id="main-page-link"></div>
-        <div id="logout-link"></div>
+      <div id="navigation-bar">
+        <a href="index.html" id="main-page-link">
+          <i class="fas fa-globe-europe"></i>
+        </a>
+        <a href="index.html" id="logout-link">
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
       </div>
-      <div id="profile-picture">
-        <img src="./pictures/defaultProfilePicture.jpeg">
-      </div>
-      <div id="friend-code">FC</div>
-      <div id="profile-info">"profile info"</div>
-      <div id="routes">
-        <div class="row">
 
+      <div id="profile-picture">
+        <div id="new-image">
+          <span class="fas fa-plus"></span>
+        </div>
+        <div id="avatar"><img src="./pictures/defaultProfilePicture.jpeg"></div>
+      </div>
+
+      <div id="friend-code">
+        <p id="text">Your friend code:</p>
+        <p id="friend-code-code">#AAAAA</p>
+      </div>
+
+      <div id="profile-info">
+        <div>name</div>
+        <form>
+          <input type="text" placeholder="New name">
+        </form>
+        <div>email</div>
+        <form>
+          <input type="text" placeholder="New mail">
+        </form>
+        <form>
+          <input type="radio" name="joke" value="bed" /> Send notifications
+          <input type="radio" name="joke" value="clock" /> Don't
+        </form>
+
+        <form>
+          <button type="submit" id=>Submit changes</button>
+        </form>
+      </div>
+
+      <div id="content-bar">
+        <button class="bar-item" id="routes-item" onclick="openContent('routes')">Routes</button>
+        <button class="bar-item" id="reviews-item" onclick="openContent('reviews')">Reviews</button>
+      </div>
+
+      <div id="routes" class="content">
+        <div class="row">
           <div class="column">
             <div class="card">
               <div class="container">
-                <p>Create New Route</p>
-                <img class="new-route-img" src="./pictures/newRoute.png">
+                <div class="route-details">
+                  <p class="name">Savan</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/first.jpg">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
               </div>
             </div>
           </div>
 
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="route-details">
+                  <p class="name">Temple</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/second.jpg">
+
+                <div class="rating">
+                  <span class="fas fa-star-half-alt"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="route-details">
+                  <p class="name">Lake</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/third.jpg">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star-half-alt"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <p>Create New Route</p>
+                <div class="new-route">
+                  <span class="fas fa-plus"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="reviews" class="content">
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="review-details">
+                  <p class="name">Savan</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <div class="user-rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="review-details">
+                  <p class="name">Temple</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <div class="user-rating">
+                  <span class="fas fa-star-half-alt"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 
