@@ -15,44 +15,57 @@
 
     <!-- Header -->
     <div class="header">
-      <div style="border-style:outset;">
+      <div class="headerbox">
         <h1>TheGlobetrotter</h1>
-        <p>Plan your trip and share it with your friends!</p>
+        <p>Plan your trips and share<br> them with your friends!</p>
       </div>
     </div>
 
     <!-- Navigation bar-->
-    <div id="navigation-bar">
-      <a href="#routes-section">
-        <button>See others TRIPS</button>
-      </a>
-      <a href="profile.html">
-        <button>MY PROFILE</button>
-      </a>
-    <span style="float:right">  
-      <button id="login-button">LOGIN</button>
-    </span>
+    <div class="navbar">
+      <div class="logo"><img src="pictures/logo.png" alt="Logo"></div>
+      <a href="#" class="active">HOME</a>
+      <a href="#map-section">CREATE YOUR TRIP</a>
+      <a href="#routes-section">SUGGESTIONS</a>
+      <a href="profile.html" id="profile">MY PROFILE</a>
+      <a href="#" class="right">SIGN IN</a>
     </div>
 
     <!-- Main section -->
-    <div class="map-section">
+    <div id="map-section">
       <img src="pictures/google-map.jpg" alt="Map">
     </div>
 
     <!-- Others routes section -->
     <div id="routes-section">
-      <div class="routes-list">
-      </div>
-
-      <div class="comments">
-        <p>Some text ....</p>
-        <p>Some text ....</p>
-        <p>Some text ....</p>
-        <p>Some text ....</p>
-        <p>Some text ....</p>
-        <p>Some text ....</p>
-        <p>Some text ....</p>
-        <p>Some text ....</p>
+      <h1>Top trips suggestions</h1>
+      <p>Choose from the best rated routes and then create your own experience!</p>
+      <input type="text" placeholder="Search..">
+      <div class="routes-grid">
+        <div class="route-card">
+          <img src="pictures/praga.jpg" alt="praga">
+          <div class="route-card-wrapper">
+            <span class="route-card-text" onclick="">CLICK TO SEE DETAILS</span>
+          </div>
+        </div>
+        <div class="route-card">
+          <img src="pictures/praga.jpg" alt="praga">
+          <div class="route-card-wrapper">
+            <span class="route-card-text" onclick="">CLICK TO SEE DETAILS</span>
+          </div>
+        </div>
+        <div class="route-card">
+          <img src="pictures/praga.jpg" alt="praga">
+          <div class="route-card-wrapper">
+            <span class="route-card-text" onclick="">CLICK TO SEE DETAILS</span>
+          </div>
+        </div>
+        <div class="route-card">
+          <img src="pictures/praga.jpg" alt="praga">
+          <div class="route-card-wrapper">
+            <span class="route-card-text" onclick="">CLICK TO SEE DETAILS</span>
+          </div>
+        </div>
       </div>
     </div>
 

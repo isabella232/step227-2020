@@ -10,42 +10,172 @@ img {
 
 /* Header properties */
 .header {
-  padding: 70px;
-  text-align: right;
-  background-image: url("pictures/header.jpg");
+  background-image: url("pictures/back2.jpg");
   background-repeat: no-repeat;
-  color: white;
-}
-
-#navigation-bar {
-  padding: 20px;
-  height: 60px;
+  background-size: cover;
+  height: 300px;
   width: 100%;
-  background: black;
+  padding: 50px;
+}
+
+.headerbox {
+  float: left;
+  height: 170px;
+  width: 400px;
+  text-align: left;
+}
+
+.headerbox p {
+  font-size: 20px;
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-weight: 5px;
+  color: white;
+  text-shadow: 
+    -1px -1px 0px #000,
+    0px -1px 0px #000,
+    1px -1px 0px #000,
+    -1px  0px 0px #000,
+    1px  0px 0px #000,
+    -1px  1px 0px #000,
+    0px  1px 0px #000,
+    1px  1px 0px #000;
+}
+
+.headerbox h1 {
+  font-size: 50px;
+  color: #f2f2f2;
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-weight: bold;
+  text-shadow: 5px 5px 10px black;
+  opacity: 1;
+ }
+
+/* Navigation bar style */
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  height: 60px;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  text-decoration: none;
+}
+
+.logo {
+  padding: 0px 10px;
+  float: left;
+} 
+
+.logo img {
+  height: 60px;
+  width: 65px;
+  border-style: solid;
+}
+
+/* Right align sign in button */
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Active/current link */
+.navbar a.active {
+  background-color: #666;
   color: white;
 }
 
-.map-section {
+/* Hide profile button if user is not logged in*/
+#profile {
+  visibility: hidden;
+}
+
+#map-section {
   padding: 30px;
 }
 
 /* Routes container properties */
 #routes-section {
   padding: 10px;
+  text-align: center;
+  background-color: rgba(0, 51, 0, 0.3);
+  line-height: 50%;
+  font-family: Georgia, serif;
+}
+
+#routes-section p {
+  color: #666;
+}
+
+/* Search bar style */
+#routes-section input[type=text] {
+  float: center;
+  padding: 6px;
+  margin-top: 8px;
+  margin-right: 16px;
+  border: none;
+  font-size: 17px;
+}
+
+.routes-grid {
+  display: grid;
+  grid-auto-rows: 500x;
+  grid-gap: 45px;
+  grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+  margin-top: 25px;
+}
+
+.route-card {
+  border-radius: 6px;
+  color: #fff;
+  position: relative;
+}
+
+.route-card img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+/* Create blur container over the image */
+.route-card-wrapper {
+  -ms-flex-align: end;
+  align-items: flex-end;
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  bottom: 0;
+  cursor: pointer;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  text-align: center;
 }
 
-/* Left column properties */
-.routes-list {
-  flex: 40%;
-  background-color: #001a00;
-  padding: 20px;
+.route-card div:hover {
+  border-style: groove;
+  border-width: 5px;
+  border-color: darkgray;
 }
 
-/* Main column properties*/
-.comments {
-  flex: 60%;
-  background-color: #ccffcc;
-  padding: 20px;
+.route-card-text {
+  color: white;
+  font-family: "Lucida Console", Monaco, monospace;
+  line-height: normal;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  padding: 20px 55px;
+  z-index: 1;
 }
