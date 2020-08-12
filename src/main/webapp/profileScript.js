@@ -17,10 +17,11 @@
  */
 function openContent(contentName) {
   // Update requested content.
-  var contentItems = document.getElementsByClassName("content");
+  var contentItems = document.getElementsByClassName("content-item");
   for (var i = 0; i < contentItems.length; i++) {
-    contentItems[i].style.display = "none";  
+    contentItems[i].style.display = "none";
   }
+
   document.getElementById(contentName).style.display = "block";
 
   // Update button desing.
@@ -31,4 +32,40 @@ function openContent(contentName) {
 
   var barItem = contentName + "-item";
   document.getElementById(barItem).style.color = "black";  
+}
+
+/**
+* Show popup with details for chosen place.
+*/
+function showFavPlaceDetails(contentName, createClosePopup = true) {
+  var contentId = contentName + "-popup";
+  var popup = document.getElementById(contentId);
+  var content = document.getElementById("content");
+
+  // Create window which will hide popup and
+  // delete itself if user click anywhere else.
+  if (createClosePopup) {
+    var closePopup = document.createElement("div");
+    closePopup.id = "close-popup";
+    closePopup.style.position = "absolute";
+    closePopup.style.width = "98%";
+    closePopup.style.height = "98%";
+    closePopup.style.zIndex= "1";
+    closePopup.style.top= "0";
+    closePopup.style.left= "0";
+    closePopup.style.right= "0";
+    closePopup.style.bottom= "0";
+    closePopup.style.margin= "auto";
+    closePopup.onclick = function()
+    {
+      document.getElementById("close-popup").remove();
+      showFavPlaceDetails(contentName, false);
+      console.log("Remove surface to delete popup");
+    }
+    console.log("Create surface to delete popup");
+    content.insertBefore(closePopup, content.firstChild);
+  }
+
+  // Show popup.
+  popup.classList.toggle("show");
 }

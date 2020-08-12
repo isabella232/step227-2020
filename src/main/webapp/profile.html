@@ -35,29 +35,49 @@
 
       <div id="profile-info">
         <div>name</div>
-        <form>
+        <form id="insert-name" class="insert-new-info">
           <input type="text" placeholder="New name">
         </form>
         <div>email</div>
-        <form>
+        <form id="insert-email" class="insert-new-info">
           <input type="text" placeholder="New mail">
         </form>
-        <form>
-          <input type="radio" name="joke" value="bed" /> Send notifications
-          <input type="radio" name="joke" value="clock" /> Don't
+        <div>nickname</div>
+        <form id="insert-nickname" class="insert-new-info">
+          <input type="text" placeholder="New nickname">
+        </form>
+        <form id="notification-status">
+          <input type="radio" name="notifications" value="unmute" /> Send notifications
+          <input type="radio" name="notifications" value="mute" /> Don't send notifications
         </form>
 
-        <form>
-          <button type="submit" id=>Submit changes</button>
+        <form id="submit-button">
+          <button type="submit">Submit changes</button>
         </form>
       </div>
 
       <div id="content-bar">
-        <button class="bar-item" id="routes-item" onclick="openContent('routes')">Routes</button>
-        <button class="bar-item" id="reviews-item" onclick="openContent('reviews')">Reviews</button>
+        <button
+          class="bar-item" id="completed-routes-item" onclick="openContent('completed-routes')">
+          Completed routes
+        </button>
+        <button
+          class="bar-item" id="future-routes-item" onclick="openContent('future-routes')">
+          Future routes</button>
+        <button
+          class="bar-item" id="fav-places-item" onclick="openContent('fav-places')">
+          Favourite places</button>
+        <button
+          class="bar-item" id="new-route-item" onclick="openContent('new-route')">
+          Create new route
+        </button>
+        <button
+          class="bar-item" id="reviews-item" onclick="openContent('reviews')">
+          Reviews
+        </button>
       </div>
 
-      <div id="routes" class="content">
+      <div id="completed-routes" class="content-item">
         <div class="row">
           <div class="column">
             <div class="card">
@@ -67,7 +87,7 @@
                   <p class="description">Some Basic info</p>
                 </div>
 
-                <img class="route-img" src="./pictures/routePhotos/first.jpg">
+                <img class="route-img" src="./pictures/routePhotos/first.jpg" alt="Tanzania">
 
                 <div class="rating">
                   <span class="fas fa-star checked"></span>
@@ -88,7 +108,7 @@
                   <p class="description">Some Basic info</p>
                 </div>
 
-                <img class="route-img" src="./pictures/routePhotos/second.jpg">
+                <img class="route-img" src="./pictures/routePhotos/second.jpg" alt="Nikko, Tochigi, Japan">
 
                 <div class="rating">
                   <span class="fas fa-star-half-alt"></span>
@@ -109,7 +129,7 @@
                   <p class="description">Some Basic info</p>
                 </div>
 
-                <img class="route-img" src="./pictures/routePhotos/third.jpg">
+                <img class="route-img" src="./pictures/routePhotos/third.jpg" alt="New Zealand">
 
                 <div class="rating">
                   <span class="fas fa-star checked"></span>
@@ -122,21 +142,118 @@
             </div>
           </div>
         </div>
+      </div>
 
+      <div id="future-routes" class="content-item">
         <div class="row">
           <div class="column">
             <div class="card">
               <div class="container">
-                <p>Create New Route</p>
-                <div class="new-route">
-                  <span class="fas fa-plus"></span>
+                <div class="route-details">
+                  <p class="name">Madagascar</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/fourth.jpg" alt="Mpungubwe, South Africa">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="route-details">
+                  <p class="name">India</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/fifth.jpg" alt="Sikkim, India">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star-half-alt"></span>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div id="reviews" class="content">
+
+      <div id="fav-places" class="content-item">
+        <div class="fav-row">
+          <div class="fav-column">
+            <div class="fav-item" >
+              <div class="toggle-popup" onclick="showFavPlaceDetails('place-id-1')">
+                <span class="fas fa-map-marker-alt"></span>
+                <div class="fav-place-desc">Place name 1</div>
+              </div>
+
+              <div class="popups" id="place-id-1-popup">
+                <p> First location name </p>
+                <p> Some info with links.
+              </div>
+            </div>
+          </div>
+
+          <div class="fav-column">
+            <div class="fav-item" >
+              <div class="toggle-popup" onclick="showFavPlaceDetails('place-id-2')">
+                <span class="fas fa-map-marker-alt"></span>
+                <div class="fav-place-desc">Place name 2</div>
+              </div>
+
+              <div class="popups" id="place-id-2-popup">
+                <p> Second location name </p>
+                <p> Some info with links.
+              </div>
+            </div>
+          </div>
+
+          <div class="fav-column">
+            <div class="fav-item" >
+              <div class="toggle-popup" onclick="showFavPlaceDetails('place-id-3')">
+                <span class="fas fa-map-marker-alt"></span>
+                <div class="fav-place-desc">Place name 3</div>
+              </div>
+
+              <div class="popups" id="place-id-3-popup">
+                <p> Third location name </p>
+                <p> Some info with links.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="new-route" class="content-item">
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <p>Create New Route</p>
+                <a href="index.html">
+                  <div href="index.html" class="new-route">
+                    <span class="fas fa-plus"></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="reviews" class="content-item">
         <div class="row">
           <div class="column">
             <div class="card">

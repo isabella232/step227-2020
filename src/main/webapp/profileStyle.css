@@ -3,9 +3,13 @@
 }
 
 #navigation-bar {
-  margin-top: 10px;
+  margin-top: 20px;
   height: 40px;
-  width: 100%;
+  width: 600px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 a#main-page-link {
@@ -35,7 +39,7 @@ a#logout-link {
   appearance: button;
 
   float: right;
-  margin-left: 20px;
+  margin-right: 20px;
   height: 30px;
   width: 30px;
   text-align: center;
@@ -83,8 +87,8 @@ a#logout-link i {
   transition: 0.1s;
 }
 
-#new-image .fas{
-  margin-top: 45px;
+#new-image .fa-plus{
+  margin-top: 70px;
 }
 
 #profile-picture:hover #new-image {
@@ -134,12 +138,36 @@ a#logout-link i {
   padding: 7px;
 }
 
+#profile-info .insert-new-info {
+  margin-left: 65%;
+}
+
+#profile-info #notification-status {
+  width: 400px;
+  left: 0;
+  right: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 #profile-info div {
   padding: 7px;
+  float: left;
+  margin-left: 5px;
+  width: 30%;
+}
+
+#submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
 }
 
 #profile-info button {
   height: 25px;
+  width: 120px;
+
   border: solid rgb(163, 163, 163) 1px;
   background-color: rgb(255, 255, 255, 0.8);
   color: rgb(116, 116, 116);
@@ -249,12 +277,28 @@ img.route-img {
   border: 1px solid rgb(202, 202, 202);
 }
 
-.fa-plus {
+.new-route .fa-plus {
   padding: 25px;
   margin-top: 2px;
 }
 
+a:visited {
+  color: black;
+}
+
 #reviews {
+  display: none;
+}
+
+#future-routes {
+  display: none;
+}
+
+#fav-places {
+  display: none;
+}
+
+#new-route {
   display: none;
 }
 
@@ -280,6 +324,7 @@ img.route-img {
 
 #content-bar {
   margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .bar-item {
@@ -290,4 +335,106 @@ img.route-img {
 
 #reviews-item {
   color: grey;
+}
+
+#future-routes-item {
+  color: grey;
+}
+
+#fav-places-item {
+  color: grey;
+}
+
+#new-route-item {
+  color: grey;
+}
+
+/* Design for cards's container. */
+.fav-row {
+  text-align: center;
+  display: flex;
+  justify-content: left;
+  width: 750px;
+  max-width: 75%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fav-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.fav-column {
+  display: table-cell;
+  float: left;
+  width: 140px;
+  padding: 0 10px;
+}
+
+/* Cards design. */
+.fav-item {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  text-align: center;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.fav-item .toggle-popup {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+
+.fav-item .fav-place-desc {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 30px;
+}
+
+.fav-item:hover{
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.fa-map-marker-alt {
+  color: rgb(190, 20, 20);
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.popups {
+  visibility: hidden;
+  width: 150px;
+  height: 230px;
+  z-index: 2;
+  position: absolute;
+  margin-top: -275px;
+  margin-left: -5px;
+
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+.popups.show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
 }
