@@ -13,15 +13,15 @@
 // limitations under the License.
 
 // Make navbar stick to the top of the page when scrolling.
-window.onscroll = function() {
-  stickyNavbar()
+window.onscroll = function () {
+  stickyNavbar();
 };
 
 function stickyNavbar() {
   var navbar = document.getElementById("navbar");
 
   if (window.pageYOffset >= 308) {
-    navbar.classList.add("sticky")
+    navbar.classList.add("sticky");
   } else {
     navbar.classList.remove("sticky");
   }
