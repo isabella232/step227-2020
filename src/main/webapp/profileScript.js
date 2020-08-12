@@ -40,9 +40,9 @@ function openContent(contentName) {
 function showFavPlaceDetails(contentName, createClosePopup = true) {
   var contentId = contentName + "-popup";
   var popup = document.getElementById(contentId);
-  
+
   var popups = document.getElementsByClassName("popups");
-    console.log(popups);
+  console.log(popups);
   for (var i = 0; i < popups.length; i++) {
     if (popups[i] == popup) {
       continue;

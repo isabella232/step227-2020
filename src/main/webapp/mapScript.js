@@ -16,27 +16,36 @@ let map;
 
 function initMap(showMarkers = true) {
   // Create markers.
-  let japanTemple = {lat: 34.462117, lng: 135.830272};
-  let newZealandLake = {lat: -43.979931, lng: 170.194799};
-  let ugandaView = {lat: -0.099273, lng: 32.652921}
+  let japanTemple = { lat: 34.462117, lng: 135.830272 };
+  let newZealandLake = { lat: -43.979931, lng: 170.194799 };
+  let ugandaView = { lat: -0.099273, lng: 32.652921 };
 
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
-  map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById("map"), {
     center: new google.maps.LatLng(0.211772, 102.290621),
     zoom: 2.3,
     fullscreenControl: false,
     streetViewControl: false,
     mapTypeControlOptions: {
-      mapTypeIds: ['roadmap', 'satellite', 'hybrid', 'terrain']
-    }
+      mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain"],
+    },
   });
 
   // Set markers on the map if marker flag is True.
   if (showMarkers) {
-    let markerJapanTemple = new google.maps.Marker({position: japanTemple, map: map});
-    let markerNewZealand = new google.maps.Marker({position: newZealandLake, map: map});
-    let markerUganda = new google.maps.Marker({position: ugandaView, map: map});
+    let markerJapanTemple = new google.maps.Marker({
+      position: japanTemple,
+      map: map,
+    });
+    let markerNewZealand = new google.maps.Marker({
+      position: newZealandLake,
+      map: map,
+    });
+    let markerUganda = new google.maps.Marker({
+      position: ugandaView,
+      map: map,
+    });
   }
   console.log("Initialise new map");
 }
