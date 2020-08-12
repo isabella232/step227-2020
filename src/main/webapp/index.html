@@ -6,6 +6,17 @@
     <title>TheGlobetrotter</title>
     <link rel="stylesheet" href="style.css" />
     <script src="script.js"></script>
+    <script src="./mapScript.js"></script>
+
+    <script 
+      src="https://kit.fontawesome.com/3beeeddc2b.js" crossorigin="anonymous">
+    </script>
+
+    <script
+      async defer 
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAv-H8pVyOLYFGTWRaYz0uI_o84wj6oNCg&callback=initMap&libraries=&v=weekly"
+      type="text/javascript"
+    ></script>
   </head>
 
   <body>
@@ -32,7 +43,22 @@
 
     <!-- Main section -->
     <div id="map-section">
-      <img src="pictures/google-map.jpg" alt="Map" />
+      <div id="route-creation-section">
+        <div id="route-creation-name">Route name </div>
+        <div class="new-place" id="place-id-1">
+          <span class="fas fa-ellipsis-v"></span>Place 1</div>
+        <div class="new-place" id="place-id-2">
+          <span class="fas fa-ellipsis-v"></span>Place 2</div>
+        <div class="new-place" id="place-id-3">
+          <span class="fas fa-ellipsis-v"></span>Place 3</div>
+        <div class="new-place" id="place-id-4">
+          <span class="fas fa-ellipsis-v"></span>Place 4</div>
+        <div class="new-place" id="place-id-5">
+          <span class="fas fa-ellipsis-v"></span>Place 5</div>
+        <div class="new-place" id="place-id-6">
+          <span class="fas fa-ellipsis-v"></span>Place 6</div>
+      </div>
+      <div id="map"></div>
     </div>
 
     <!-- Others routes section -->
