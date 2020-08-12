@@ -25,7 +25,7 @@ img {
 }
 
 /* Header properties */
-.header {
+#header {
   background-image: url("pictures/back2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -67,13 +67,13 @@ img {
  }
 
 /* Navigation bar style */
-.navbar {
+#navbar {
   overflow: hidden;
   background-color: #333;
   height: 60px;
 }
 
-.navbar a {
+#navbar a {
   float: left;
   display: block;
   color: white;
@@ -94,20 +94,20 @@ img {
 }
 
 /* Right align sign in button */
-.navbar a.right {
+#navbar a.right {
   float: right;
 }
 
 /* Change color on hover */
-.navbar a:hover {
+#navbar a:hover {
   background-color: #ddd;
   color: black;
 }
 
-/* Active/current link */
-.navbar a.active {
-  background-color: #666;
-  color: white;
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 /* Hide profile button if user is not logged in*/
@@ -150,7 +150,7 @@ img {
 
 .routes-grid {
   display: grid;
-  grid-gap: 20px;
+  grid-gap: 40px;
   grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
   margin-top: 25px;
 }
@@ -191,6 +191,11 @@ img {
   line-height: 10px;
 }
 
+.route-card:hover .route-details{
+  visibility: visible;
+  height: 245px;
+}
+
 .route-details p, .route-details button {
   visibility: hidden;
 }
@@ -198,11 +203,6 @@ img {
 .route-card:hover .route-details p, 
     .route-card:hover .route-details button {
   visibility: visible;
-}
-
-.route-card:hover .route-details{
-  visibility: visible;
-  height: 245px;
 }
 
 .action-button {

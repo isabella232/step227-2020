@@ -31,12 +31,12 @@ function openContent(contentName) {
   }
 
   var barItem = contentName + "-item";
-  document.getElementById(barItem).style.color = "black";  
+  document.getElementById(barItem).style.color = "black";
 }
 
 /**
-* Show popup with details for chosen place.
-*/
+ * Show popup with details for chosen place.
+ */
 function showFavPlaceDetails(contentName, createClosePopup = true) {
   var contentId = contentName + "-popup";
   var popup = document.getElementById(contentId);
@@ -50,18 +50,17 @@ function showFavPlaceDetails(contentName, createClosePopup = true) {
     closePopup.style.position = "absolute";
     closePopup.style.width = "98%";
     closePopup.style.height = "98%";
-    closePopup.style.zIndex= "1";
-    closePopup.style.top= "0";
-    closePopup.style.left= "0";
-    closePopup.style.right= "0";
-    closePopup.style.bottom= "0";
-    closePopup.style.margin= "auto";
-    closePopup.onclick = function()
-    {
+    closePopup.style.zIndex = "1";
+    closePopup.style.top = "0";
+    closePopup.style.left = "0";
+    closePopup.style.right = "0";
+    closePopup.style.bottom = "0";
+    closePopup.style.margin = "auto";
+    closePopup.onclick = function () {
       document.getElementById("close-popup").remove();
       showFavPlaceDetails(contentName, false);
       console.log("Remove surface to delete popup");
-    }
+    };
     console.log("Create surface to delete popup");
     content.insertBefore(closePopup, content.firstChild);
   }
