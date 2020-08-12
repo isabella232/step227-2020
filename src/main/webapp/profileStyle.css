@@ -154,7 +154,8 @@ a#logout-link i {
 }
 
 #profile-info .insert-new-info {
-  margin-left: 65%;
+  margin-right: 5%;
+  float: right;
 }
 
 #profile-info #notification-status {
@@ -163,6 +164,7 @@ a#logout-link i {
   right: 0;
   margin-right: auto;
   margin-left: auto;
+  display: flex;
 }
 
 #profile-info div {
