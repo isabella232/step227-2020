@@ -138,9 +138,12 @@ img {
   backdrop-filter: blur(1px);
   border: 1px solid rgb(88, 88, 88);
   border-radius: 7px 7px 0 0;
+}
 
-  display: grid;
-  grid-gap: 0;
+#places-table {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
 }
 
 #route-creation-name {
@@ -148,9 +151,15 @@ img {
   border-bottom: 1px solid rgb(88, 88, 88);
 }
 
+#route-creation-name p {
+  margin: 0;
+  margin-top: 5px;
+  margin-left: 25px;
+}
+
 .new-place {
   height: 25px;
-  border-bottom: 1px solid rgb(200, 200, 200);
+  border: 1px solid rgb(200, 200, 200);
 }
 
 .fa-ellipsis-v {
