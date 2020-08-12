@@ -3,49 +3,122 @@
 }
 
 #navigation-bar {
-  margin-top: 10px;
-  height: 60px;
-  width: 100%;
-  background: rgb(255, 0, 0);
+  margin-top: 20px;
+  height: 40px;
+  width: 600px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#main-page-link {
+a#main-page-link {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+
   float: left;
   margin-left: 20px;
-  width: 40px;
-  height: 40px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid rgb(202, 202, 202);
   border-radius: 50%;
-  border: 1px solid rgb(0, 0, 0);
+  color: initial;
 }
 
-#logout-link {
+a#main-page-link i {
+  margin-top: 6px;
+  color: rgb(180, 250, 10);
+}
+
+a#logout-link {
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+
   float: right;
   margin-right: 20px;
-  width: 40px;
-  height: 40px;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  text-decoration: none;
+  border: 1px solid rgb(202, 202, 202);
   border-radius: 50%;
-  border: 1px solid rgb(0, 0, 0);
+  color: initial;
+}
+
+a#logout-link i {
+  margin-top: 6px;
+  color: rgb(210, 75, 10);
 }
 
 #profile-picture {
   margin-top: 10px;
+  margin-bottom: 10px;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  height: 150px;
+  width: 150px;
 }
 
 #profile-picture img {
-  object-fit: cover; 
+  object-fit: cover;
   height: 150px;
   width: 150px;
   border-radius: 50%;
   margin-bottom: 30px;
 }
 
+#new-image {
+  position: absolute;
+  left: 0; 
+  right: 0; 
+  margin-left: auto; 
+  margin-right: auto; 
+  display: none;
+  background: rgba(255, 255, 255, 0.6);
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  transition: 0.1s;
+}
+
+#new-image .fa-plus{
+  margin-top: 70px;
+}
+
+#profile-picture:hover #new-image {
+  display: block;
+}
+
 #friend-code {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 300px;
+  width: 350px;
+  height: auto;
   max-width: 100%;
-  background: rgb(255, 0, 0);
+  border-bottom: 1px solid rgb(202, 202, 202);
+}
+
+#friend-code #text {
+  display: block;
+  width: 120px;
+  float: left;
+  margin: 0;
+  padding: 3px;
+}
+
+#friend-code #friend-code-code {
+  margin-left: 110px;
+  margin-top: 0;
+  width: 40%;
+  padding: 3px;
+  margin-bottom: 0;
 }
 
 #profile-info {
@@ -53,10 +126,52 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 700px;
+  width: 500px;
   max-width: 100%;
-  height: 200px;
-  background: rgb(0, 255, 0);
+  height: 205px;
+  text-align: left;
+  border: 1px solid rgb(202, 202, 202);
+  border-radius: 7px;
+}
+
+#profile-info form {
+  padding: 7px;
+}
+
+#profile-info .insert-new-info {
+  margin-left: 65%;
+}
+
+#profile-info #notification-status {
+  width: 400px;
+  left: 0;
+  right: 0;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#profile-info div {
+  padding: 7px;
+  float: left;
+  margin-left: 5px;
+  width: 30%;
+}
+
+#submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+
+#profile-info button {
+  height: 25px;
+  width: 120px;
+
+  border: solid rgb(163, 163, 163) 1px;
+  background-color: rgb(255, 255, 255, 0.8);
+  color: rgb(116, 116, 116);
+  border-radius: 7px;
 }
 
 #routes {
@@ -64,6 +179,7 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+  width: initial;
 }
 
 /* Design for cards's container. */
@@ -84,7 +200,7 @@
 .column {
   display: table-cell;
   float: left;
-  width: 30%;
+  width: 230px;
   padding: 0 10px;
 }
 
@@ -93,18 +209,237 @@
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   text-align: center;
-  height:200px;
-}
-
-.card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  height: 255px;
+  border-radius: 5px;
 }
 
 .container {
-  padding: 2px 16px;
+  text-align: center;
 }
 
-.container .new-route-img {
+.card:hover{
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+img.route-img {
+  object-fit: cover; 
+  height: 230px;
+  width: 230px;
+  border-radius: 5px 5px 0 0;
+}
+
+.route-details {
+  visibility: hidden;
+  height: 0px;
+  position: absolute;
+  width: 230px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  border-radius: 5px 5px 0 0;
+  transition: 0.5s;
+}
+
+.route-details p {
+  visibility: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card:hover .route-details{
+  visibility: visible;
+  height: 230px;
+}
+
+.card:hover .route-details p{
+  visibility: visible;
+}
+
+.checked {
+  color: rgb(255, 200, 0);
+}
+
+.fa-star-half-alt {
+  color: rgb(255, 200, 0);
+}
+
+.far.fa-star {
+  color: rgb(255, 200, 0);
+}
+
+.rating {
+  border-radius: 0 0 5px 5px;
+  margin-top: 0px;
+}
+
+.new-route {
   height: 70px;
   width: 70px;
+  margin-top: 60px;
+  margin-left: 80px;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid rgb(202, 202, 202);
+}
+
+.new-route .fa-plus {
+  padding: 25px;
+  margin-top: 2px;
+}
+
+a:visited {
+  color: black;
+}
+
+#reviews {
+  display: none;
+}
+
+#future-routes {
+  display: none;
+}
+
+#fav-places {
+  display: none;
+}
+
+#new-route {
+  display: none;
+}
+
+.review-details {
+  position: absolute;
+  height: 230px;
+  width: 230px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  border-radius: 5px 5px 0 0;
+  transition: 0.5s;
+}
+
+.card:hover .review-details{
+  height: 255px;
+}
+
+.user-rating {
+  border-radius: 0 0 5px 5px;
+  padding-top: 230px;
+}
+
+#content-bar {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.bar-item {
+  background: rgb(255, 255, 255, 0);
+  border: 1px solid rgb(255, 255, 255, 0);
+  outline:none;
+}
+
+#reviews-item {
+  color: grey;
+}
+
+#future-routes-item {
+  color: grey;
+}
+
+#fav-places-item {
+  color: grey;
+}
+
+#new-route-item {
+  color: grey;
+}
+
+/* Design for cards's container. */
+.fav-row {
+  text-align: center;
+  display: flex;
+  justify-content: left;
+  width: 750px;
+  max-width: 75%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fav-row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.fav-column {
+  display: table-cell;
+  float: left;
+  width: 140px;
+  padding: 0 10px;
+}
+
+/* Cards design. */
+.fav-item {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+  text-align: center;
+  height: 40px;
+  border-radius: 5px;
+}
+
+.fav-item .toggle-popup {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+
+.fav-item .fav-place-desc {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 30px;
+}
+
+.fav-item:hover{
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.fa-map-marker-alt {
+  color: rgb(190, 20, 20);
+  float: left;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.popups {
+  visibility: hidden;
+  width: 150px;
+  height: 230px;
+  z-index: 2;
+  position: absolute;
+  margin-top: -275px;
+  margin-left: -5px;
+
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  border-radius: 5px;
+  border: 1px solid black;
+}
+
+.popups.show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;} 
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
 }

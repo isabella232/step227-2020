@@ -4,33 +4,296 @@
     <meta charset="UTF-8">
     <title>Profile</title>
     <link rel="stylesheet" href="profileStyle.css">
-    
+    <script src="profileScript.js"></script>
+    <script 
+      src="https://kit.fontawesome.com/3beeeddc2b.js" crossorigin="anonymous">
+    </script>
   </head>
 
   <body>
     <div id="content">
-      <div id="navigation-bar"> 
-        <div id="main-page-link"></div>
-        <div id="logout-link"></div>
+      <div id="navigation-bar">
+        <a href="index.html" id="main-page-link">
+          <i class="fas fa-globe-europe"></i>
+        </a>
+        <a href="index.html" id="logout-link">
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
       </div>
-      <div id="profile-picture">
-        <img src="./pictures/defaultProfilePicture.jpeg">
-      </div>
-      <div id="friend-code">FC</div>
-      <div id="profile-info">"profile info"</div>
-      <div id="routes">
-        <div class="row">
 
+      <div id="profile-picture">
+        <div id="new-image">
+          <span class="fas fa-plus"></span>
+        </div>
+        <div id="avatar"><img src="./pictures/defaultProfilePicture.jpeg"></div>
+      </div>
+
+      <div id="friend-code">
+        <p id="text">Your friend code:</p>
+        <p id="friend-code-code">#AAAAA</p>
+      </div>
+
+      <div id="profile-info">
+        <div>name</div>
+        <form id="insert-name" class="insert-new-info">
+          <input type="text" placeholder="New name">
+        </form>
+        <div>email</div>
+        <form id="insert-email" class="insert-new-info">
+          <input type="text" placeholder="New mail">
+        </form>
+        <div>nickname</div>
+        <form id="insert-nickname" class="insert-new-info">
+          <input type="text" placeholder="New nickname">
+        </form>
+        <form id="notification-status">
+          <input type="radio" name="notifications" value="unmute" /> Send notifications
+          <input type="radio" name="notifications" value="mute" /> Don't send notifications
+        </form>
+
+        <form id="submit-button">
+          <button type="submit">Submit changes</button>
+        </form>
+      </div>
+
+      <div id="content-bar">
+        <button
+          class="bar-item" id="completed-routes-item" onclick="openContent('completed-routes')">
+          Completed routes
+        </button>
+        <button
+          class="bar-item" id="future-routes-item" onclick="openContent('future-routes')">
+          Future routes</button>
+        <button
+          class="bar-item" id="fav-places-item" onclick="openContent('fav-places')">
+          Favourite places</button>
+        <button
+          class="bar-item" id="new-route-item" onclick="openContent('new-route')">
+          Create new route
+        </button>
+        <button
+          class="bar-item" id="reviews-item" onclick="openContent('reviews')">
+          Reviews
+        </button>
+      </div>
+
+      <div id="completed-routes" class="content-item">
+        <div class="row">
           <div class="column">
             <div class="card">
               <div class="container">
-                <p>Create New Route</p>
-                <img class="new-route-img" src="./pictures/newRoute.png">
+                <div class="route-details">
+                  <p class="name">Savan</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/first.jpg" alt="Tanzania">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
               </div>
             </div>
           </div>
 
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="route-details">
+                  <p class="name">Temple</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/second.jpg" alt="Nikko, Tochigi, Japan">
+
+                <div class="rating">
+                  <span class="fas fa-star-half-alt"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="route-details">
+                  <p class="name">Lake</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/third.jpg" alt="New Zealand">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star-half-alt"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div id="future-routes" class="content-item">
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="route-details">
+                  <p class="name">Madagascar</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/fourth.jpg" alt="Mpungubwe, South Africa">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="route-details">
+                  <p class="name">India</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <img class="route-img" src="./pictures/routePhotos/fifth.jpg" alt="Sikkim, India">
+
+                <div class="rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star-half-alt"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="fav-places" class="content-item">
+        <div class="fav-row">
+          <div class="fav-column">
+            <div class="fav-item" >
+              <div class="toggle-popup" onclick="showFavPlaceDetails('place-id-1')">
+                <span class="fas fa-map-marker-alt"></span>
+                <div class="fav-place-desc">Place name 1</div>
+              </div>
+
+              <div class="popups" id="place-id-1-popup">
+                <p> First location name </p>
+                <p> Some info with links.
+              </div>
+            </div>
+          </div>
+
+          <div class="fav-column">
+            <div class="fav-item" >
+              <div class="toggle-popup" onclick="showFavPlaceDetails('place-id-2')">
+                <span class="fas fa-map-marker-alt"></span>
+                <div class="fav-place-desc">Place name 2</div>
+              </div>
+
+              <div class="popups" id="place-id-2-popup">
+                <p> Second location name </p>
+                <p> Some info with links.
+              </div>
+            </div>
+          </div>
+
+          <div class="fav-column">
+            <div class="fav-item" >
+              <div class="toggle-popup" onclick="showFavPlaceDetails('place-id-3')">
+                <span class="fas fa-map-marker-alt"></span>
+                <div class="fav-place-desc">Place name 3</div>
+              </div>
+
+              <div class="popups" id="place-id-3-popup">
+                <p> Third location name </p>
+                <p> Some info with links.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="new-route" class="content-item">
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <p>Create New Route</p>
+                <a href="index.html">
+                  <div href="index.html" class="new-route">
+                    <span class="fas fa-plus"></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="reviews" class="content-item">
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="review-details">
+                  <p class="name">Savan</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <div class="user-rating">
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="fas fa-star checked"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <div class="container">
+                <div class="review-details">
+                  <p class="name">Temple</p>
+                  <p class="description">Some Basic info</p>
+                </div>
+
+                <div class="user-rating">
+                  <span class="fas fa-star-half-alt"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                  <span class="far fa-star"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </body>
 
