@@ -46,15 +46,9 @@ img {
   font-family: "Arial Black", Gadget, sans-serif;
   font-weight: 5px;
   color: white;
-  text-shadow: 
-    -1px -1px 0px #000,
-    0px -1px 0px #000,
-    1px -1px 0px #000,
-    -1px  0px 0px #000,
-    1px  0px 0px #000,
-    -1px  1px 0px #000,
-    0px  1px 0px #000,
-    1px  1px 0px #000;
+  text-shadow: -1px -1px 0px #000, 0px -1px 0px #000, 1px -1px 0px #000,
+    -1px 0px 0px #000, 1px 0px 0px #000, -1px 1px 0px #000, 0px 1px 0px #000,
+    1px 1px 0px #000;
 }
 
 .headerbox h1 {
@@ -64,7 +58,7 @@ img {
   font-weight: bold;
   text-shadow: 5px 5px 10px black;
   opacity: 1;
- }
+}
 
 /* Navigation bar style */
 #navbar {
@@ -85,7 +79,7 @@ img {
 .logo {
   padding: 0px 10px;
   float: left;
-} 
+}
 
 .logo img {
   height: 60px;
@@ -112,7 +106,7 @@ img {
 
 /* Hide profile button if user is not logged in*/
 #profile {
-  visibility: hidden;
+  visibility: visible;
 }
 
 #map-section {
@@ -133,31 +127,31 @@ img {
 }
 
 /* Search bar style */
-#routes-section input[type=text] {
+#routes-section input[type="text"] {
   float: center;
   padding: 6px;
   margin-top: 8px;
   margin-right: 16px;
   border: none;
   font-size: 17px;
-  -webkit-transition: width .35s ease-in-out;
-  transition: width .35s ease-in-out;
+  -webkit-transition: width 0.35s ease-in-out;
+  transition: width 0.35s ease-in-out;
 }
 
-#routes-section input[type=text]:focus {
+#routes-section input[type="text"]:focus {
   width: 500px;
 }
 
 .routes-grid {
   display: grid;
   grid-gap: 40px;
-  grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   margin-top: 25px;
 }
 
 /* Cards design. */
 .route-card {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   text-align: center;
   height: 255px;
   width: 305px;
@@ -166,8 +160,8 @@ img {
   transition: 0.3s;
 }
 
-.route-card:hover{
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+.route-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .route-card img {
@@ -191,26 +185,27 @@ img {
   line-height: 10px;
 }
 
-.route-card:hover .route-details{
+.route-card:hover .route-details {
   visibility: visible;
   height: 245px;
 }
 
-.route-details p, .route-details button {
+.route-details p,
+.route-details button {
   visibility: hidden;
 }
 
-.route-card:hover .route-details p, 
-    .route-card:hover .route-details button {
+.route-card:hover .route-details p,
+.route-card:hover .route-details button {
   visibility: visible;
 }
 
 .action-button {
   display: inline-block;
   border-radius: 4px;
-  background-color:rgba(46, 42, 42, 0.596);
+  background-color: rgba(46, 42, 42, 0.596);
   border: none;
-  color: #FFFFFF;
+  color: #ffffff;
   text-align: center;
   font-size: 10px;
   padding: 10px;
@@ -229,7 +224,7 @@ img {
 }
 
 .action-button span:after {
-  content: '\00bb';
+  content: "\00bb";
   position: absolute;
   opacity: 0;
   top: 0;
