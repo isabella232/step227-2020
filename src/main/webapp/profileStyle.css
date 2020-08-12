@@ -229,9 +229,9 @@ img.route-img {
 }
 
 .route-details {
-  display: none;
+  visibility: hidden;
+  height: 0px;
   position: absolute;
-  height: 230px;
   width: 230px;
   text-align: center;
   background: rgba(255, 255, 255, 0.8);
@@ -241,13 +241,18 @@ img.route-img {
 }
 
 .route-details p {
-  display: block;
+  visibility: hidden;
   margin-left: auto;
   margin-right: auto;
 }
 
 .card:hover .route-details{
-  display: block;
+  visibility: visible;
+  height: 230px;
+}
+
+.card:hover .route-details p{
+  visibility: visible;
 }
 
 .checked {
