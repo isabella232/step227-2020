@@ -1,6 +1,22 @@
+/* Copyright 2020 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+*/
+
 /* Ensure proper box sizing */
 * {
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 img {
@@ -9,7 +25,7 @@ img {
 }
 
 /* Header properties */
-.header {
+#header {
   background-image: url("pictures/back2.jpg");
   background-repeat: no-repeat;
   background-size: cover;
@@ -30,15 +46,9 @@ img {
   font-family: "Arial Black", Gadget, sans-serif;
   font-weight: 5px;
   color: white;
-  text-shadow: 
-    -1px -1px 0px #000,
-    0px -1px 0px #000,
-    1px -1px 0px #000,
-    -1px  0px 0px #000,
-    1px  0px 0px #000,
-    -1px  1px 0px #000,
-    0px  1px 0px #000,
-    1px  1px 0px #000;
+  text-shadow: -1px -1px 0px #000, 0px -1px 0px #000, 1px -1px 0px #000,
+    -1px 0px 0px #000, 1px 0px 0px #000, -1px 1px 0px #000, 0px 1px 0px #000,
+    1px 1px 0px #000;
 }
 
 .headerbox h1 {
@@ -48,16 +58,16 @@ img {
   font-weight: bold;
   text-shadow: 5px 5px 10px black;
   opacity: 1;
- }
+}
 
 /* Navigation bar style */
-.navbar {
+#navbar {
   overflow: hidden;
   background-color: #333;
   height: 60px;
 }
 
-.navbar a {
+#navbar a {
   float: left;
   display: block;
   color: white;
@@ -69,7 +79,7 @@ img {
 .logo {
   padding: 0px 10px;
   float: left;
-} 
+}
 
 .logo img {
   height: 60px;
@@ -78,25 +88,25 @@ img {
 }
 
 /* Right align sign in button */
-.navbar a.right {
+#navbar a.right {
   float: right;
 }
 
 /* Change color on hover */
-.navbar a:hover {
+#navbar a:hover {
   background-color: #ddd;
   color: black;
 }
 
-/* Active/current link */
-.navbar a.active {
-  background-color: #666;
-  color: white;
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 /* Hide profile button if user is not logged in*/
 #profile {
-  visibility: hidden;
+  visibility: visible;
 }
 
 #map-section {
@@ -117,65 +127,116 @@ img {
 }
 
 /* Search bar style */
-#routes-section input[type=text] {
+#routes-section input[type="text"] {
   float: center;
   padding: 6px;
   margin-top: 8px;
   margin-right: 16px;
   border: none;
   font-size: 17px;
+  -webkit-transition: width 0.35s ease-in-out;
+  transition: width 0.35s ease-in-out;
+}
+
+#routes-section input[type="text"]:focus {
+  width: 500px;
 }
 
 .routes-grid {
   display: grid;
-  grid-auto-rows: 500x;
-  grid-gap: 45px;
-  grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
+  grid-gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   margin-top: 25px;
 }
 
+/* Cards design. */
 .route-card {
-  border-radius: 6px;
-  color: #fff;
-  position: relative;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+  height: 255px;
+  width: 305px;
+  border-radius: 5px;
+  padding: 5px;
+  transition: 0.3s;
+}
+
+.route-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
 .route-card img {
-  height: 100%;
+  height: 250px;
+  width: 300px;
   object-fit: cover;
-  width: 100%;
+  border-radius: 5px 5px 0 0;
 }
 
-/* Create blur container over the image */
-.route-card-wrapper {
-  -ms-flex-align: end;
-  align-items: flex-end;
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(3px);
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  bottom: 0;
-  cursor: pointer;
-  display: -ms-flexbox;
-  display: flex;
-  overflow: hidden;
+.route-details {
+  visibility: hidden;
+  height: 0px;
   position: absolute;
-  width: 100%;
+  width: 295px;
   text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  border-radius: 5px 5px 0 0;
+  transition: 0.7s;
+  padding-top: 50px;
+  line-height: 10px;
 }
 
-.route-card div:hover {
-  border-style: groove;
-  border-width: 5px;
-  border-color: darkgray;
+.route-card:hover .route-details {
+  visibility: visible;
+  height: 245px;
 }
 
-.route-card-text {
-  color: white;
-  font-family: "Lucida Console", Monaco, monospace;
-  line-height: normal;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  padding: 20px 55px;
-  z-index: 1;
+.route-details p,
+.route-details button {
+  visibility: hidden;
+}
+
+.route-card:hover .route-details p,
+.route-card:hover .route-details button {
+  visibility: visible;
+}
+
+.action-button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: rgba(46, 42, 42, 0.596);
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  font-size: 10px;
+  padding: 10px;
+  width: 150px;
+  height: 30px;
+  cursor: pointer;
+  margin: 5px;
+  font-weight: bold;
+}
+
+.action-button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.3s;
+}
+
+.action-button span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -10px;
+  transition: 0.3s;
+}
+
+.action-button:hover span {
+  padding-right: 15px;
+}
+
+.action-button:hover span:after {
+  opacity: 1;
+  right: 0;
 }

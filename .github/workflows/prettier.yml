@@ -6,20 +6,20 @@ name: Check formatting with Prettier
 # events but only for the master branch
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   prettier:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
-    - name: Prettier Check
-      uses: creyD/prettier_action@v3.0
-      with:
-        dry: true
-        prettier_options: --write **/*.{html,js,md}
+      - name: Prettier Check
+        uses: creyD/prettier_action@v3.0
+        with:
+          dry: true
+          prettier_options: --write **/*.{html,js,md}

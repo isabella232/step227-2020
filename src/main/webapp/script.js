@@ -11,3 +11,18 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+// Make navbar stick to the top of the page when scrolling.
+window.onscroll = function () {
+  stickyNavbar();
+};
+
+function stickyNavbar() {
+  var navbar = document.getElementById("navbar");
+
+  if (window.pageYOffset >= 308) {
+    navbar.classList.add("sticky");
+  } else {
+    navbar.classList.remove("sticky");
+  }
+}
