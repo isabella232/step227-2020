@@ -126,9 +126,9 @@ img {
 #route-creation-section {
   position: absolute;
   z-index: 1;
-  width: 300px;
-  max-width: 30%;
-  height: 200px;
+  width: 500px;
+  max-width: 50%;
+  height: auto;
 
   right: 0;
   margin-right: 13px;
@@ -140,15 +140,17 @@ img {
   border-radius: 7px 7px 0 0;
 }
 
+#route-creation-name {
+  height: 25px;
+  border-bottom: 1px solid rgb(88, 88, 88);
+}
+
 #places-table {
   padding: 0;
   margin: 0;
   list-style-type: none;
-}
-
-#route-creation-name {
-  height: 25px;
-  border-bottom: 1px solid rgb(88, 88, 88);
+  overflow-y:scroll;
+  overflow:hidden;
 }
 
 #route-creation-name p {
@@ -160,6 +162,8 @@ img {
 .new-place {
   height: 25px;
   border: 1px solid rgb(200, 200, 200);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
 }
 
 .fa-ellipsis-v {
