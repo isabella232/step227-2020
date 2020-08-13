@@ -55,10 +55,27 @@ function showFavPlaceDetails(contentName, createClosePopup = true) {
   popup.classList.toggle("show");
 }
 
+function loadUserInfo() {
+  addLogoutLink();
+
+  fetch("/user-info")
+    .then((response) => response.json())
+    .then((currentUser) => {
+      document.getElementById("fname").value = currentUser.fname;
+      document.getElementById("lname").value = currentUser.lname;
+      document.getElementById("nickname").value = currentUser.nickname;
+      if (currentUser.notifications === true) {
+        document.getElementById("notifications-on").checked = true;
+      } else {
+        document.getElementById("notifications-off").checked = true;
+      }
+    });
+}
+
 //** Add correspondent link to the logout button. */
-async function logout() {
-  const response = await fetch('/login');
+async function addLogoutLink() {
+  const response = await fetch("/login");
   const loginInfo = await response.json();
-  
-  document.getElementById('logout-link').href = loginInfo.actionURL;
+
+  document.getElementById("logout-link").href = loginInfo.actionURL;
 }
