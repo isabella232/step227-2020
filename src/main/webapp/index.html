@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TheGlobetrotter</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
     <script src="./mapScript.js"></script>
+    <script src="script.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -28,9 +28,10 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAv-H8pVyOLYFGTWRaYz0uI_o84wj6oNCg&callback=initMap&libraries=&v=weekly"
       type="text/javascript"
     ></script>
+
   </head>
 
-  <body>
+  <body onload="checkLog()">
     <!-- Header -->
     <div id="header">
       <div class="headerbox">
@@ -49,7 +50,7 @@
       <a href="#map-section">CREATE YOUR TRIP</a>
       <a href="#routes-section">SUGGESTIONS</a>
       <a href="profile.html" id="profile">MY PROFILE</a>
-      <a href="#" class="right">SIGN IN</a>
+      <a id="log-button" class="right"></a>
     </div>
 
     <!-- Main section -->

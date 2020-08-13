@@ -54,3 +54,11 @@ function showFavPlaceDetails(contentName, createClosePopup = true) {
   popup.style.visibility = "visible";
   popup.classList.toggle("show");
 }
+
+//** Add correspondent link to the logout button. */
+async function logout() {
+  const response = await fetch('/login');
+  const loginInfo = await response.json();
+  
+  document.getElementById('logout-link').href = loginInfo.actionURL;
+}
