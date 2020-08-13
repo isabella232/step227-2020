@@ -110,7 +110,73 @@ img {
 }
 
 #map-section {
-  padding: 30px;
+  width: 100%;
+  text-align: center;
+
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+#map {
+  margin-top: 10px;
+  height: 700px;
+  text-align: center;
+}
+
+#route-creation-section {
+  position: absolute;
+  z-index: 1;
+  width: 500px;
+  max-width: 50%;
+  height: auto;
+
+  right: 0;
+  margin-right: 13px;
+  margin-top: 5px;
+
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  border: 1px solid rgb(88, 88, 88);
+  border-radius: 7px 7px 0 0;
+}
+
+#route-creation-name {
+  height: 25px;
+  border-bottom: 1px solid rgb(88, 88, 88);
+}
+
+#places-table {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  overflow-y:scroll;
+  overflow:hidden;
+}
+
+#route-creation-name p {
+  margin: 0;
+  margin-top: 5px;
+  margin-left: 25px;
+}
+
+.new-place {
+  height: 25px;
+  border: 1px solid rgb(200, 200, 200);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+}
+
+.fa-ellipsis-v {
+  height: 25px;
+  float: left;
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: 10px;
+  padding-top: 2px;
+  padding-right: 10px;
+  border-right: 1px solid rgb(200, 200, 200);
 }
 
 /* Routes container properties */
