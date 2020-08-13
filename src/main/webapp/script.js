@@ -16,13 +16,33 @@
 window.onscroll = function () {
   stickyNavbar();
 };
-
 function stickyNavbar() {
   var navbar = document.getElementById("navbar");
+  var initialNavBarOffset = 308;
 
   if (window.pageYOffset >= 308) {
     navbar.classList.add("sticky");
   } else {
     navbar.classList.remove("sticky");
+  }
+}
+
+//** Checks login status and display HTML elements accordingly. */
+async function checkLog() {
+  const response = await fetch('/login');
+  const loginInfo = await response.json();
+  
+  // Add correspondent link to the log button.
+  const logButton = document.getElementById("log-button");
+  logButton.href = loginInfo.actionURL;
+
+  // User is logged in.
+  if (loginInfo.loggedIn === true) {
+    document.getElementById("profile").style.visibility = "visible";
+    logButton.innerText = "LOGOUT";
+  // User is not logged in.
+  } else {
+    document.getElementById("profile").style.visibility = "hidden";
+    logButton.innerText = "LOGIN";
   }
 }
