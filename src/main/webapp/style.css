@@ -149,8 +149,8 @@ img {
   padding: 0;
   margin: 0;
   list-style-type: none;
-  overflow-y:scroll;
-  overflow:hidden;
+  overflow-y: scroll;
+  overflow: hidden;
 }
 
 #route-creation-name p {
