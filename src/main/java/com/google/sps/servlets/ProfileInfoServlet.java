@@ -43,8 +43,8 @@ public class ProfileInfoServlet extends HttpServlet {
       return;
     }
     // Get the input from the form.
-    String fname = getParameter(request, "fname", "Not set");
-    String lname = getParameter(request, "lname", "Not set");
+    String fname = getParameter(request, "first -name", "Not set");
+    String lname = getParameter(request, "last-name", "Not set");
     String nickname = getParameter(request, "nickname", "Anonym");
     boolean notifications;
     if ((getParameter(request, "radio", "mute")) == "mute") {
@@ -58,8 +58,8 @@ public class ProfileInfoServlet extends HttpServlet {
 
     // Store the comments as entities.
     Entity userEntity = new Entity("User", email);
-    userEntity.setProperty("fname", fname);
-    userEntity.setProperty("lname", lname);
+    userEntity.setProperty("firstName", fname);
+    userEntity.setProperty("lastName", lname);
     userEntity.setProperty("nickname", nickname);
     userEntity.setProperty("notifications", notifications);
 
@@ -94,8 +94,8 @@ public class ProfileInfoServlet extends HttpServlet {
       Entity userEntity = datastore.get(userKey);
       currentUser =
           new User(
-              (String) userEntity.getProperty("fname"),
-              (String) userEntity.getProperty("lname"),
+              (String) userEntity.getProperty("firstName"),
+              (String) userEntity.getProperty("lastName"),
               (String) userEntity.getProperty("nickname"),
               (boolean) userEntity.getProperty("notifications"));
     } catch (Exception e) {
