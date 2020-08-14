@@ -43,8 +43,8 @@ public class ProfileInfoServlet extends HttpServlet {
       return;
     }
     // Get the input from the form.
-    String fname = getParameter(request, "first -name", "Not set");
-    String lname = getParameter(request, "last-name", "Not set");
+    String firstName = getParameter(request, "first-name", "Not set");
+    String lastName = getParameter(request, "last-name", "Not set");
     String nickname = getParameter(request, "nickname", "Anonym");
     boolean notifications;
     if ((getParameter(request, "radio", "mute")) == "mute") {
@@ -58,8 +58,8 @@ public class ProfileInfoServlet extends HttpServlet {
 
     // Store the comments as entities.
     Entity userEntity = new Entity("User", email);
-    userEntity.setProperty("firstName", fname);
-    userEntity.setProperty("lastName", lname);
+    userEntity.setProperty("firstName", firstName);
+    userEntity.setProperty("lastName", lastName);
     userEntity.setProperty("nickname", nickname);
     userEntity.setProperty("notifications", notifications);
 
