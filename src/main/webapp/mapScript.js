@@ -14,11 +14,12 @@
 
 let map;
 
-function initMap(showMarkers = true, 
+function initMap(
+  showMarkers = true,
   japanTemple = { lat: 34.462117, lng: 135.830272 },
   newZealandLake = { lat: -43.979931, lng: 170.194799 },
-  ugandaView = { lat: -0.099273, lng: 32.652921 }) {
-
+  ugandaView = { lat: -0.099273, lng: 32.652921 }
+) {
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
   map = new google.maps.Map(document.getElementById("map"), {
@@ -31,7 +32,7 @@ function initMap(showMarkers = true,
     },
   });
 
-  map.addListener('click', function(event) {
+  map.addListener("click", function (event) {
     placeMarker(event.latLng);
   });
 
@@ -57,21 +58,22 @@ function initMap(showMarkers = true,
 
   function placeMarker(location) {
     let marker = new google.maps.Marker({
-      position: location, 
-      map: map
+      position: location,
+      map: map,
     });
     console.log("Place user's marker");
 
-    let lat = location.lat(), lng = location.lng();
+    let lat = location.lat(),
+      lng = location.lng();
 
-    let data = {lat, lng};
+    let data = { lat, lng };
     console.log("data");
     console.log(data);
     let options = {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(data),
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
     };
 
