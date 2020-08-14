@@ -98,10 +98,13 @@ img {
   color: black;
 }
 
+/* Add sticky effect to navigation bar */
 .sticky {
-  position: fixed;
+  position: -webkit-sticky;
+  position: sticky;
   top: 0;
   width: 100%;
+  z-index: 2;
 }
 
 /* Hide profile button if user is not logged in*/

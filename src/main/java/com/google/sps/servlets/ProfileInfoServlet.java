@@ -20,20 +20,16 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.appengine.api.images.ServingUrlOptions;
-import java.net.URL;
-import java.util.*;
-import com.google.sps.data.User;
 import com.google.gson.Gson;
+import com.google.sps.data.User;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.util.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-/** Responsible for storing user info. */ 
+/** Responsible for storing user info. */
 @WebServlet("/user-info")
 public class ProfileInfoServlet extends HttpServlet {
 
@@ -41,10 +37,10 @@ public class ProfileInfoServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     // Check if user is logged in.
-    if(!userService.isUserLoggedIn()) {
-        System.out.println("ERROR:You are not logged in!");
-        response.sendRedirect("/index.html");
-        return;
+    if (!userService.isUserLoggedIn()) {
+      System.out.println("ERROR:You are not logged in!");
+      response.sendRedirect("/index.html");
+      return;
     }
     // Get the input from the form.
     String fname = getParameter(request, "fname", "Not set");
@@ -74,10 +70,10 @@ public class ProfileInfoServlet extends HttpServlet {
     response.sendRedirect("/profile.html");
   }
 
-/**
-  * Return the request parameter, or the default value if the parameter
-  * was not specified by the client.
-*/
+  /**
+   * Return the request parameter, or the default value if the parameter was not specified by the
+   * client.
+   */
   private String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
     if (value == null || value.isEmpty()) {
@@ -96,19 +92,14 @@ public class ProfileInfoServlet extends HttpServlet {
 
     try {
       Entity userEntity = datastore.get(userKey);
-      currentUser = new User(
-          (String) userEntity.getProperty("fname"),
-          (String) userEntity.getProperty("lname"),
-          (String) userEntity.getProperty("nickname"),
-          (boolean) userEntity.getProperty("notifications")
-      ); 
-    } catch(Exception e) {
-      currentUser = new User(
-        "Set first name...",
-        "Set last name...",
-        "Set nickname...",
-        false
-      );
+      currentUser =
+          new User(
+              (String) userEntity.getProperty("fname"),
+              (String) userEntity.getProperty("lname"),
+              (String) userEntity.getProperty("nickname"),
+              (boolean) userEntity.getProperty("notifications"));
+    } catch (Exception e) {
+      currentUser = new User("Set first name...", "Set last name...", "Set nickname...", false);
     }
 
     Gson gson = new Gson();

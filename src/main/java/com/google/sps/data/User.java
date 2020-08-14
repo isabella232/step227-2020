@@ -19,7 +19,7 @@ public final class User {
   private final String fname;
   private final String lname;
   private final String nickname;
-  private final boolean  notifications;
+  private final boolean notifications;
 
   public User(String fname, String lname, String nickname, boolean notifications) {
     this.fname = fname;
