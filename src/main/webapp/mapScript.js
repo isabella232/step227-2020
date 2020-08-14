@@ -35,7 +35,7 @@ function initMap(showMarkers = true,
     placeMarker(event.latLng);
   });
 
-  console.log("Initialise new map");
+  console.log("Initialise new map111111");
 
   // Set markers on the map if marker flag is True.
   if (showMarkers) {
@@ -66,15 +66,22 @@ function initMap(showMarkers = true,
 
     let lat = location.lat(), lng = location.lng();
 
-    let data = { lat, lng};
+    let data = {lat, lng};
+    console.log("data");
+    console.log(data);
     let options = {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
-        "Content-type": "application/json",
+        'Content-Type': 'application/json'
       },
     };
+    console.log(options);
 
-    fetch("/markers", options).then();
+    console.log("Here");
+
+    fetch("/markers", options).then(str => {
+      console.log('Here111');
+    });
   }
 }
