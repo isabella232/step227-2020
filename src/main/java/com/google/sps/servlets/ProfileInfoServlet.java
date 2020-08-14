@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Responsible for storing user info. */
 @WebServlet("/user-info")
+@SuppressWarnings("serial")
 public class ProfileInfoServlet extends HttpServlet {
 
   @Override

@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 // ** Returns the login status of a user */
 @WebServlet("/login")
+@SuppressWarnings("serial")
 public class LoginServlet extends HttpServlet {
   static class LoginStatus {
     boolean loggedIn;
