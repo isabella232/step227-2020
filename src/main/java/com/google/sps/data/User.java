@@ -16,24 +16,24 @@ package com.google.sps.data;
 
 public final class User {
 
-  private final String fname;
-  private final String lname;
+  private final String firstName;
+  private final String lastName;
   private final String nickname;
   private final boolean notifications;
 
-  public User(String fname, String lname, String nickname, boolean notifications) {
-    this.fname = fname;
-    this.lname = lname;
+  public User(String firstName, String lastName, String nickname, boolean notifications) {
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.nickname = nickname;
     this.notifications = notifications;
   }
 
-  public String getFname() {
-    return fname;
+  public String getFirstName() {
+    return firstName;
   }
 
-  public String getLname() {
-    return lname;
+  public String getLastName() {
+    return lastName;
   }
 
   public String getNickname() {

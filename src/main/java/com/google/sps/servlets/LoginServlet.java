@@ -25,22 +25,22 @@ import javax.servlet.http.HttpServletResponse;
 
 // ** Returns the login status of a user */
 @WebServlet("/login")
-public class LogInServlet extends HttpServlet {
+public class LoginServlet extends HttpServlet {
   static class LoginStatus {
     boolean loggedIn;
-    String actionURL;
+    String actionUrl;
 
-    LoginStatus(boolean loggedIn, String actionURL) {
+    LoginStatus(boolean loggedIn, String actionUrl) {
       this.loggedIn = loggedIn;
-      this.actionURL = actionURL;
+      this.actionUrl = actionUrl;
     }
 
     boolean getLoggedIn() {
       return loggedIn;
     }
 
-    String getActionURL() {
-      return actionURL;
+    String getActionUrl() {
+      return actionUrl;
     }
   }
 
