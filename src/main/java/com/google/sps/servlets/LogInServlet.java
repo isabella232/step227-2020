@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//** Returns the login status of a user */
+// ** Returns the login status of a user */
 @WebServlet("/login")
 public class LogInServlet extends HttpServlet {
   static class LoginStatus {
@@ -34,7 +34,7 @@ public class LogInServlet extends HttpServlet {
       this.loggedIn = loggedIn;
       this.actionURL = actionURL;
     }
-    
+
     boolean getLoggedIn() {
       return loggedIn;
     }
@@ -46,11 +46,11 @@ public class LogInServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    LoginStatus loginStatus ;
+    LoginStatus loginStatus;
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
-      String logoutUrl = userService.createLogoutURL("/");   
+      String logoutUrl = userService.createLogoutURL("/");
       loginStatus = new LoginStatus(true, logoutUrl);
     } else {
       String loginUrl = userService.createLoginURL("/");
