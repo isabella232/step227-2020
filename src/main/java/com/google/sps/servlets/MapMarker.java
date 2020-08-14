@@ -14,38 +14,17 @@
 
 package com.google.sps.servlets;
 
-import com.google.sps.data.Marker;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
-
-import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.datastore.KeyFactory;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Iterator;
-import java.util.stream.Collectors;
 import org.json.JSONObject;
-
-import com.google.gson.Gson; 
-import com.google.gson.GsonBuilder;  
 
 /** Servlet that process information about user's markers. */
 @WebServlet("/markers")
@@ -55,9 +34,9 @@ public class MapMarker extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Read request body.
-    String requestBody = 
-      request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-    
+    String requestBody =
+        request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
+
     // Convert it to JSON.
     JSONObject jsonBody = new JSONObject(requestBody);
 
