@@ -35,7 +35,7 @@ function initMap(showMarkers = true,
     placeMarker(event.latLng);
   });
 
-  console.log("Initialise new map111111");
+  console.log("Initialise new map");
 
   // Set markers on the map if marker flag is True.
   if (showMarkers) {
@@ -52,8 +52,7 @@ function initMap(showMarkers = true,
       map: map,
     });
 
-    console.log("Place default markers1");
-    console.log("Place default markers1");
+    console.log("Place default markers");
   }
 
   function placeMarker(location) {
@@ -61,8 +60,7 @@ function initMap(showMarkers = true,
       position: location, 
       map: map
     });
-    console.log("Set new marker");
-    console.log();
+    console.log("Place user's marker");
 
     let lat = location.lat(), lng = location.lng();
 
@@ -76,12 +74,8 @@ function initMap(showMarkers = true,
         'Content-Type': 'application/json'
       },
     };
-    console.log(options);
 
-    console.log("Here");
-
-    fetch("/markers", options).then(str => {
-      console.log('Here111');
-    });
+    fetch("/markers", options);
+    console.log("Store new marker");
   }
 }
