@@ -14,11 +14,10 @@
 
 let map;
 
-function initMap(showMarkers = true) {
-  // Create markers.
-  let japanTemple = { lat: 34.462117, lng: 135.830272 };
-  let newZealandLake = { lat: -43.979931, lng: 170.194799 };
-  let ugandaView = { lat: -0.099273, lng: 32.652921 };
+function initMap(showMarkers = true, 
+  japanTemple = { lat: 34.462117, lng: 135.830272 },
+  newZealandLake = { lat: -43.979931, lng: 170.194799 },
+  ugandaView = { lat: -0.099273, lng: 32.652921 }) {
 
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
@@ -31,6 +30,12 @@ function initMap(showMarkers = true) {
       mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain"],
     },
   });
+
+  map.addListener('click', function(event) {
+    placeMarker(event.latLng);
+  });
+
+  console.log("Initialise new map");
 
   // Set markers on the map if marker flag is True.
   if (showMarkers) {
@@ -46,6 +51,30 @@ function initMap(showMarkers = true) {
       position: ugandaView,
       map: map,
     });
+
+    console.log("Place default markers1");
+    console.log("Place default markers1");
   }
-  console.log("Initialise new map");
+
+  function placeMarker(location) {
+    let marker = new google.maps.Marker({
+      position: location, 
+      map: map
+    });
+    console.log("Set new marker");
+    console.log();
+
+    let lat = location.lat(), lng = location.lng();
+
+    let data = { lat, lng};
+    let options = {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        "Content-type": "application/json",
+      },
+    };
+
+    fetch("/markers", options).then();
+  }
 }
