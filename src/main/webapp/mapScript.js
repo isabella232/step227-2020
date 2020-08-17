@@ -53,16 +53,16 @@ function initMap(showMarkers = true) {
       },
     };
 
-    fetch("/markers", options).then(response => response.json()).then(id => {
-      console.log("receive new place's id");
-      console.log(id);
+    fetch("/markers", options)
+      .then((response) => response.json())
+      .then((id) => {
+        console.log("receive new place's id");
+        console.log(id);
 
-      addNewTableItem(
-        "New place name", id.toString()
-      );
+        addNewTableItem("New place name", id.toString());
 
-    console.log("Place user's marker");
-    });
+        console.log("Place user's marker");
+      });
     console.log("Store new marker");
   }
 }
