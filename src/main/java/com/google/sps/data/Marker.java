@@ -18,9 +18,9 @@ package com.google.sps.data;
 public class Marker {
   private double lat;
   private double lng;
-  private String id;
+  private Long id;
 
-  public Marker(double newLat, double newLng, String newId) {
+  public Marker(double newLat, double newLng, Long newId) {
     lat = newLat;
     lng = newLng;
     id = newId;
@@ -29,7 +29,7 @@ public class Marker {
   public Marker() {
     lat = 0.0;
     lng = 0.0;
-    id = "";
+    id = 0L;
   }
 
   public double getLat() {
@@ -40,7 +40,7 @@ public class Marker {
     return lng;
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
@@ -52,7 +52,7 @@ public class Marker {
     lng = newLng;
   }
 
-  public void setId(String newId) {
+  public void setId(Long newId) {
     id = newId;
   }
 }

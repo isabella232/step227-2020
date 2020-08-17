@@ -42,13 +42,6 @@ function initMap(showMarkers = true) {
     let lat = location.lat(),
       lng = location.lng();
 
-    addNewTableItem(
-      "Place name " + " Lat: " + 
-      lat.toString() + " Lng: " + lng.toString()
-    );
-
-    console.log("Place user's marker");
-
     let data = { lat, lng };
     console.log("data");
     console.log(data);
@@ -60,7 +53,16 @@ function initMap(showMarkers = true) {
       },
     };
 
-    fetch("/markers", options);
+    fetch("/markers", options).then(response => response.json()).then(id => {
+      console.log("receive new place's id");
+      console.log(id);
+
+      addNewTableItem(
+        "New place name", id.toString()
+      );
+
+    console.log("Place user's marker");
+    });
     console.log("Store new marker");
   }
 }
@@ -70,39 +72,46 @@ function loadRoute() {
     method: "GET",
   };
 
-  fetch("/markers", options).then(response => response.json()).then(placesList => {
-    console.log("Get json of places");
+  fetch("/markers", options)
+    .then((response) => response.json())
+    .then((placesList) => {
+      console.log("Get json of places");
 
-    for (i in placesList) {
-      console.log("Place " + i.toString());
-      console.log(placesList[i].id);
-      let lat = placesList[i].lat, lng = placesList[i].lng, id = placesList[i].id;
-      let position = { lat, lng};
-      let marker = new google.maps.Marker({
-        position: position,
-        map: map,
-      });
+      for (i in placesList) {
+        console.log("Place " + i.toString());
+        console.log(placesList[i].id);
+        let lat = placesList[i].lat,
+          lng = placesList[i].lng,
+          id = placesList[i].id;
+        let position = { lat, lng };
+        let marker = new google.maps.Marker({
+          position: position,
+          map: map,
+        });
 
-      addNewTableItem("Place name " + i.toString() + " ", lat, lng, id.toString());
-    }
+        addNewTableItem("Place name " + i.toString() + " ", id.toString());
+      }
 
-    console.log("Place markers");
-  });
+      console.log("Place markers");
+    });
 }
 
-function addNewTableItem(name, lat, lng, id) {
+function addNewTableItem(name, id) {
   let tabel = document.getElementById("places-table");
 
-  let newPlace = document.createElement('li');
+  let newPlace = document.createElement("li");
   newPlace.id = id;
   newPlace.classList.add("new-place");
 
   let markerSign = '<span class="fas fa-ellipsis-v"></span>';
   let placeName = name;
-  let deleteFunction = 'deletePlace(\''+ id + '\')';
-  let deleteSign = '<span class="fas fa-minus-square" onclick="' + deleteFunction + '"></span>';
+  let deleteFunction = "deletePlace('" + id + "')";
+  let deleteSign =
+    '<span class="fas fa-minus-square" onclick="' +
+    deleteFunction +
+    '"></span>';
 
-  newPlace.innerHTML =  markerSign + placeName + deleteSign;
+  newPlace.innerHTML = markerSign + placeName + deleteSign;
 
   tabel.appendChild(newPlace);
 }
@@ -112,4 +121,11 @@ function deletePlace(contentId) {
   let tableItem = document.getElementById(contentId);
   tableItem.parentNode.removeChild(tableItem);
   console.log("Remove place from the table");
+
+  let options = {
+    method: "POST",
+  };
+
+  let URL = "/delete_marker?contentId=" + contentId;
+  fetch(URL, options).then();
 }
