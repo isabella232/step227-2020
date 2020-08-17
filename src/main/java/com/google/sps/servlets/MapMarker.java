@@ -14,25 +14,22 @@
 
 package com.google.sps.servlets;
 
-import com.google.sps.data.Marker;
-
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.gson.Gson;
+import com.google.sps.data.Marker;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.ArrayList;
 import org.json.JSONObject;
-
-import com.google.gson.Gson; 
-import com.google.gson.GsonBuilder;  
 
 /** Servlet that process information about user's markers. */
 @WebServlet("/markers")
@@ -52,14 +49,14 @@ public class MapMarker extends HttpServlet {
     List<Marker> markersList = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
       double lat = 0, lng = 0;
-      String id = "";
+      Long id;
 
       lat = (Double) entity.getProperty("lat");
       lng = (Double) entity.getProperty("lng");
-      id = "Id-" + String.valueOf(lat).substring(0, 5) + "-" + String.valueOf(lng).substring(0, 5);
+      id = entity.getKey().getId();
 
       Marker marker = new Marker(lat, lng, id);
-      
+
       markersList.add(marker);
     }
 
@@ -90,5 +87,12 @@ public class MapMarker extends HttpServlet {
     // Store new marker.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(markerEntity);
+
+    Long id = markerEntity.getKey().getId();
+    Gson gson = new Gson();
+    String json = gson.toJson(id);
+
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 }
