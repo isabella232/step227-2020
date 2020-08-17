@@ -19,7 +19,7 @@ async function checkLog() {
 
   // Add correspondent link to the log button.
   const logButton = document.getElementById("log-button");
-  logButton.href = loginInfo.actionURL;
+  logButton.href = loginInfo.actionUrl;
 
   // User is logged in.
   if (loginInfo.loggedIn === true) {

@@ -30,8 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Responsible for storing user info. */
-@WebServlet("/user-info")
 @SuppressWarnings("serial")
+@WebServlet("/user-info")
 public class ProfileInfoServlet extends HttpServlet {
 
   @Override
@@ -39,20 +39,16 @@ public class ProfileInfoServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
-      System.out.println("ERROR:You are not logged in!");
-      response.sendRedirect("/index.html");
+      response.setContentType("text/html;");
+      response.getWriter().println("<p>ERROR: You are not logged in</p>");
+      response.getWriter().println("<a href=\"index.html\">Go to home page</button>");
       return;
     }
     // Get the input from the form.
     String firstName = getParameter(request, "first-name", "Not set");
     String lastName = getParameter(request, "last-name", "Not set");
     String nickname = getParameter(request, "nickname", "Anonym");
-    boolean notifications;
-    if ((getParameter(request, "radio", "mute")) == "mute") {
-      notifications = false;
-    } else {
-      notifications = true;
-    }
+    boolean notifications = ((getParameter(request, "radio", "mute")) != "mute");
 
     // Get user's email.
     String email = userService.getCurrentUser().getEmail();
@@ -88,19 +84,23 @@ public class ProfileInfoServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     UserService userService = UserServiceFactory.getUserService();
 
-    Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getEmail());
     User currentUser;
+    if (userService.isUserLoggedIn()) {
+      Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getEmail());
 
-    try {
-      Entity userEntity = datastore.get(userKey);
-      currentUser =
-          new User(
-              (String) userEntity.getProperty("firstName"),
-              (String) userEntity.getProperty("lastName"),
-              (String) userEntity.getProperty("nickname"),
-              (boolean) userEntity.getProperty("notifications"));
-    } catch (Exception e) {
-      currentUser = new User("Set first name...", "Set last name...", "Set nickname...", false);
+      try {
+        Entity userEntity = datastore.get(userKey);
+        currentUser =
+            new User(
+                (String) userEntity.getProperty("firstName"),
+                (String) userEntity.getProperty("lastName"),
+                (String) userEntity.getProperty("nickname"),
+                (boolean) userEntity.getProperty("notifications"));
+      } catch (Exception e) {
+        currentUser = new User("Set first name...", "Set last name...", "Set nickname...", false);
+      }
+    } else {
+      currentUser = new User("Undefined", "Undefined", "Undefined", false);
     }
 
     Gson gson = new Gson();

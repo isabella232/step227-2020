@@ -61,8 +61,8 @@ function loadUserInfo() {
   fetch("/user-info")
     .then((response) => response.json())
     .then((currentUser) => {
-      document.getElementById("fname").value = currentUser.fname;
-      document.getElementById("lname").value = currentUser.lname;
+      document.getElementById("first-name").value = currentUser.firstName;
+      document.getElementById("last-name").value = currentUser.lastName;
       document.getElementById("nickname").value = currentUser.nickname;
       if (currentUser.notifications === true) {
         document.getElementById("notifications-on").checked = true;
