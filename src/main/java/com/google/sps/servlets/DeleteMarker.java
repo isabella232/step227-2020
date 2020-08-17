@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that process information about user's markers. */
+@SuppressWarnings("serial")
 @WebServlet("/delete_marker")
 public class DeleteMarker extends HttpServlet {
   /** Processes POST request by deleting marker by received id. */

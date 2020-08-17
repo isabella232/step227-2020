@@ -18,8 +18,8 @@ function initMap(showMarkers = true) {
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
   map = new google.maps.Map(document.getElementById("map"), {
-    center: new google.maps.LatLng(0.211772, 102.290621),
-    zoom: 2.3,
+    center: new google.maps.LatLng(47.0, 5.15),
+    zoom: 2.8,
     fullscreenControl: false,
     streetViewControl: false,
     mapTypeControlOptions: {

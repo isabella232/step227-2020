@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TheGlobetrotter</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
     <script src="./mapScript.js"></script>
+    <script src="script.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -43,20 +43,22 @@
     </div>
 
     <!-- Navigation bar-->
-    <div id="navbar">
+    <div id="navbar" class="sticky">
       <div class="logo"><img src="pictures/logo.png" alt="Logo" /></div>
       <a href="#header">HOME</a>
       <a href="#map-section">CREATE YOUR TRIP</a>
       <a href="#routes-section">SUGGESTIONS</a>
       <a href="profile.html" id="profile">MY PROFILE</a>
-      <a href="#" class="right">SIGN IN</a>
+      <a id="log-button" class="right"></a>
     </div>
 
     <!-- Main section -->
     <div id="map-section">
       <div id="route-creation-section">
-        <div id="route-creation-name"><p>Route name</p></div>
-        <ul id="places-table"></ul>
+        <textarea id="route-name" placeholder="Route name..."></textarea><br />
+        <ul id="places-table">
+        </ul>
+        <button id="create-route-button">CREATE ROUTE</button>
       </div>
       <div id="map"></div>
     </div>

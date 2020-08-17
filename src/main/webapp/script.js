@@ -12,17 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Make navbar stick to the top of the page when scrolling.
-window.onscroll = function () {
-  stickyNavbar();
-};
+//** Checks login status and display HTML elements accordingly. */
+async function checkLog() {
+  const response = await fetch("/login");
+  const loginInfo = await response.json();
 
-function stickyNavbar() {
-  var navbar = document.getElementById("navbar");
+  // Add correspondent link to the log button.
+  const logButton = document.getElementById("log-button");
+  logButton.href = loginInfo.actionUrl;
 
-  if (window.pageYOffset >= 308) {
-    navbar.classList.add("sticky");
+  // User is logged in.
+  if (loginInfo.loggedIn === true) {
+    document.getElementById("profile").style.visibility = "visible";
+    logButton.innerText = "LOGOUT";
+    // User is not logged in.
   } else {
-    navbar.classList.remove("sticky");
+    document.getElementById("profile").style.visibility = "hidden";
+    logButton.innerText = "LOGIN";
   }
 }

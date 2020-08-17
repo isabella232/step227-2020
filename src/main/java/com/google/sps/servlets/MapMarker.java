@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 /** Servlet that process information about user's markers. */
+@SuppressWarnings("serial")
 @WebServlet("/markers")
 public class MapMarker extends HttpServlet {
   /** Processes GET request to return all stored markers. */
