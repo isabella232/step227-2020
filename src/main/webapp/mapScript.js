@@ -13,8 +13,9 @@
 // limitations under the License.
 
 let map;
+var markersArray = [];
 
-function initMap(showMarkers = true) {
+function initMap() {
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
   map = new google.maps.Map(document.getElementById("map"), {
@@ -33,7 +34,7 @@ function initMap(showMarkers = true) {
 
   console.log("Initialise new map");
 
-  function placeMarker(location) {
+  async function placeMarker(location) {
     let marker = new google.maps.Marker({
       position: location,
       map: map,
@@ -43,8 +44,6 @@ function initMap(showMarkers = true) {
       lng = location.lng();
 
     let data = { lat, lng };
-    console.log("data");
-    console.log(data);
     let options = {
       method: "POST",
       body: JSON.stringify(data),
@@ -53,14 +52,13 @@ function initMap(showMarkers = true) {
       },
     };
 
-    fetch("/markers", options)
+    await fetch("/markers", options)
       .then((response) => response.json())
       .then((id) => {
-        console.log("receive new place's id");
-        console.log(id);
+        console.log("receive new place's id " + id.toString());
+        markersArray.push({ marker: marker, id: id.toString() });
 
         addNewTableItem("New place name", id.toString());
-
         console.log("Place user's marker");
       });
     console.log("Store new marker");
@@ -78,8 +76,6 @@ function loadRoute() {
       console.log("Get json of places");
 
       for (i in placesList) {
-        console.log("Place " + i.toString());
-        console.log(placesList[i].id);
         let lat = placesList[i].lat,
           lng = placesList[i].lng,
           id = placesList[i].id;
@@ -88,6 +84,7 @@ function loadRoute() {
           position: position,
           map: map,
         });
+        markersArray.push({ marker: marker, id: id.toString() });
 
         addNewTableItem("Place name " + i.toString() + " ", id.toString());
       }
@@ -116,16 +113,24 @@ function addNewTableItem(name, id) {
   tabel.appendChild(newPlace);
 }
 
-function deletePlace(contentId) {
-  console.log(contentId);
+async function deletePlace(contentId) {
   let tableItem = document.getElementById(contentId);
   tableItem.parentNode.removeChild(tableItem);
   console.log("Remove place from the table");
+
+  for (var i = 0; i < markersArray.length; i++) {
+    if (markersArray[i].id == contentId) {
+      markersArray[i].marker.setMap(null);
+      markersArray.splice(i, 1);
+      console.log("remove marker from the array and the map");
+      break;
+    }
+  }
 
   let options = {
     method: "POST",
   };
 
   let URL = "/delete_marker?contentId=" + contentId;
-  fetch(URL, options).then();
+  await fetch(URL, options).then();
 }
