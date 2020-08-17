@@ -98,15 +98,18 @@ img {
   color: black;
 }
 
+/* Add sticky effect to navigation bar */
 .sticky {
-  position: fixed;
+  position: -webkit-sticky;
+  position: sticky;
   top: 0;
   width: 100%;
+  z-index: 2;
 }
 
 /* Hide profile button if user is not logged in*/
 #profile {
-  visibility: visible;
+  visibility: hidden;
 }
 
 #map-section {
@@ -140,23 +143,23 @@ img {
   border-radius: 7px 7px 0 0;
 }
 
-#route-creation-name {
-  height: 25px;
-  border-bottom: 1px solid rgb(88, 88, 88);
+#route-name {
+  height: 20px;
+  margin-top: 10px;
+  width: 200px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px;
 }
 
 #places-table {
+  margin-top: 30px;
   padding: 0;
   margin: 0;
   list-style-type: none;
-  overflow-y:scroll;
-  overflow:hidden;
-}
-
-#route-creation-name p {
-  margin: 0;
-  margin-top: 5px;
-  margin-left: 25px;
+  overflow-y: scroll;
+  overflow: hidden;
 }
 
 .new-place {
@@ -177,6 +180,25 @@ img {
   padding-top: 2px;
   padding-right: 10px;
   border-right: 1px solid rgb(200, 200, 200);
+}
+
+#create-route-button {
+  justify-content: center;
+  align-items: center;
+  margin: 20px 180px 20px 180px;
+  float: center;
+  height: 30px;
+  width: 140px;
+  border: solid rgb(163, 163, 163) 1px;
+  color: rgb(255, 255, 255, 0.8);
+  background-color: darkgreen;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#create-route-button:hover {
+  background-color: rgb(106, 153, 106);
 }
 
 /* Routes container properties */

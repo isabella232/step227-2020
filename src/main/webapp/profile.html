@@ -11,13 +11,13 @@
     ></script>
   </head>
 
-  <body>
+  <body onload="loadUserInfo()">
     <div id="content">
       <div id="navigation-bar">
         <a href="index.html" id="main-page-link">
           <i class="fas fa-globe-europe"></i>
         </a>
-        <a href="index.html" id="logout-link">
+        <a id="logout-link">
           <i class="fas fa-sign-out-alt"></i>
         </a>
       </div>
@@ -37,27 +37,49 @@
       </div>
 
       <div id="profile-info">
-        <div>name</div>
-        <form id="insert-name" class="insert-new-info">
-          <input type="text" placeholder="New name" />
-        </form>
-        <div>email</div>
-        <form id="insert-email" class="insert-new-info">
-          <input type="text" placeholder="New mail" />
-        </form>
-        <div>nickname</div>
-        <form id="insert-nickname" class="insert-new-info">
-          <input type="text" placeholder="New nickname" />
-        </form>
-        <form id="notification-status">
-          <input type="radio" name="notifications" value="unmute" /> Send
-          notifications
-          <input type="radio" name="notifications" value="mute" /> Don't send
-          notifications
-        </form>
+        <form method="POST" action="/user-info" id="profile-form">
+          <label for="first-name">First name: </label>
+          <input
+            type="text"
+            id="first-name"
+            name="first-name"
+            class="insert-new-info"
+          /><br />
 
-        <form id="submit-button">
-          <button type="submit">Submit changes</button>
+          <label for="last-name">Last name: </label>
+          <input
+            type="text"
+            id="last-name"
+            name="last-name"
+            class="insert-new-info"
+          /><br />
+
+          <label for="nickname">Nickname: </label>
+          <input
+            type="text"
+            id="nickname"
+            name="nickname"
+            class="insert-new-info"
+          /><br />
+
+          <div id="notification-status">
+            <input
+              id="notifications-on"
+              type="radio"
+              name="notifications"
+              value="unmute"
+            />
+            Send notifications
+            <input
+              id="notifications-off"
+              type="radio"
+              name="notifications"
+              value="mute"
+            />
+            Don't send notifications
+          </div>
+
+          <input type="submit" value="Submit changes" id="submit-button" />
         </form>
       </div>
 

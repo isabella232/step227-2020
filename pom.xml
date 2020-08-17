@@ -47,7 +47,7 @@
         <version>2.2.0</version>
         <configuration>
           <!-- Set project ID. -->
-          <deploy.projectId>google.com:theglobetrotter-step-2020</deploy.projectId>
+          <deploy.projectId>theglobetrotter-step-2020</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
@@ -61,6 +61,7 @@
           <showWarnings>true</showWarnings>
           <compilerArgs>
             <arg>-Xlint:all</arg>
+            <arg>-Xlint:-processing</arg>
             <arg>-Werror</arg>
           </compilerArgs>
         </configuration>
