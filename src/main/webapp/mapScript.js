@@ -14,12 +14,7 @@
 
 let map;
 
-function initMap(
-  showMarkers = true,
-  japanTemple = { lat: 34.462117, lng: 135.830272 },
-  newZealandLake = { lat: -43.979931, lng: 170.194799 },
-  ugandaView = { lat: -0.099273, lng: 32.652921 }
-) {
+function initMap(showMarkers = true) {
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
   map = new google.maps.Map(document.getElementById("map"), {
@@ -38,33 +33,21 @@ function initMap(
 
   console.log("Initialise new map");
 
-  // Set markers on the map if marker flag is True.
-  if (showMarkers) {
-    let markerJapanTemple = new google.maps.Marker({
-      position: japanTemple,
-      map: map,
-    });
-    let markerNewZealand = new google.maps.Marker({
-      position: newZealandLake,
-      map: map,
-    });
-    let markerUganda = new google.maps.Marker({
-      position: ugandaView,
-      map: map,
-    });
-
-    console.log("Place default markers");
-  }
-
   function placeMarker(location) {
     let marker = new google.maps.Marker({
       position: location,
       map: map,
     });
-    console.log("Place user's marker");
 
     let lat = location.lat(),
       lng = location.lng();
+
+    addNewTableItem(
+      "Place name " + " Lat: " + 
+      lat.toString() + " Lng: " + lng.toString()
+    );
+
+    console.log("Place user's marker");
 
     let data = { lat, lng };
     console.log("data");
@@ -80,4 +63,53 @@ function initMap(
     fetch("/markers", options);
     console.log("Store new marker");
   }
+}
+
+function loadRoute() {
+  let options = {
+    method: "GET",
+  };
+
+  fetch("/markers", options).then(response => response.json()).then(placesList => {
+    console.log("Get json of places");
+
+    for (i in placesList) {
+      console.log("Place " + i.toString());
+      console.log(placesList[i].id);
+      let lat = placesList[i].lat, lng = placesList[i].lng, id = placesList[i].id;
+      let position = { lat, lng};
+      let marker = new google.maps.Marker({
+        position: position,
+        map: map,
+      });
+
+      addNewTableItem("Place name " + i.toString() + " ", lat, lng, id.toString());
+    }
+
+    console.log("Place markers");
+  });
+}
+
+function addNewTableItem(name, lat, lng, id) {
+  let tabel = document.getElementById("places-table");
+
+  let newPlace = document.createElement('li');
+  newPlace.id = id;
+  newPlace.classList.add("new-place");
+
+  let markerSign = '<span class="fas fa-ellipsis-v"></span>';
+  let placeName = name;
+  let deleteFunction = 'deletePlace(\''+ id + '\')';
+  let deleteSign = '<span class="fas fa-minus-square" onclick="' + deleteFunction + '"></span>';
+
+  newPlace.innerHTML =  markerSign + placeName + deleteSign;
+
+  tabel.appendChild(newPlace);
+}
+
+function deletePlace(contentId) {
+  console.log(contentId);
+  let tableItem = document.getElementById(contentId);
+  tableItem.parentNode.removeChild(tableItem);
+  console.log("Remove place from the table");
 }
