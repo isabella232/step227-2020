@@ -60,7 +60,7 @@ public class MapMarker extends HttpServlet {
       markersList.add(marker);
     }
 
-    // Convert list of comments to JSON format.
+    // Convert list of markers to JSON format.
     String json = gson.toJson(markersList);
 
     // Return response to the request.
