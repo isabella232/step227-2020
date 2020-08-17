@@ -35,8 +35,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;  
 
 /** Servlet that process information about user's markers. */
-@WebServlet("/markers")
-public class MapMarker extends HttpServlet {
+@WebServlet("/delete_marker")
+public class DeleteMarker extends HttpServlet {
   /** Processes GET request to return all stored markers. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

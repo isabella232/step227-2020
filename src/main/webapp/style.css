@@ -173,10 +173,31 @@ img {
   bottom: 0;
   margin-top: auto;
   margin-bottom: auto;
+
   padding-left: 10px;
   padding-top: 2px;
   padding-right: 10px;
+
   border-right: 1px solid rgb(200, 200, 200);
+}
+
+.fa-minus-square {
+  height: 25px;
+  float: right;
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-left: 10px;
+
+  border-left: 1px solid rgb(200, 200, 200);
+}
+
+.fa-minus-square:hover {
+  color: red;
 }
 
 /* Routes container properties */

@@ -18,15 +18,18 @@ package com.google.sps.data;
 public class Marker {
   private double lat;
   private double lng;
+  private String id;
 
-  public Marker(double newLat, double newLng) {
+  public Marker(double newLat, double newLng, String newId) {
     lat = newLat;
     lng = newLng;
+    id = newId;
   }
 
   public Marker() {
     lat = 0.0;
     lng = 0.0;
+    id = "";
   }
 
   public double getLat() {
@@ -37,11 +40,19 @@ public class Marker {
     return lng;
   }
 
+  public String getId() {
+    return id;
+  }
+
   public void setLat(double newLat) {
     lat = newLat;
   }
 
   public void setLng(double newLng) {
     lng = newLng;
+  }
+
+  public void setId(String newId) {
+    id = newId;
   }
 }
