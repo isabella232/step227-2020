@@ -72,7 +72,6 @@ public class RoutesStoring extends HttpServlet {
     String routeName = request.getParameter("routeName");
 
     // Get user email.
-    UserService userService = UserServiceFactory.getUserService();
     String email = userService.getCurrentUser().getEmail();
 
     // Create new entity.
