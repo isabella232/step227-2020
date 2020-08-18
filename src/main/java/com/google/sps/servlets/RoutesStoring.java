@@ -47,6 +47,15 @@ public class RoutesStoring extends HttpServlet {
   /** Processes POST request by storing routes. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    UserService userService = UserServiceFactory.getUserService();
+    // Check if user is logged in.
+    if (!userService.isUserLoggedIn()) {
+      response.setContentType("text/html;");
+      response.getWriter().println("<p>ERROR: You are not logged in</p>");
+      response.getWriter().println("<a href=\"index.html\">Go to home page</button>");
+      return;
+    }
+
     // Read request body.
     String requestBody =
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));

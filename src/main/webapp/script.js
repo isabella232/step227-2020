@@ -15,6 +15,7 @@
 function loadPage() {
   checkLog();
 }
+var loggedIn;
 
 //** Checks login status and display HTML elements accordingly. */
 async function checkLog() {
@@ -29,9 +30,15 @@ async function checkLog() {
   if (loginInfo.loggedIn === true) {
     document.getElementById("profile").style.visibility = "visible";
     logButton.innerText = "LOGOUT";
+    document.getElementById("route-creation-section").style.visibility =
+      "visible";
+    loggedIn = true;
     // User is not logged in.
   } else {
     document.getElementById("profile").style.visibility = "hidden";
     logButton.innerText = "LOGIN";
+    document.getElementById("login-required").style.visibility = "visible";
+    loggedIn = false;
   }
+  return loggedIn;
 }
