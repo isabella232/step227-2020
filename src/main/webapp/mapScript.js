@@ -41,9 +41,24 @@ function initMap() {
     });
 
     let lat = location.lat(),
-      lng = location.lng();
+      lng = location.lng(),
+      id = -1,
+      visitHour = 0,
+      visitMinute = 0,
+      leaveHour = 0,
+      leaveMinute = 0,
+      markerName = "Place " + markersArray.length.toString();
 
-    let data = { lat, lng };
+    let data = {
+      lat,
+      lng,
+      id,
+      visitHour,
+      visitMinute,
+      leaveHour,
+      leaveMinute,
+      markerName,
+    };
     let options = {
       method: "POST",
       body: JSON.stringify(data),
@@ -58,7 +73,7 @@ function initMap() {
         console.log("receive new place's id " + id.toString());
         markersArray.push({ marker: marker, id: id.toString() });
 
-        addNewTableItem("New place name", id.toString());
+        addNewTableItem(markerName, id.toString());
         console.log("Place user's marker");
       });
     console.log("Store new marker");
@@ -132,5 +147,13 @@ async function deletePlace(contentId) {
   };
 
   let URL = "/delete_marker?contentId=" + contentId;
-  await fetch(URL, options).then();
+  await fetch(URL, options)
+    .then((response) => response.json())
+    .then((deletionResult) => {
+      if (deletionResult) {
+        console.log("Successful deletion");
+      } else {
+        console.log("Unsuccessful deletion");
+      }
+    });
 }

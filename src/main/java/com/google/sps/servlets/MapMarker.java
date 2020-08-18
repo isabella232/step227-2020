@@ -29,7 +29,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
 
 /** Servlet that process information about user's markers. */
 @SuppressWarnings("serial")
@@ -48,15 +47,21 @@ public class MapMarker extends HttpServlet {
 
     // Get list of markers.
     List<Marker> markersList = new ArrayList<>();
+    int i = 0;
     for (Entity entity : results.asIterable()) {
       double lat = 0, lng = 0;
       Long id;
+
+      int visitHour = 0, visitMinute = 0, leaveHour = 0, leaveMinute = 0;
+      String markerName = "Place " + String.valueOf(i);
+      i += 1;
 
       lat = (Double) entity.getProperty("lat");
       lng = (Double) entity.getProperty("lng");
       id = entity.getKey().getId();
 
-      Marker marker = new Marker(lat, lng, id);
+      Marker marker =
+          new Marker(lat, lng, id, visitHour, visitMinute, leaveHour, leaveMinute, markerName);
 
       markersList.add(marker);
     }
@@ -76,21 +81,30 @@ public class MapMarker extends HttpServlet {
     String requestBody =
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
-    // Convert it to JSON.
-    JSONObject jsonBody = new JSONObject(requestBody);
+    // Convert it to Marker object.
+    Gson gson = new Gson();
+    Marker newMarker = gson.fromJson(requestBody, Marker.class);
 
     // Create new entity.
     Entity markerEntity = new Entity("Marker");
 
-    markerEntity.setProperty("lat", jsonBody.getDouble("lat"));
-    markerEntity.setProperty("lng", jsonBody.getDouble("lng"));
+    markerEntity.setProperty("lat", newMarker.getLat());
+    markerEntity.setProperty("lng", newMarker.getLng());
+
+    markerEntity.setProperty("visitHour", newMarker.getVisitHour());
+    markerEntity.setProperty("visitMinute", newMarker.getVisitMinute());
+
+    markerEntity.setProperty("leaveHour", newMarker.getLeaveHour());
+    markerEntity.setProperty("leaveMinute", newMarker.getLeaveMinute());
+
+    markerEntity.setProperty("name", newMarker.getMarkerName());
 
     // Store new marker.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(markerEntity);
 
     Long id = markerEntity.getKey().getId();
-    Gson gson = new Gson();
+    gson = new Gson();
     String json = gson.toJson(id);
 
     response.setContentType("application/json;");

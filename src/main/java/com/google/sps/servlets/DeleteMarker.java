@@ -18,6 +18,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,6 +33,7 @@ public class DeleteMarker extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Get Id from the request.
+    Boolean successfulDeletion = true;
     try {
       String contentId = request.getParameter("contentId");
       Long id = Long.parseLong(contentId);
@@ -41,7 +43,14 @@ public class DeleteMarker extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.delete(markerKey);
     } catch (Exception e) {
-      System.out.println("Can't find marker by id");
+      successfulDeletion = false;
     }
+
+    Gson gson = new Gson();
+    String json = gson.toJson(successfulDeletion);
+
+    // Return response to the request.
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 }
