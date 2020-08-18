@@ -63,7 +63,7 @@ public class ProfileInfoServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(userEntity);
 
-    // Redirect back to the HTML page - comments section.
+    // Redirect back to the profile page.
     response.sendRedirect("/profile.html");
   }
 

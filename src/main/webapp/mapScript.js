@@ -65,34 +65,6 @@ function initMap() {
   }
 }
 
-function loadRoute() {
-  let options = {
-    method: "GET",
-  };
-
-  fetch("/markers", options)
-    .then((response) => response.json())
-    .then((placesList) => {
-      console.log("Get json of places");
-
-      for (i in placesList) {
-        let lat = placesList[i].lat,
-          lng = placesList[i].lng,
-          id = placesList[i].id;
-        let position = { lat, lng };
-        let marker = new google.maps.Marker({
-          position: position,
-          map: map,
-        });
-        markersArray.push({ marker: marker, id: id.toString() });
-
-        addNewTableItem("Place name " + i.toString() + " ", id.toString());
-      }
-
-      console.log("Place markers");
-    });
-}
-
 function addNewTableItem(name, id) {
   let tabel = document.getElementById("places-table");
 
@@ -133,4 +105,35 @@ async function deletePlace(contentId) {
 
   let URL = "/delete_marker?contentId=" + contentId;
   await fetch(URL, options).then();
+}
+
+async function createRoute() {
+  var routeName = document.getElementById("route-name").value;
+  if (routeName == "") {
+    alert("Please add a name to your new route!");
+  } else {
+    var markersIds = [];
+    for (var i = 0; i < markersArray.length; i++) {
+      markersIds.push({ id: markersArray[i].id });
+    }
+    let options = {
+      method: "POST",
+      body: JSON.stringify(markersIds),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    let URL = "/storeRoute?routeName=" + routeName;
+    await fetch(URL, options).then();
+
+    let tabel = document.getElementById("places-table");
+    tabel.innerHTML = "";
+    for (var i = 0; i < markersArray.length; i++) {
+      markersArray[i].marker.setMap(null);
+    }
+    alert(
+      "Route successfully created!\nYou can see new created routes on your profile page!"
+    );
+  }
 }
