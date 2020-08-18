@@ -153,31 +153,43 @@ a#logout-link i {
   padding: 7px;
 }
 
+.info-line {
+  width: 250px;
+  height: 37px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-line input {
+  margin-left: 10px;
+}
+
+.info-line-notifications {
+  width: 350px;
+  height: 37px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+}
+
+.info-line-submit {
+  width: 120px;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #profile-info .insert-new-info {
   margin-top: 10px;
 }
 
-#profile-info label {
-  padding: 20px;
-}
-
-#profile-info #notification-status {
-  width: 500px;
-  margin-top: 10px;
-  display: block;
-  float: center;
-  text-align: center;
-  position: relative;
-}
-
 #submit-button {
-  justify-content: center;
-  align-items: center;
-  margin-top: 25px;
-  margin-left: 190px;
-  float: center;
   height: 25px;
-  width: 120px;
   border: solid rgb(163, 163, 163) 1px;
   background-color: rgb(255, 255, 255, 0.8);
   color: rgb(116, 116, 116);
