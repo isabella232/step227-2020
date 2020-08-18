@@ -19,6 +19,7 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,12 +28,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONArray;
 
 /** Servlet that process information about user's markers. */
 @SuppressWarnings("serial")
 @WebServlet("/storeRoute")
 public class RoutesStoring extends HttpServlet {
+  static class MarkerId {
+    String id;
+
+    MarkerId(String id) {
+      this.id = id;
+    }
+
+    String getId() {
+      return id;
+    }
+  }
   /** Processes POST request by storing routes. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -40,11 +51,12 @@ public class RoutesStoring extends HttpServlet {
     String requestBody =
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
-    // Convert it to JSON.
+    // Convert it to Gson Array.
+    Gson gson = new Gson();
+    MarkerId[] gsonArray = gson.fromJson(requestBody, MarkerId[].class);
     Collection<String> tourPoints = new ArrayList<String>();
-    JSONArray jsonArray = new JSONArray(requestBody);
-    for (int i = 0; i < jsonArray.length(); i++) {
-      tourPoints.add(jsonArray.getJSONObject(i).getString("id"));
+    for (MarkerId markerId : gsonArray) {
+      tourPoints.add(markerId.getId());
     }
 
     // Get route name.
