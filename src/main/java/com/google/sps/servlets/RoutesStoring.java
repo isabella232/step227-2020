@@ -17,20 +17,23 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.gson.Gson;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 /** Servlet that process information about user's markers. */
 @SuppressWarnings("serial")
-@WebServlet("/markers")
-public class MapMarker extends HttpServlet {
-  /** Processes POST request by storing received markers. */
+@WebServlet("/storeRoute")
+public class RoutesStoring extends HttpServlet {
+  /** Processes POST request by storing routes. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // Read request body.
@@ -38,23 +41,30 @@ public class MapMarker extends HttpServlet {
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
     // Convert it to JSON.
-    JSONObject jsonBody = new JSONObject(requestBody);
+    Collection<String> tourPoints = new ArrayList<String>();
+    JSONArray jsonArray = new JSONArray(requestBody);
+    for (int i = 0; i < jsonArray.length(); i++) {
+      tourPoints.add(jsonArray.getJSONObject(i).getString("id"));
+    }
+
+    // Get route name.
+    String routeName = request.getParameter("routeName");
+
+    // Get user email.
+    UserService userService = UserServiceFactory.getUserService();
+    String email = userService.getCurrentUser().getEmail();
 
     // Create new entity.
-    Entity markerEntity = new Entity("Marker");
+    Entity routeEntity = new Entity("Route");
 
-    markerEntity.setProperty("lat", jsonBody.getDouble("lat"));
-    markerEntity.setProperty("lng", jsonBody.getDouble("lng"));
+    routeEntity.setProperty("name", routeName);
+    routeEntity.setProperty("user", email);
+    routeEntity.setProperty("tourPoints", tourPoints);
 
     // Store new marker.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(markerEntity);
+    datastore.put(routeEntity);
 
-    Long id = markerEntity.getKey().getId();
-    Gson gson = new Gson();
-    String json = gson.toJson(id);
-
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.sendRedirect("index.html");
   }
 }

@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+function loadPage() {
+  checkLog();
+}
+
 //** Checks login status and display HTML elements accordingly. */
 async function checkLog() {
   const response = await fetch("/login");

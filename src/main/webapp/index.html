@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TheGlobetrotter</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="./mapScript.js"></script>
     <script src="script.js"></script>
+    <script src="mapScript.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -30,7 +30,7 @@
     ></script>
   </head>
 
-  <body onload="loadRoute()">
+  <body onload="loadPage()">
     <!-- Header -->
     <div id="header">
       <div class="headerbox">
@@ -57,7 +57,9 @@
       <div id="route-creation-section">
         <textarea id="route-name" placeholder="Route name..."></textarea><br />
         <ul id="places-table"></ul>
-        <button id="create-route-button">CREATE ROUTE</button>
+        <button id="create-route-button" onclick="createRoute()">
+          CREATE ROUTE
+        </button>
       </div>
       <div id="map"></div>
     </div>
