@@ -31,3 +31,44 @@ async function checkLog() {
     logButton.innerText = "LOGIN";
   }
 }
+
+function showSettings(contentId) {
+  var settings = document.getElementsByClassName("marker-setting")[0];
+  document.getElementById("submit-button").onclick = function () {
+    updateMarkerSettings(contentId);
+  };
+
+  // Show popup.
+  // setting.style.visibility = "visible";
+  settings.classList.toggle("show");
+}
+
+async function updateMarkerSettings(contentId) {
+  let markerName = document.getElementById("marker-name").value,
+    visitHour = document.getElementById("visit-hour").value,
+    visitMinute = document.getElementById("visit-minute").value,
+    leaveHour = document.getElementById("leave-hour").value,
+    leaveMinute = document.getElementById("leave-minute").value,
+    lat = -1, lng = -1, id = contentId;
+  
+  let data = {
+    lat,
+    lng,
+    id,
+    visitHour,
+    visitMinute,
+    leaveHour,
+    leaveMinute,
+    markerName,
+  };
+
+  let options = {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  await fetch("/markers", options);
+  console.log("Update marker settings");
+}

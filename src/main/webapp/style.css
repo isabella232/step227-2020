@@ -177,6 +177,95 @@ img {
   backdrop-filter: blur(1px);
 }
 
+.marker-setting {
+  visibility: hidden;
+  width: 350px;
+  height: 90px;
+  position: absolute;
+  right: 102%;
+  bottom: 25%;
+
+  background:  rgba(255, 255, 255, 0.8);
+  border: 1px solid black;
+  border-radius: 7px;
+}
+
+.marker-setting.show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+#marker-name {
+  width: 90px;
+  height: 25px;
+
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-right: 15px;
+  float: left;
+}
+
+.setting-line {
+  display: flex;
+  float: left;
+  margin-bottom: 5px;
+}
+
+.time-text {
+  padding: 3px;
+  display:inline-block
+}
+
+#visit-hour {
+  margin-left: 9px;
+  width: 25px;
+  height: 25px;
+  display:inline-block
+}
+
+#visit-minute {
+  width: 25px;
+  height: 25px;
+  display:inline-block
+}
+
+#leave-hour {
+  width: 25px;
+  height: 25px;
+  display:inline-block
+}
+
+#leave-minute {
+  width: 25px;
+  height: 25px;
+  display:inline-block
+}
+
+#submit-button {
+  height: 25px;
+  margin-top: 15px;
+}
+
 .fa-ellipsis-v {
   height: 25px;
   float: left;
@@ -190,6 +279,25 @@ img {
   padding-right: 10px;
 
   border-right: 1px solid rgb(200, 200, 200);
+}
+
+.fa-cog {
+  height: 25px;
+  float: right;
+  top: 0;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+
+  padding-right: 10px;
+  padding-top: 2px;
+  padding-left: 10px;
+
+  border-left: 1px solid rgb(200, 200, 200);
+}
+
+.fa-cog:hover {
+  color: green;
 }
 
 .fa-minus-square {

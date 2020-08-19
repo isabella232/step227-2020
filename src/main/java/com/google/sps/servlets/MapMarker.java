@@ -19,6 +19,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Marker;
 import java.io.IOException;
@@ -51,17 +53,18 @@ public class MapMarker extends HttpServlet {
     for (Entity entity : results.asIterable()) {
       double lat = 0, lng = 0;
       Long id;
+      String name;
 
       int visitHour = 0, visitMinute = 0, leaveHour = 0, leaveMinute = 0;
-      String markerName = "Place " + String.valueOf(i);
       i += 1;
 
       lat = (Double) entity.getProperty("lat");
       lng = (Double) entity.getProperty("lng");
       id = entity.getKey().getId();
+      name = (String) entity.getProperty("name");
 
       Marker marker =
-          new Marker(lat, lng, id, visitHour, visitMinute, leaveHour, leaveMinute, markerName);
+          new Marker(lat, lng, id, visitHour, visitMinute, leaveHour, leaveMinute, name);
 
       markersList.add(marker);
     }
@@ -85,29 +88,52 @@ public class MapMarker extends HttpServlet {
     Gson gson = new Gson();
     Marker newMarker = gson.fromJson(requestBody, Marker.class);
 
-    // Create new entity.
-    Entity markerEntity = new Entity("Marker");
-
-    markerEntity.setProperty("lat", newMarker.getLat());
-    markerEntity.setProperty("lng", newMarker.getLng());
-
-    markerEntity.setProperty("visitHour", newMarker.getVisitHour());
-    markerEntity.setProperty("visitMinute", newMarker.getVisitMinute());
-
-    markerEntity.setProperty("leaveHour", newMarker.getLeaveHour());
-    markerEntity.setProperty("leaveMinute", newMarker.getLeaveMinute());
-
-    markerEntity.setProperty("name", newMarker.getMarkerName());
-
-    // Store new marker.
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(markerEntity);
 
-    Long id = markerEntity.getKey().getId();
-    gson = new Gson();
-    String json = gson.toJson(id);
+    // To store new marker.
+    if (newMarker.getId() == -1) {
+      // Create new entity.
+      Entity markerEntity = new Entity("Marker");
 
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+      markerEntity.setProperty("lat", newMarker.getLat());
+      markerEntity.setProperty("lng", newMarker.getLng());
+
+      markerEntity.setProperty("visitHour", newMarker.getVisitHour());
+      markerEntity.setProperty("visitMinute", newMarker.getVisitMinute());
+
+      markerEntity.setProperty("leaveHour", newMarker.getLeaveHour());
+      markerEntity.setProperty("leaveMinute", newMarker.getLeaveMinute());
+
+      markerEntity.setProperty("name", newMarker.getMarkerName());
+
+      // Store new marker.
+      datastore.put(markerEntity);
+
+      Long id = markerEntity.getKey().getId();
+      gson = new Gson();
+      String json = gson.toJson(id);
+
+      response.setContentType("application/json;");
+      response.getWriter().println(json);
+      return;
+    }
+
+    // To update settings on an existing  markers.
+    Long id = newMarker.getId();
+
+    try {
+      Entity markerEntity = datastore.get(KeyFactory.createKey("Marker", id));
+
+      markerEntity.setProperty("visitHour", newMarker.getVisitHour());
+      markerEntity.setProperty("visitMinute", newMarker.getVisitMinute());
+
+      markerEntity.setProperty("leaveHour", newMarker.getLeaveHour());
+      markerEntity.setProperty("leaveMinute", newMarker.getLeaveMinute());
+
+      markerEntity.setProperty("name", newMarker.getMarkerName());
+      datastore.put(markerEntity);
+    } catch(Exception e) {
+
+    }
   }
 }

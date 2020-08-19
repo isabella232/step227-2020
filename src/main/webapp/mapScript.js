@@ -93,7 +93,8 @@ function loadRoute() {
       for (i in placesList) {
         let lat = placesList[i].lat,
           lng = placesList[i].lng,
-          id = placesList[i].id;
+          id = placesList[i].id,
+          name = placesList[i].markerName;
         let position = { lat, lng };
         let marker = new google.maps.Marker({
           position: position,
@@ -101,7 +102,7 @@ function loadRoute() {
         });
         markersArray.push({ marker: marker, id: id.toString() });
 
-        addNewTableItem("Place name " + i.toString() + " ", id.toString());
+        addNewTableItem(name, id.toString());
       }
 
       console.log("Place markers");
@@ -117,13 +118,12 @@ function addNewTableItem(name, id) {
 
   let markerSign = '<span class="fas fa-ellipsis-v"></span>';
   let placeName = name;
+  let showSelectFunction = "showSettings('" + id + "')"
+  let settingsButton = '<span class="fas fa-cog" onclick="' + showSelectFunction + '"></span>'
   let deleteFunction = "deletePlace('" + id + "')";
-  let deleteSign =
-    '<span class="fas fa-minus-square" onclick="' +
-    deleteFunction +
-    '"></span>';
+  let deleteSign = '<span class="fas fa-minus-square" onclick="' + deleteFunction + '"></span>';
 
-  newPlace.innerHTML = markerSign + placeName + deleteSign;
+  newPlace.innerHTML = markerSign + placeName + deleteSign + settingsButton;
 
   tabel.appendChild(newPlace);
 }
@@ -156,4 +156,8 @@ async function deletePlace(contentId) {
         console.log("Unsuccessful deletion");
       }
     });
+}
+
+function hey() {
+  console.log("hey");
 }
