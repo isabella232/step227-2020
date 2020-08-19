@@ -15,10 +15,10 @@
 function loadPage() {
   checkLog();
 }
-var loggedIn;
 
 //** Checks login status and display HTML elements accordingly. */
 async function checkLog() {
+  var loggedIn;
   const response = await fetch("/login");
   const loginInfo = await response.json();
 

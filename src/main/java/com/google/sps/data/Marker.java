@@ -14,22 +14,51 @@
 
 package com.google.sps.data;
 
+// TODO(#13): Add owner's id property.
 /** Google maps's markers's class. */
 public class Marker {
   private double lat;
   private double lng;
-  private Long id;
 
-  public Marker(double newLat, double newLng, Long newId) {
+  private int visitHour;
+  private int visitMinute;
+
+  private int leaveHour;
+  private int leaveMinute;
+
+  private String markerName;
+
+  public Marker(
+      double newLat,
+      double newLng,
+      int newVisitHour,
+      int newVisitMinute,
+      int newLeaveHour,
+      int newLeaveMinute,
+      String newMarkerName) {
     lat = newLat;
     lng = newLng;
-    id = newId;
+
+    visitHour = newVisitHour;
+    visitMinute = newVisitMinute;
+
+    leaveHour = newLeaveHour;
+    leaveMinute = newLeaveMinute;
+
+    markerName = newMarkerName;
   }
 
   public Marker() {
     lat = 0.0;
     lng = 0.0;
-    id = 0L;
+
+    visitHour = 0;
+    visitMinute = 0;
+
+    leaveHour = 0;
+    leaveMinute = 0;
+
+    markerName = "Place 0";
   }
 
   public double getLat() {
@@ -40,8 +69,24 @@ public class Marker {
     return lng;
   }
 
-  public Long getId() {
-    return id;
+  public int getVisitHour() {
+    return visitHour;
+  }
+
+  public int getVisitMinute() {
+    return visitMinute;
+  }
+
+  public int getLeaveHour() {
+    return leaveHour;
+  }
+
+  public int getLeaveMinute() {
+    return leaveMinute;
+  }
+
+  public String getMarkerName() {
+    return markerName;
   }
 
   public void setLat(double newLat) {
@@ -52,7 +97,23 @@ public class Marker {
     lng = newLng;
   }
 
-  public void setId(Long newId) {
-    id = newId;
+  public void setVisitHour(int newHour) {
+    visitHour = newHour;
+  }
+
+  public void setVisitMinute(int newMinute) {
+    visitMinute = newMinute;
+  }
+
+  public void setLeaveHour(int newHour) {
+    leaveHour = newHour;
+  }
+
+  public void setLeaveMinute(int newMinute) {
+    leaveMinute = newMinute;
+  }
+
+  public void setMarkerName(String newName) {
+    markerName = newName;
   }
 }

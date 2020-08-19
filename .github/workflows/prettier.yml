@@ -23,4 +23,3 @@ jobs:
         with:
           dry: true
           prettier_options: --write **/*.{html,js,md}
-          

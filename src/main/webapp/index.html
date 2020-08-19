@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TheGlobetrotter</title>
     <link rel="stylesheet" href="style.css" />
+
     <script src="./script.js"></script>
     <script src="./mapScript.js"></script>
 
@@ -59,7 +60,56 @@
       </div>
       <div id="route-creation-section">
         <textarea id="route-name" placeholder="Route name..."></textarea><br />
-        <ul id="places-table"></ul>
+        <ul id="places-table">
+          <div class="marker-setting">
+            <div id="marker-form">
+              <input
+                type="text"
+                id="marker-name"
+                name="marker-name"
+                placeholder="Marker name"
+              /><br />
+
+              <div class="setting-line">
+                <div class="time-text">Visit time</div>
+                <input
+                  type="text"
+                  id="visit-hour"
+                  name="visit-hour"
+                  value="-1"
+                /><br />
+                <div class="time-text">:</div>
+                <input
+                  type="text"
+                  id="visit-minute"
+                  name="visit-minute"
+                  value="-1"
+                /><br />
+              </div>
+
+              <div class="setting-line">
+                <div class="time-text">Leave time</div>
+                <input
+                  type="text"
+                  id="leave-hour"
+                  name="leave-hour"
+                  value="-1"
+                /><br />
+                <div class="time-text">:</div>
+                <input
+                  type="text"
+                  id="leave-minute"
+                  name="leave-minute"
+                  value="-1"
+                /><br />
+              </div>
+
+              <div>
+                <input type="submit" id="submit-button" />
+              </div>
+            </div>
+          </div>
+        </ul>
         <button id="create-route-button" onclick="createRoute()">
           CREATE ROUTE
         </button>

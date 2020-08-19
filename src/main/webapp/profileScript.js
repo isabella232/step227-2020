@@ -42,7 +42,6 @@ function showFavPlaceDetails(contentName, createClosePopup = true) {
   var popup = document.getElementById(contentId);
 
   var popups = document.getElementsByClassName("popups");
-  console.log(popups);
   for (var i = 0; i < popups.length; i++) {
     if (popups[i] == popup) {
       continue;
@@ -77,5 +76,5 @@ async function addLogoutLink() {
   const response = await fetch("/login");
   const loginInfo = await response.json();
 
-  document.getElementById("logout-link").href = loginInfo.actionURL;
+  document.getElementById("logout-link").href = loginInfo.actionUrl;
 }

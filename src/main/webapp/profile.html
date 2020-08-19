@@ -38,48 +38,58 @@
 
       <div id="profile-info">
         <form method="POST" action="/user-info" id="profile-form">
-          <label for="first-name">First name: </label>
-          <input
-            type="text"
-            id="first-name"
-            name="first-name"
-            class="insert-new-info"
-          /><br />
-
-          <label for="last-name">Last name: </label>
-          <input
-            type="text"
-            id="last-name"
-            name="last-name"
-            class="insert-new-info"
-          /><br />
-
-          <label for="nickname">Nickname: </label>
-          <input
-            type="text"
-            id="nickname"
-            name="nickname"
-            class="insert-new-info"
-          /><br />
-
-          <div id="notification-status">
+          <div class="info-line">
+            <label for="first-name">First name: </label>
             <input
-              id="notifications-on"
-              type="radio"
-              name="notifications"
-              value="unmute"
-            />
-            Send notifications
-            <input
-              id="notifications-off"
-              type="radio"
-              name="notifications"
-              value="mute"
-            />
-            Don't send notifications
+              type="text"
+              id="first-name"
+              name="first-name"
+              class="insert-new-info"
+            /><br />
           </div>
 
-          <input type="submit" value="Submit changes" id="submit-button" />
+          <div class="info-line">
+            <label for="last-name">Last name: </label>
+            <input
+              type="text"
+              id="last-name"
+              name="last-name"
+              class="insert-new-info"
+            /><br />
+          </div>
+
+          <div class="info-line">
+            <label for="nickname">Nickname: </label>
+            <input
+              type="text"
+              id="nickname"
+              name="nickname"
+              class="insert-new-info"
+            /><br />
+          </div>
+
+          <div class="info-line-notifications">
+            <div id="notification-status">
+              <input
+                id="notifications-on"
+                type="radio"
+                name="notifications"
+                value="unmute"
+              />
+              Send notifications
+              <input
+                id="notifications-off"
+                type="radio"
+                name="notifications"
+                value="mute"
+              />
+              Don't send notifications
+            </div>
+          </div>
+
+          <div class="info-line-submit">
+            <input type="submit" value="Submit changes" id="submit-button" />
+          </div>
         </form>
       </div>
 
