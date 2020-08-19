@@ -161,7 +161,3 @@ async function deletePlace(contentId) {
       }
     });
 }
-
-function hey() {
-  console.log("hey");
-}
