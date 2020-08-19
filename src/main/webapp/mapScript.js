@@ -13,18 +13,14 @@
 // limitations under the License.
 
 let map;
+var markersArray = [];
 
-function initMap(showMarkers = true) {
-  // Create markers.
-  let japanTemple = { lat: 34.462117, lng: 135.830272 };
-  let newZealandLake = { lat: -43.979931, lng: 170.194799 };
-  let ugandaView = { lat: -0.099273, lng: 32.652921 };
-
+function initMap() {
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
   map = new google.maps.Map(document.getElementById("map"), {
-    center: new google.maps.LatLng(0.211772, 102.290621),
-    zoom: 2.3,
+    center: new google.maps.LatLng(47.0, 5.15),
+    zoom: 2.8,
     fullscreenControl: false,
     streetViewControl: false,
     mapTypeControlOptions: {
@@ -32,20 +28,136 @@ function initMap(showMarkers = true) {
     },
   });
 
-  // Set markers on the map if marker flag is True.
-  if (showMarkers) {
-    let markerJapanTemple = new google.maps.Marker({
-      position: japanTemple,
-      map: map,
-    });
-    let markerNewZealand = new google.maps.Marker({
-      position: newZealandLake,
-      map: map,
-    });
-    let markerUganda = new google.maps.Marker({
-      position: ugandaView,
-      map: map,
-    });
-  }
+  map.addListener("click", function (event) {
+    placeMarker(event.latLng);
+  });
+
   console.log("Initialise new map");
+
+  async function placeMarker(location) {
+    let marker = new google.maps.Marker({
+      position: location,
+      map: map,
+    });
+
+    let lat = location.lat(),
+      lng = location.lng(),
+      id = -1,
+      visitHour = 0,
+      visitMinute = 0,
+      leaveHour = 0,
+      leaveMinute = 0,
+      markerName = "Place " + markersArray.length.toString();
+
+    let data = {
+      lat,
+      lng,
+      id,
+      visitHour,
+      visitMinute,
+      leaveHour,
+      leaveMinute,
+      markerName,
+    };
+    let options = {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    await fetch("/markers", options)
+      .then((response) => response.json())
+      .then((id) => {
+        console.log("receive new place's id " + id.toString());
+        markersArray.push({ marker: marker, id: id.toString() });
+
+        addNewTableItem(markerName, id.toString());
+        console.log("Place user's marker");
+      });
+    console.log("Store new marker");
+  }
+}
+
+function loadRoute() {
+  let options = {
+    method: "GET",
+  };
+
+  fetch("/markers", options)
+    .then((response) => response.json())
+    .then((placesList) => {
+      console.log("Get json of places");
+
+      for (i in placesList) {
+        let lat = placesList[i].lat,
+          lng = placesList[i].lng,
+          id = placesList[i].id,
+          name = placesList[i].markerName;
+        let position = { lat, lng };
+        let marker = new google.maps.Marker({
+          position: position,
+          map: map,
+        });
+        markersArray.push({ marker: marker, id: id.toString() });
+
+        addNewTableItem(name, id.toString());
+      }
+
+      console.log("Place markers");
+    });
+}
+
+function addNewTableItem(name, id) {
+  let tabel = document.getElementById("places-table");
+
+  let newPlace = document.createElement("li");
+  newPlace.id = id;
+  newPlace.classList.add("new-place");
+
+  let markerSign = '<span class="fas fa-ellipsis-v"></span>';
+  let placeName = name;
+  let showSelectFunction = "showSettings('" + id + "')";
+  let settingsButton =
+    '<span class="fas fa-cog" onclick="' + showSelectFunction + '"></span>';
+  let deleteFunction = "deletePlace('" + id + "')";
+  let deleteSign =
+    '<span class="fas fa-minus-square" onclick="' +
+    deleteFunction +
+    '"></span>';
+
+  newPlace.innerHTML = markerSign + placeName + deleteSign + settingsButton;
+
+  tabel.appendChild(newPlace);
+}
+
+async function deletePlace(contentId) {
+  let tableItem = document.getElementById(contentId);
+  tableItem.parentNode.removeChild(tableItem);
+  console.log("Remove place from the table");
+
+  for (var i = 0; i < markersArray.length; i++) {
+    if (markersArray[i].id == contentId) {
+      markersArray[i].marker.setMap(null);
+      markersArray.splice(i, 1);
+      console.log("remove marker from the array and the map");
+      break;
+    }
+  }
+
+  let options = {
+    method: "POST",
+  };
+
+  let URL = "/delete_marker?contentId=" + contentId;
+  await fetch(URL, options)
+    .then((response) => response.json())
+    .then((deletionResult) => {
+      if (deletionResult) {
+        console.log("Successful deletion");
+      } else {
+        console.log("Unsuccessful deletion");
+      }
+    });
 }
