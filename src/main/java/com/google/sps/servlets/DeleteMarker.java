@@ -43,6 +43,7 @@ public class DeleteMarker extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.delete(markerKey);
     } catch (Exception e) {
+      // TODO(#14): Catch more specific exceptions.
       successfulDeletion = false;
     }
 

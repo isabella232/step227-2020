@@ -132,7 +132,7 @@ public class MapMarker extends HttpServlet {
       markerEntity.setProperty("name", newMarker.getMarkerName());
       datastore.put(markerEntity);
     } catch (Exception e) {
-
+      // TODO(#14): Add proper java logging.
     }
   }
 }
