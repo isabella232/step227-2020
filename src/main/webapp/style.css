@@ -185,7 +185,7 @@ img {
   right: 102%;
   bottom: 25%;
 
-  background:  rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.8);
   border: 1px solid black;
   border-radius: 7px;
 }
@@ -233,32 +233,32 @@ img {
 
 .time-text {
   padding: 3px;
-  display:inline-block
+  display: inline-block;
 }
 
 #visit-hour {
   margin-left: 9px;
   width: 25px;
   height: 25px;
-  display:inline-block
+  display: inline-block;
 }
 
 #visit-minute {
   width: 25px;
   height: 25px;
-  display:inline-block
+  display: inline-block;
 }
 
 #leave-hour {
   width: 25px;
   height: 25px;
-  display:inline-block
+  display: inline-block;
 }
 
 #leave-minute {
   width: 25px;
   height: 25px;
-  display:inline-block
+  display: inline-block;
 }
 
 #submit-button {

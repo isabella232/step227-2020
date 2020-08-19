@@ -49,8 +49,10 @@ async function updateMarkerSettings(contentId) {
     visitMinute = document.getElementById("visit-minute").value,
     leaveHour = document.getElementById("leave-hour").value,
     leaveMinute = document.getElementById("leave-minute").value,
-    lat = -1, lng = -1, id = contentId;
-  
+    lat = -1,
+    lng = -1,
+    id = contentId;
+
   let data = {
     lat,
     lng,

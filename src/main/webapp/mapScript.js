@@ -118,10 +118,14 @@ function addNewTableItem(name, id) {
 
   let markerSign = '<span class="fas fa-ellipsis-v"></span>';
   let placeName = name;
-  let showSelectFunction = "showSettings('" + id + "')"
-  let settingsButton = '<span class="fas fa-cog" onclick="' + showSelectFunction + '"></span>'
+  let showSelectFunction = "showSettings('" + id + "')";
+  let settingsButton =
+    '<span class="fas fa-cog" onclick="' + showSelectFunction + '"></span>';
   let deleteFunction = "deletePlace('" + id + "')";
-  let deleteSign = '<span class="fas fa-minus-square" onclick="' + deleteFunction + '"></span>';
+  let deleteSign =
+    '<span class="fas fa-minus-square" onclick="' +
+    deleteFunction +
+    '"></span>';
 
   newPlace.innerHTML = markerSign + placeName + deleteSign + settingsButton;
 
