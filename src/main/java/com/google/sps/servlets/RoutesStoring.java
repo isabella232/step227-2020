@@ -67,9 +67,11 @@ public class RoutesStoring extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Gson gson = new Gson();
+
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
-      Error userError("Error: User is not logged in!");
+      Error userError = new Error("Error: User is not logged in!");
 
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(userError));
@@ -81,7 +83,6 @@ public class RoutesStoring extends HttpServlet {
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
     // Convert it to Gson Object.
-    Gson gson = new Gson();
     RouteData gsonObject = gson.fromJson(requestBody, RouteData.class);
     Marker[] routeMarkers = gsonObject.getMarkersData();
     String routeName = gsonObject.getRouteName();
@@ -117,9 +118,9 @@ public class RoutesStoring extends HttpServlet {
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(routeId));
 
-    // TODO(#14): Catch more specific exceptions.
+      // TODO(#14): Catch more specific exceptions.
     } catch (Exception e) {
-      Error userError("Error getting User from DataStore");
+      Error userError = new Error("Error getting User from DataStore");
 
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(userError));

@@ -62,7 +62,7 @@ public class LoginServlet extends HttpServlet {
       Key userKey = KeyFactory.createKey("User", userId);
       try {
         datastore.get(userKey);
-      // TODO(#16): Use query instead of get.
+        // TODO(#16): Use query instead of get.
       } catch (Exception e) {
         datastore.put(new Entity("User", userId));
       }
