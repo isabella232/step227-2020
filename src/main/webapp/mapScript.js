@@ -164,7 +164,15 @@ async function createRoute() {
     };
 
     // TODO(#17): Handle response from fetch.
-    await fetch("/storeRoute", options).then();
+    await fetch("/storeRoute", options)
+      .then((response) => response.json())
+      .then((status) => {
+        if (status.hasOwnProperty("errorMessage")) {
+          alert(status.errorMessage);
+        } else {
+          console.log("receive new place's id " + status.toString());
+        }
+      });
 
     // Remove route details from the page.
     document.getElementById("places-table").innerHTML = "";

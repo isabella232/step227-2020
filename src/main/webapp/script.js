@@ -42,18 +42,6 @@ async function checkLog() {
   return loggedIn;
 }
 
-// Show a marker's settings area.
-function showSettings(contentId) {
-  var settings = document.getElementsByClassName("marker-setting")[0];
-  document.getElementById("submit-button").onclick = function () {
-    updateMarkerSettings(contentId);
-  };
-
-  // Show popup.
-  // setting.style.visibility = "visible";
-  settings.classList.toggle("show");
-}
-
 // Show an area to share a route with friends.
 function showShareSection() {
   var section = document.getElementById("share-section");
