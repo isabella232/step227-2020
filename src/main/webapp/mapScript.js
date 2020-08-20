@@ -51,12 +51,15 @@ function initMap() {
 
         markersArray.push({
           marker: marker,
-          index: index.toString(),
-          name: markerName,
-          visitHour: visitHour,
-          visitMinute: visitMinute,
-          leaveHour: leaveHour,
-          leaveMinute: leaveMinute,
+          data: {
+            lat: location.lat(),
+            lng: location.lng(),
+            visitHour: visitHour,
+            visitMinute: visitMinute,
+            leaveHour: leaveHour,
+            leaveMinute: leaveMinute,
+            markerName: markerName,
+          },
         });
         addNewTableItem(markerName, index.toString());
       }
@@ -92,13 +95,9 @@ function deletePlace(contentId) {
   tableItem.parentNode.removeChild(tableItem);
   console.log("Remove place from the table");
 
-  for (var i = 0; i < markersArray.length; i++) {
-    if (markersArray[i].index == contentId) {
-      markersArray[i].marker.setMap(null);
-      markersArray.splice(i, 1);
-      console.log("remove marker from the array and the map");
-    }
-  }
+  markersArray[contentId].marker.setMap(null);
+  markersArray.splice(contentId, 1);
+  console.log("remove marker from the array and the map");
 }
 
 function showSettings(contentId) {
@@ -110,15 +109,16 @@ function showSettings(contentId) {
   // Show popup.
   // setting.style.visibility = "visible";
   settings.classList.toggle("show");
-  document.getElementById("marker-name").value = markersArray[contentId].name;
+  document.getElementById("marker-name").value =
+    markersArray[contentId].data.markerName;
   document.getElementById("visit-hour").value =
-    markersArray[contentId].visitHour;
+    markersArray[contentId].data.visitHour;
   document.getElementById("visit-minute").value =
-    markersArray[contentId].visitMinute;
+    markersArray[contentId].data.visitMinute;
   document.getElementById("leave-hour").value =
-    markersArray[contentId].leaveHour;
+    markersArray[contentId].data.leaveHour;
   document.getElementById("leave-minute").value =
-    markersArray[contentId].leaveMinute;
+    markersArray[contentId].data.leaveMinute;
 }
 
 function updateMarkerSettings(contentId) {
@@ -128,11 +128,11 @@ function updateMarkerSettings(contentId) {
     leaveHour = document.getElementById("leave-hour").value,
     leaveMinute = document.getElementById("leave-minute").value;
 
-  markersArray[contentId].name = markerName;
-  markersArray[contentId].visitHour = visitHour;
-  markersArray[contentId].visitMinute = visitMinute;
-  markersArray[contentId].leaveHour = leaveHour;
-  markersArray[contentId].leaveMinute = leaveMinute;
+  markersArray[contentId].data.markerName = markerName;
+  markersArray[contentId].data.visitHour = visitHour;
+  markersArray[contentId].data.visitMinute = visitMinute;
+  markersArray[contentId].data.leaveHour = leaveHour;
+  markersArray[contentId].data.leaveMinute = leaveMinute;
 
   let tableItemElemens = document.getElementById("place" + contentId)
     .childNodes;
@@ -144,55 +144,28 @@ async function createRoute() {
   if (routeName == "") {
     alert("Please add a name to your new route!");
   } else {
-    var markersIds = [];
-    console.log(markersArray);
-
+    var markersData = [];
     for (var i = 0; i < markersArray.length; i++) {
-      let lat = markersArray[i].marker.position.lat(),
-        lng = markersArray[i].marker.position.lng();
-      (markerName = markersArray[i].name),
-        (visitHour = markersArray[i].visitHour),
-        (visitMinute = markersArray[i].visitMinute),
-        (leaveHour = markersArray[i].leaveHour),
-        (leaveMinute = markersArray[i].leaveMinute);
-
-      let markerData = {
-        lat,
-        lng,
-        visitHour,
-        visitMinute,
-        leaveHour,
-        leaveMinute,
-        markerName,
-      };
-
-      let options = {
-        method: "POST",
-        body: JSON.stringify(markerData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-
-      await fetch("/markers", options)
-        .then((response) => response.json())
-        .then((id) => {
-          console.log("receive new place's id " + id.toString());
-          markersIds.push({ id: id });
-        });
+      markersData.push(markersArray[i].data);
     }
+
+    var routeData = {
+      routeName: routeName,
+      markersData: markersData,
+    };
+    console.log(routeData);
 
     let options = {
       method: "POST",
-      body: JSON.stringify(markersIds),
+      body: JSON.stringify(routeData),
       headers: {
         "Content-Type": "application/json",
       },
     };
 
-    let URL = "/storeRoute?routeName=" + routeName;
-    await fetch(URL, options).then();
+    await fetch("/storeRoute", options).then();
 
+    // Remove route details from the page.
     document.getElementById("places-table").innerHTML = "";
     document.getElementById("route-name").value = "";
     for (var i = 0; i < markersArray.length; i++) {

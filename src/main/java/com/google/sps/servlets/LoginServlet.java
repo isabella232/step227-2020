@@ -14,6 +14,8 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -53,6 +55,17 @@ public class LoginServlet extends HttpServlet {
     if (userService.isUserLoggedIn()) {
       String logoutUrl = userService.createLogoutURL("/");
       loginStatus = new LoginStatus(true, logoutUrl);
+
+      // Create user entity if it doesn't already exist.
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      String userId = userService.getCurrentUser().getUserId();
+      Key userKey = KeyFactory.createKey("User", userId);
+      try {
+        datastore.get(userKey);
+      } catch (Exception e) {
+        datastore.put(new Entity("User", userId));
+      }
+
     } else {
       String loginUrl = userService.createLoginURL("/");
       loginStatus = new LoginStatus(false, loginUrl);

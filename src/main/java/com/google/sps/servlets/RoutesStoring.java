@@ -14,15 +14,12 @@
 
 package com.google.sps.servlets;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.sps.data.Marker;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,21 +30,31 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 @WebServlet("/storeRoute")
 public class RoutesStoring extends HttpServlet {
-  static class MarkerId {
-    String id;
+  static class RouteData {
+    String routeName;
+    Marker[] markersData;
 
-    MarkerId(String id) {
-      this.id = id;
+    RouteData(String routeName, Marker[] markersData) {
+      this.routeName = routeName;
+      this.markersData = markersData;
     }
 
-    String getId() {
-      return id;
+    String getRouteName() {
+      return routeName;
+    }
+
+    Marker[] getMarkersData() {
+      return markersData;
     }
   }
+
+  String json;
+
   /** Processes POST request by storing routes. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
       response.setContentType("text/html;");
@@ -60,31 +67,41 @@ public class RoutesStoring extends HttpServlet {
     String requestBody =
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
-    // Convert it to Gson Array.
+    // Convert it to Gson Object.
     Gson gson = new Gson();
-    MarkerId[] gsonArray = gson.fromJson(requestBody, MarkerId[].class);
-    Collection<String> tourPoints = new ArrayList<String>();
-    for (MarkerId markerId : gsonArray) {
-      tourPoints.add(markerId.getId());
+    RouteData gsonObject = gson.fromJson(requestBody, RouteData.class);
+    Marker[] routeMarkers = gsonObject.getMarkersData();
+    String routeName = gsonObject.getRouteName();
+
+    Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getUserId());
+
+    try {
+      Entity userEntity = datastore.get(userKey);
+      // Create new route entity and make it child of the user.
+      Entity routeEntity = new Entity("Route", userEntity.getKey());
+      routeEntity.setProperty("name", routeName);
+      datastore.put(routeEntity);
+
+      for (Marker marker : routeMarkers) {
+        // Create entities for markers and make them children of the route.
+        Entity markerEntity = new Entity("Marker", routeEntity.getKey());
+
+        markerEntity.setProperty("lat", marker.getLat());
+        markerEntity.setProperty("lng", marker.getLng());
+        markerEntity.setProperty("visitHour", marker.getVisitHour());
+        markerEntity.setProperty("visitMinute", marker.getVisitMinute());
+        markerEntity.setProperty("leaveHour", marker.getLeaveHour());
+        markerEntity.setProperty("leaveMinute", marker.getLeaveMinute());
+        markerEntity.setProperty("markerName", marker.getMarkerName());
+
+        // Store new marker.
+        datastore.put(markerEntity);
+      }
+      response.sendRedirect("index.html");
+    } catch (Exception e) {
+      response.setContentType("text/html;");
+      response.getWriter().println("<p>Error getting User from DataStore</p>");
+      return;
     }
-
-    // Get route name.
-    String routeName = request.getParameter("routeName");
-
-    // Get user email.
-    String email = userService.getCurrentUser().getEmail();
-
-    // Create new entity.
-    Entity routeEntity = new Entity("Route");
-
-    routeEntity.setProperty("name", routeName);
-    routeEntity.setProperty("user", email);
-    routeEntity.setProperty("tourPoints", tourPoints);
-
-    // Store new marker.
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(routeEntity);
-
-    response.sendRedirect("index.html");
   }
 }

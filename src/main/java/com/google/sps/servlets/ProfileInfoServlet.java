@@ -15,9 +15,6 @@
 package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -50,17 +47,13 @@ public class ProfileInfoServlet extends HttpServlet {
     String nickname = getParameter(request, "nickname", "Anonym");
     boolean notifications = ((getParameter(request, "radio", "mute")) != "mute");
 
-    // Get user's email.
-    String email = userService.getCurrentUser().getEmail();
-
-    // Store the comments as entities.
-    Entity userEntity = new Entity("User", email);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Entity userEntity = new Entity("User", userService.getCurrentUser().getUserId());
     userEntity.setProperty("firstName", firstName);
     userEntity.setProperty("lastName", lastName);
     userEntity.setProperty("nickname", nickname);
     userEntity.setProperty("notifications", notifications);
 
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(userEntity);
 
     // Redirect back to the profile page.
@@ -86,9 +79,11 @@ public class ProfileInfoServlet extends HttpServlet {
 
     User currentUser;
     if (userService.isUserLoggedIn()) {
-      Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getEmail());
+      String userId = userService.getCurrentUser().getUserId();
+      Key userKey = KeyFactory.createKey("User", userId);
 
       try {
+        // Return current user's info.
         Entity userEntity = datastore.get(userKey);
         currentUser =
             new User(
@@ -97,7 +92,7 @@ public class ProfileInfoServlet extends HttpServlet {
                 (String) userEntity.getProperty("nickname"),
                 (boolean) userEntity.getProperty("notifications"));
       } catch (Exception e) {
-        currentUser = new User("Set first name...", "Set last name...", "Set nickname...", false);
+        currentUser = new User("Not set", "Not set", "Not set", false);
       }
     } else {
       currentUser = new User("Undefined", "Undefined", "Undefined", false);
