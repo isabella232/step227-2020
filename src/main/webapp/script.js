@@ -30,8 +30,7 @@ async function checkLog() {
   if (loginInfo.loggedIn === true) {
     document.getElementById("profile").style.visibility = "visible";
     logButton.innerText = "LOGOUT";
-    document.getElementById("route-creation-section").style.visibility =
-      "visible";
+    document.getElementById("route-content").style.visibility = "visible";
     loggedIn = true;
     // User is not logged in.
   } else {
@@ -41,4 +40,10 @@ async function checkLog() {
     loggedIn = false;
   }
   return loggedIn;
+}
+
+// Show an area to share a route with friends.
+function showShareSection() {
+  var section = document.getElementById("share-section");
+  section.classList.toggle("show");
 }

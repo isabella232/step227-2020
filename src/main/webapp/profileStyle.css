@@ -327,6 +327,10 @@ a:visited {
   display: none;
 }
 
+#shared-routes {
+  display: none;
+}
+
 #fav-places {
   display: none;
 }
@@ -371,6 +375,10 @@ a:visited {
 }
 
 #future-routes-item {
+  color: grey;
+}
+
+#shared-routes-item {
   color: grey;
 }
 
