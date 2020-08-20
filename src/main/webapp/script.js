@@ -12,8 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+function loadPage() {
+  checkLog();
+}
+
 //** Checks login status and display HTML elements accordingly. */
 async function checkLog() {
+  var loggedIn;
   const response = await fetch("/login");
   const loginInfo = await response.json();
 
@@ -25,52 +30,15 @@ async function checkLog() {
   if (loginInfo.loggedIn === true) {
     document.getElementById("profile").style.visibility = "visible";
     logButton.innerText = "LOGOUT";
+    document.getElementById("route-creation-section").style.visibility =
+      "visible";
+    loggedIn = true;
     // User is not logged in.
   } else {
     document.getElementById("profile").style.visibility = "hidden";
     logButton.innerText = "LOGIN";
+    document.getElementById("login-required").style.visibility = "visible";
+    loggedIn = false;
   }
-}
-
-function showSettings(contentId) {
-  var settings = document.getElementsByClassName("marker-setting")[0];
-  document.getElementById("submit-button").onclick = function () {
-    updateMarkerSettings(contentId);
-  };
-
-  // Show popup.
-  // setting.style.visibility = "visible";
-  settings.classList.toggle("show");
-}
-
-async function updateMarkerSettings(contentId) {
-  let markerName = document.getElementById("marker-name").value,
-    visitHour = document.getElementById("visit-hour").value,
-    visitMinute = document.getElementById("visit-minute").value,
-    leaveHour = document.getElementById("leave-hour").value,
-    leaveMinute = document.getElementById("leave-minute").value,
-    lat = -1,
-    lng = -1,
-    id = contentId;
-
-  let data = {
-    lat,
-    lng,
-    id,
-    visitHour,
-    visitMinute,
-    leaveHour,
-    leaveMinute,
-    markerName,
-  };
-
-  let options = {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-  await fetch("/markers", options);
-  console.log("Update marker settings");
+  return loggedIn;
 }

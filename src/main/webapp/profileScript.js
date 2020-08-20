@@ -76,5 +76,5 @@ async function addLogoutLink() {
   const response = await fetch("/login");
   const loginInfo = await response.json();
 
-  document.getElementById("logout-link").href = loginInfo.actionURL;
+  document.getElementById("logout-link").href = loginInfo.actionUrl;
 }

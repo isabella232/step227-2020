@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TheGlobetrotter</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="./mapScript.js"></script>
+
     <script src="./script.js"></script>
+    <script src="./mapScript.js"></script>
 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -30,7 +31,7 @@
     ></script>
   </head>
 
-  <body onload="loadRoute()">
+  <body onload="loadPage()">
     <!-- Header -->
     <div id="header">
       <div class="headerbox">
@@ -54,59 +55,62 @@
 
     <!-- Main section -->
     <div id="map-section">
+      <div id="login-required">
+        <p>Login to start creating your trips!</p>
+      </div>
       <div id="route-creation-section">
         <textarea id="route-name" placeholder="Route name..."></textarea><br />
-        <ul id="places-table">
-          <div class="marker-setting">
-            <form id="marker-form">
+        <div class="marker-setting">
+          <div id="marker-form">
+            <input
+              type="text"
+              id="marker-name"
+              name="marker-name"
+              placeholder="Marker name"
+            /><br />
+
+            <div class="setting-line">
+              <div class="time-text">Visit time</div>
               <input
                 type="text"
-                id="marker-name"
-                name="marker-name"
-                placeholder="Marker name"
+                id="visit-hour"
+                name="visit-hour"
+                value="-1"
               /><br />
+              <div class="time-text">:</div>
+              <input
+                type="text"
+                id="visit-minute"
+                name="visit-minute"
+                value="-1"
+              /><br />
+            </div>
 
-              <div class="setting-line">
-                <div class="time-text">Visit time</div>
-                <input
-                  type="text"
-                  id="visit-hour"
-                  name="visit-hour"
-                  value="-1"
-                /><br />
-                <div class="time-text">:</div>
-                <input
-                  type="text"
-                  id="visit-minute"
-                  name="visit-minute"
-                  value="-1"
-                /><br />
-              </div>
-
-              <div class="setting-line">
-                <div class="time-text">Leave time</div>
-                <input
-                  type="text"
-                  id="leave-hour"
-                  name="leave-hour"
-                  value="-1"
-                /><br />
-                <div class="time-text">:</div>
-                <input
-                  type="text"
-                  id="leave-minute"
-                  name="leave-minute"
-                  value="-1"
-                /><br />
-              </div>
-
-              <div>
-                <input type="submit" id="submit-button" />
-              </div>
-            </form>
+            <div class="setting-line">
+              <div class="time-text">Leave time</div>
+              <input
+                type="text"
+                id="leave-hour"
+                name="leave-hour"
+                value="-1"
+              /><br />
+              <div class="time-text">:</div>
+              <input
+                type="text"
+                id="leave-minute"
+                name="leave-minute"
+                value="-1"
+              /><br />
+            </div>
+            <div>
+              <input type="submit" id="submit-button" />
+            </div>
           </div>
-        </ul>
-        <button id="create-route-button">CREATE ROUTE</button>
+        </div>
+        <ul id="places-table"></ul>
+        <button id="create-route-button" onclick="createRoute()">
+          CREATE ROUTE
+        </button>
       </div>
       <div id="map"></div>
     </div>

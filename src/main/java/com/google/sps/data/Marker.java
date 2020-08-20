@@ -19,7 +19,6 @@ package com.google.sps.data;
 public class Marker {
   private double lat;
   private double lng;
-  private Long id;
 
   private int visitHour;
   private int visitMinute;
@@ -32,7 +31,6 @@ public class Marker {
   public Marker(
       double newLat,
       double newLng,
-      Long newId,
       int newVisitHour,
       int newVisitMinute,
       int newLeaveHour,
@@ -40,7 +38,6 @@ public class Marker {
       String newMarkerName) {
     lat = newLat;
     lng = newLng;
-    id = newId;
 
     visitHour = newVisitHour;
     visitMinute = newVisitMinute;
@@ -54,7 +51,6 @@ public class Marker {
   public Marker() {
     lat = 0.0;
     lng = 0.0;
-    id = 0L;
 
     visitHour = 0;
     visitMinute = 0;
@@ -71,10 +67,6 @@ public class Marker {
 
   public double getLng() {
     return lng;
-  }
-
-  public Long getId() {
-    return id;
   }
 
   public int getVisitHour() {
@@ -103,10 +95,6 @@ public class Marker {
 
   public void setLng(double newLng) {
     lng = newLng;
-  }
-
-  public void setId(Long newId) {
-    id = newId;
   }
 
   public void setVisitHour(int newHour) {

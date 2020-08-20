@@ -28,100 +28,58 @@ function initMap() {
     },
   });
 
-  map.addListener("click", function (event) {
-    placeMarker(event.latLng);
-  });
-
-  console.log("Initialise new map");
-
-  async function placeMarker(location) {
-    let marker = new google.maps.Marker({
-      position: location,
-      map: map,
-    });
-
-    let lat = location.lat(),
-      lng = location.lng(),
-      id = -1,
-      visitHour = 0,
-      visitMinute = 0,
-      leaveHour = 0,
-      leaveMinute = 0,
-      markerName = "Place " + markersArray.length.toString();
-
-    let data = {
-      lat,
-      lng,
-      id,
-      visitHour,
-      visitMinute,
-      leaveHour,
-      leaveMinute,
-      markerName,
-    };
-    let options = {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    await fetch("/markers", options)
-      .then((response) => response.json())
-      .then((id) => {
-        console.log("receive new place's id " + id.toString());
-        markersArray.push({ marker: marker, id: id.toString() });
-
-        addNewTableItem(markerName, id.toString());
-        console.log("Place user's marker");
+  checkLog().then((loggedIn) => {
+    if (loggedIn == true) {
+      map.addListener("click", function (event) {
+        placeMarker(event.latLng);
       });
-    console.log("Store new marker");
-  }
-}
 
-function loadRoute() {
-  let options = {
-    method: "GET",
-  };
+      console.log("Initialise new map");
 
-  fetch("/markers", options)
-    .then((response) => response.json())
-    .then((placesList) => {
-      console.log("Get json of places");
-
-      for (i in placesList) {
-        let lat = placesList[i].lat,
-          lng = placesList[i].lng,
-          id = placesList[i].id,
-          name = placesList[i].markerName;
-        let position = { lat, lng };
+      async function placeMarker(location) {
         let marker = new google.maps.Marker({
-          position: position,
+          position: location,
           map: map,
         });
-        markersArray.push({ marker: marker, id: id.toString() });
 
-        addNewTableItem(name, id.toString());
+        let index = markersArray.length,
+          visitHour = 0,
+          visitMinute = 0,
+          leaveHour = 0,
+          leaveMinute = 0,
+          markerName = "Place " + markersArray.length.toString();
+
+        markersArray.push({
+          marker: marker,
+          data: {
+            lat: location.lat(),
+            lng: location.lng(),
+            visitHour: visitHour,
+            visitMinute: visitMinute,
+            leaveHour: leaveHour,
+            leaveMinute: leaveMinute,
+            markerName: markerName,
+          },
+        });
+        addNewTableItem(markerName, index.toString());
       }
-
-      console.log("Place markers");
-    });
+    }
+  });
 }
 
-function addNewTableItem(name, id) {
+function addNewTableItem(name, index) {
   let tabel = document.getElementById("places-table");
 
   let newPlace = document.createElement("li");
-  newPlace.id = id;
+  newPlace.id = "place" + index;
   newPlace.classList.add("new-place");
 
   let markerSign = '<span class="fas fa-ellipsis-v"></span>';
-  let placeName = name;
-  let showSelectFunction = "showSettings('" + id + "')";
+  let placeName = '<span id="place-name">' + name + "</span>";
+  let deleteFunction = "deletePlace('" + index + "')";
+  let showSelectFunction = "showSettings('" + index + "')";
   let settingsButton =
     '<span class="fas fa-cog" onclick="' + showSelectFunction + '"></span>';
-  let deleteFunction = "deletePlace('" + id + "')";
   let deleteSign =
     '<span class="fas fa-minus-square" onclick="' +
     deleteFunction +
@@ -132,32 +90,91 @@ function addNewTableItem(name, id) {
   tabel.appendChild(newPlace);
 }
 
-async function deletePlace(contentId) {
-  let tableItem = document.getElementById(contentId);
+function deletePlace(contentId) {
+  let tableItem = document.getElementById("place" + contentId);
   tableItem.parentNode.removeChild(tableItem);
   console.log("Remove place from the table");
 
-  for (var i = 0; i < markersArray.length; i++) {
-    if (markersArray[i].id == contentId) {
-      markersArray[i].marker.setMap(null);
-      markersArray.splice(i, 1);
-      console.log("remove marker from the array and the map");
-      break;
-    }
-  }
+  markersArray[contentId].marker.setMap(null);
+  markersArray.splice(contentId, 1);
+  console.log("remove marker from the array and the map");
+}
 
-  let options = {
-    method: "POST",
+function showSettings(contentId) {
+  var settings = document.getElementsByClassName("marker-setting")[0];
+  document.getElementById("submit-button").onclick = function () {
+    updateMarkerSettings(contentId);
   };
 
-  let URL = "/delete_marker?contentId=" + contentId;
-  await fetch(URL, options)
-    .then((response) => response.json())
-    .then((deletionResult) => {
-      if (deletionResult) {
-        console.log("Successful deletion");
-      } else {
-        console.log("Unsuccessful deletion");
-      }
-    });
+  // Show popup.
+  // setting.style.visibility = "visible";
+  settings.classList.toggle("show");
+  document.getElementById("marker-name").value =
+    markersArray[contentId].data.markerName;
+  document.getElementById("visit-hour").value =
+    markersArray[contentId].data.visitHour;
+  document.getElementById("visit-minute").value =
+    markersArray[contentId].data.visitMinute;
+  document.getElementById("leave-hour").value =
+    markersArray[contentId].data.leaveHour;
+  document.getElementById("leave-minute").value =
+    markersArray[contentId].data.leaveMinute;
+}
+
+function updateMarkerSettings(contentId) {
+  let markerName = document.getElementById("marker-name").value,
+    visitHour = document.getElementById("visit-hour").value,
+    visitMinute = document.getElementById("visit-minute").value,
+    leaveHour = document.getElementById("leave-hour").value,
+    leaveMinute = document.getElementById("leave-minute").value;
+
+  markersArray[contentId].data.markerName = markerName;
+  markersArray[contentId].data.visitHour = visitHour;
+  markersArray[contentId].data.visitMinute = visitMinute;
+  markersArray[contentId].data.leaveHour = leaveHour;
+  markersArray[contentId].data.leaveMinute = leaveMinute;
+
+  let tableItemElemens = document.getElementById("place" + contentId)
+    .childNodes;
+  tableItemElemens[1].innerHTML = markerName;
+}
+
+async function createRoute() {
+  var routeName = document.getElementById("route-name").value;
+  if (routeName == "") {
+    alert("Please add a name to your new route!");
+  } else {
+    var markersData = [];
+    for (var i = 0; i < markersArray.length; i++) {
+      markersData.push(markersArray[i].data);
+    }
+
+    var routeData = {
+      routeName: routeName,
+      markersData: markersData,
+    };
+    console.log(routeData);
+
+    let options = {
+      method: "POST",
+      body: JSON.stringify(routeData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    // TODO(#17): Handle response from fetch.
+    await fetch("/storeRoute", options).then();
+
+    // Remove route details from the page.
+    document.getElementById("places-table").innerHTML = "";
+    document.getElementById("route-name").value = "";
+    for (var i = 0; i < markersArray.length; i++) {
+      markersArray[i].marker.setMap(null);
+    }
+    markersArray = [];
+    alert(
+      "Route successfully created!\nYou can see new created routes on your profile page!"
+    );
+  }
 }
