@@ -48,6 +48,18 @@ public class RoutesStoring extends HttpServlet {
     }
   }
 
+  static class Error {
+    String errorMessage;
+
+    Error(String errorMessage) {
+      this.errorMessage = errorMessage;
+    }
+
+    String getErrorMessage() {
+      return errorMessage;
+    }
+  }
+
   String json;
 
   /** Processes POST request by storing routes. */
@@ -57,9 +69,10 @@ public class RoutesStoring extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
-      response.setContentType("text/html;");
-      response.getWriter().println("<p>ERROR: You are not logged in</p>");
-      response.getWriter().println("<a href=\"index.html\">Go to home page</button>");
+      Error userError("Error: User is not logged in!");
+
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(userError));
       return;
     }
 
@@ -97,11 +110,19 @@ public class RoutesStoring extends HttpServlet {
         // Store new marker.
         datastore.put(markerEntity);
       }
-      response.sendRedirect("index.html");
+
+      // Respond with new created route id.
+      Long routeId = routeEntity.getKey().getId();
+
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(routeId));
+
+    // TODO(#14): Catch more specific exceptions.
     } catch (Exception e) {
-      response.setContentType("text/html;");
-      response.getWriter().println("<p>Error getting User from DataStore</p>");
-      return;
+      Error userError("Error getting User from DataStore");
+
+      response.setContentType("application/json;");
+      response.getWriter().println(gson.toJson(userError));
     }
   }
 }

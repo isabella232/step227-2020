@@ -163,6 +163,7 @@ async function createRoute() {
       },
     };
 
+    // TODO(#17): Handle response from fetch.
     await fetch("/storeRoute", options).then();
 
     // Remove route details from the page.
