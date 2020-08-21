@@ -53,30 +53,32 @@ function showShareSection() {
 function loadRoutes() {
   let routesGrid = document.getElementById("routes-grid");
   routesGrid.innerHTML = "";
-  fetch('/show-suggestions').then(response => response.json()).then((routes) => {
-    routes.forEach((route) => {
-      routesGrid.appendChild(createRouteCard(route));
-    })
-    if(routesGrid === "")
-      routesGrid.innerHTML = "No suggestions available!";
-  });
+  fetch("/show-suggestions")
+    .then((response) => response.json())
+    .then((routes) => {
+      routes.forEach((route) => {
+        routesGrid.appendChild(createRouteCard(route));
+      });
+      if (routesGrid === "") routesGrid.innerHTML = "No suggestions available!";
+    });
 }
 
 function createRouteCard(route) {
-  let routeCard = document.createElement('div');
+  let routeCard = document.createElement("div");
   routeCard.className = "route-card";
 
-  let routeDetails = document.createElement('div');
+  let routeDetails = document.createElement("div");
   routeDetails.className = "route-details";
 
-  let routeName = '<p class="route-name">' + route.routeName + '</p>';
-  let button1 = '<button class="action-button"><span>See on the map </span></button><br />';
-  let button2 = '<button class="action-button"><span>Add to future routes </span></button>';
+  let routeName = '<p class="route-name">' + route.routeName + "</p>";
+  let button1 =
+    '<button class="action-button"><span>See on the map </span></button><br />';
+  let button2 =
+    '<button class="action-button"><span>Add to future routes </span></button>';
 
-  let routeImage = document.createElement('img');
+  let routeImage = document.createElement("img");
   routeImage.src = "pictures/praga-small.jpg";
-  routeImage.alt =  "praga";
-
+  routeImage.alt = "praga";
 
   routeDetails.innerHTML = routeName + button1 + button2;
   routeCard.appendChild(routeDetails);

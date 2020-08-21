@@ -19,30 +19,18 @@ public class Marker {
   private double lat;
   private double lng;
 
-  private long visitHour;
-  private long visitMinute;
-
-  private long leaveHour;
-  private long leaveMinute;
+  private long stayHour;
+  private long stayMinute;
 
   private String markerName;
 
   public Marker(
-      double newLat,
-      double newLng,
-      long newVisitHour,
-      long newVisitMinute,
-      long newLeaveHour,
-      long newLeaveMinute,
-      String newMarkerName) {
+      double newLat, double newLng, long newStayHour, long newStayMinute, String newMarkerName) {
     lat = newLat;
     lng = newLng;
 
-    visitHour = newVisitHour;
-    visitMinute = newVisitMinute;
-
-    leaveHour = newLeaveHour;
-    leaveMinute = newLeaveMinute;
+    stayHour = newStayHour;
+    stayMinute = newStayMinute;
 
     markerName = newMarkerName;
   }
@@ -51,11 +39,8 @@ public class Marker {
     lat = 0.0;
     lng = 0.0;
 
-    visitHour = 0;
-    visitMinute = 0;
-
-    leaveHour = 0;
-    leaveMinute = 0;
+    stayHour = 0;
+    stayMinute = 0;
 
     markerName = "Place 0";
   }
@@ -68,20 +53,12 @@ public class Marker {
     return lng;
   }
 
-  public long getVisitHour() {
-    return visitHour;
+  public long getStayHour() {
+    return stayHour;
   }
 
-  public long getVisitMinute() {
-    return visitMinute;
-  }
-
-  public long getLeaveHour() {
-    return leaveHour;
-  }
-
-  public long getLeaveMinute() {
-    return leaveMinute;
+  public long getStayMinute() {
+    return stayMinute;
   }
 
   public String getMarkerName() {
@@ -96,20 +73,12 @@ public class Marker {
     lng = newLng;
   }
 
-  public void setVisitHour(long newHour) {
-    visitHour = newHour;
+  public void setStayHour(long newHour) {
+    stayHour = newHour;
   }
 
-  public void setVisitMinute(long newMinute) {
-    visitMinute = newMinute;
-  }
-
-  public void setLeaveHour(long newHour) {
-    leaveHour = newHour;
-  }
-
-  public void setLeaveMinute(long newMinute) {
-    leaveMinute = newMinute;
+  public void setStayMinute(long newMinute) {
+    stayMinute = newMinute;
   }
 
   public void setMarkerName(String newName) {

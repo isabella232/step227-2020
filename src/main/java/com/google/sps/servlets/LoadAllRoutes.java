@@ -19,10 +19,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.datastore.Query.SortDirection;
-import com.google.sps.data.Route;
-import com.google.sps.data.Marker;
 import com.google.gson.Gson;
+import com.google.sps.data.Marker;
+import com.google.sps.data.Route;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Responsible for listing comments. 
+/** Responsible for listing comments. */
 @SuppressWarnings("serial")
 @WebServlet("/show-suggestions")
 public class LoadAllRoutes extends HttpServlet {
@@ -39,7 +38,7 @@ public class LoadAllRoutes extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query routesQuery = new Query("Route");
-    
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery queriedRoutes = datastore.prepare(routesQuery);
 
@@ -48,24 +47,25 @@ public class LoadAllRoutes extends HttpServlet {
     // Create Route instances from entities and add them to the list.
     for (Entity routeEntity : queriedRoutes.asIterable()) {
       String routeName = (String) routeEntity.getProperty("routeName");
-      long routeId = routeEntity.getKey().getId();
+      boolean isPublic = (Boolean) routeEntity.getProperty("isPublic");
+      long startHour = (Long) routeEntity.getProperty("startHour");
+      long startMinute = (Long) routeEntity.getProperty("startMinute");
 
-      Route route = new Route(routeId, routeName);
+      long routeId = routeEntity.getKey().getId();
+      Route route = new Route(routeId, routeName, isPublic, startHour, startMinute);
 
       Query markersQuery = new Query("Marker").setAncestor(routeEntity.getKey());
       PreparedQuery associatedMarkers = datastore.prepare(markersQuery);
       List<Marker> markers = new ArrayList<Marker>();
 
       for (Entity markerEntity : associatedMarkers.asIterable()) {
-        Marker marker = new Marker(
-            (double) markerEntity.getProperty("lat"),
-            (double) markerEntity.getProperty("lng"),
-            (Long) markerEntity.getProperty("visitHour"),
-            (Long) markerEntity.getProperty("visitMinute"),
-            (Long) markerEntity.getProperty("leaveHour"),
-            (Long) markerEntity.getProperty("leaveMinute"),
-            (String) markerEntity.getProperty("markerName")
-        );
+        Marker marker =
+            new Marker(
+                (double) markerEntity.getProperty("lat"),
+                (double) markerEntity.getProperty("lng"),
+                (Long) markerEntity.getProperty("stayHour"),
+                (Long) markerEntity.getProperty("stayMinute"),
+                (String) markerEntity.getProperty("markerName"));
         markers.add(marker);
       }
 

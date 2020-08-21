@@ -13,22 +13,42 @@
 // limitations under the License.
 
 package com.google.sps.data;
-import com.google.sps.data.Marker;
+
 import java.util.List;
 
 public final class Route {
-  
+
   private long routeId;
   private String routeName;
+  private boolean isPublic;
+  private long startHour;
+  private long startMinute;
   private List<Marker> routeMarkers;
- 
 
-  public Route (long routeId, String routeName) {
-      this.routeId = routeId;
-      this.routeName = routeName;
+  public Route(
+      long routeId,
+      String routeName,
+      boolean isPublic,
+      long startHour,
+      long startMinute,
+      List<Marker> routeMarkers) {
+    this.routeId = routeId;
+    this.routeName = routeName;
+    this.isPublic = isPublic;
+    this.startHour = startHour;
+    this.startMinute = startMinute;
+    this.routeMarkers = routeMarkers;
   }
 
-  public void setRouteMarkers (List<Marker> routeMarkers) {
+  public Route(long routeId, String routeName, boolean isPublic, long startHour, long startMinute) {
+    this.routeId = routeId;
+    this.routeName = routeName;
+    this.isPublic = isPublic;
+    this.startHour = startHour;
+    this.startMinute = startMinute;
+  }
+
+  public void setRouteMarkers(List<Marker> routeMarkers) {
     this.routeMarkers = routeMarkers;
   }
 
@@ -38,6 +58,18 @@ public final class Route {
 
   public long getRouteId() {
     return routeId;
+  }
+
+  public boolean getIsPublic() {
+    return isPublic;
+  }
+
+  public long getStartHour() {
+    return startHour;
+  }
+
+  public long getStartMinute() {
+    return startMinute;
   }
 
   public List<Marker> getRouteMarkers() {

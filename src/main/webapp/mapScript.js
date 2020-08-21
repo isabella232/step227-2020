@@ -44,10 +44,8 @@ function initMap() {
         });
 
         let index = markersArray.length,
-          visitHour = 0,
-          visitMinute = 0,
-          leaveHour = 0,
-          leaveMinute = 0,
+          stayHour = 0,
+          stayMinute = 0,
           markerName = "Place " + markersArray.length.toString();
 
         markersArray.push({
@@ -55,10 +53,8 @@ function initMap() {
           data: {
             lat: location.lat(),
             lng: location.lng(),
-            visitHour: visitHour,
-            visitMinute: visitMinute,
-            leaveHour: leaveHour,
-            leaveMinute: leaveMinute,
+            stayHour: stayHour,
+            stayMinute: stayMinute,
             markerName: markerName,
           },
         });
@@ -112,28 +108,20 @@ function showSettings(contentId) {
   settings.classList.toggle("show");
   document.getElementById("marker-name").value =
     markersArray[contentId].data.markerName;
-  document.getElementById("visit-hour").value =
-    markersArray[contentId].data.visitHour;
-  document.getElementById("visit-minute").value =
-    markersArray[contentId].data.visitMinute;
-  document.getElementById("leave-hour").value =
-    markersArray[contentId].data.leaveHour;
-  document.getElementById("leave-minute").value =
-    markersArray[contentId].data.leaveMinute;
+  document.getElementById("stay-hour").value =
+    markersArray[contentId].data.stayHour;
+  document.getElementById("stay-minute").value =
+    markersArray[contentId].data.stayMinute;
 }
 
 function updateMarkerSettings(contentId) {
   let markerName = document.getElementById("marker-name").value,
-    visitHour = document.getElementById("visit-hour").value,
-    visitMinute = document.getElementById("visit-minute").value,
-    leaveHour = document.getElementById("leave-hour").value,
-    leaveMinute = document.getElementById("leave-minute").value;
+    stayHour = document.getElementById("stay-hour").value,
+    stayMinute = document.getElementById("stay-minute").value;
 
   markersArray[contentId].data.markerName = markerName;
-  markersArray[contentId].data.visitHour = visitHour;
-  markersArray[contentId].data.visitMinute = visitMinute;
-  markersArray[contentId].data.leaveHour = leaveHour;
-  markersArray[contentId].data.leaveMinute = leaveMinute;
+  markersArray[contentId].data.stayHour = stayHour;
+  markersArray[contentId].data.stayMinute = stayMinute;
 
   let tableItemElemens = document.getElementById("place" + contentId)
     .childNodes;
@@ -141,7 +129,11 @@ function updateMarkerSettings(contentId) {
 }
 
 async function createRoute() {
-  var routeName = document.getElementById("route-name").value;
+  var routeName = document.getElementById("route-name").value,
+    routeId = 0;
+  (isPublic = Boolean(document.getElementById("publicity").value == 1)),
+    (startHour = document.getElementById("start-hour").value),
+    (startMinute = document.getElementById("start-minute").value);
   if (routeName == "") {
     alert("Please add a name to your new route!");
   } else {
@@ -151,8 +143,12 @@ async function createRoute() {
     }
 
     var routeData = {
+      routeId: routeId,
       routeName: routeName,
-      markersData: markersData,
+      routeMarkers: markersData,
+      isPublic: isPublic,
+      startHour: startHour,
+      startMinute: startMinute,
     };
     console.log(routeData);
 
@@ -178,6 +174,9 @@ async function createRoute() {
     // Remove route details from the page.
     document.getElementById("places-table").innerHTML = "";
     document.getElementById("route-name").value = "";
+    document.getElementById("publicity").value = 0;
+    document.getElementById("start-hour").value = -1;
+    document.getElementById("start-minute").value = -1;
     for (var i = 0; i < markersArray.length; i++) {
       markersArray[i].marker.setMap(null);
     }
@@ -187,4 +186,16 @@ async function createRoute() {
     );
   }
   loadRoutes();
+}
+
+function publicRoute() {
+  document.getElementById("publicity").value = 1;
+  document.getElementsByClassName("fa-users")[0].style.color = "green";
+  document.getElementsByClassName("fa-users-slash")[0].style.color = "grey";
+}
+
+function notPublicRoute() {
+  document.getElementById("publicity").value = 0;
+  document.getElementsByClassName("fa-users")[0].style.color = "grey";
+  document.getElementsByClassName("fa-users-slash")[0].style.color = "red";
 }
