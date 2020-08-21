@@ -33,10 +33,16 @@ public class RoutesStoring extends HttpServlet {
   static class RouteData {
     String routeName;
     Marker[] markersData;
+    boolean publicity;
+    int hour;
+    int minute;
 
-    RouteData(String routeName, Marker[] markersData) {
+    RouteData(String routeName, Marker[] markersData, boolean publicity, int hour, int minute) {
       this.routeName = routeName;
       this.markersData = markersData;
+      this.publicity = publicity;
+      this.hour = hour;
+      this.minute = minute;
     }
 
     String getRouteName() {
@@ -45,6 +51,18 @@ public class RoutesStoring extends HttpServlet {
 
     Marker[] getMarkersData() {
       return markersData;
+    }
+
+    boolean getPublicity() {
+      return publicity;
+    }
+
+    int getHour() {
+      return hour;
+    }
+
+    int getMinute() {
+      return minute;
     }
   }
 
@@ -86,6 +104,9 @@ public class RoutesStoring extends HttpServlet {
     RouteData gsonObject = gson.fromJson(requestBody, RouteData.class);
     Marker[] routeMarkers = gsonObject.getMarkersData();
     String routeName = gsonObject.getRouteName();
+    boolean publicity = gsonObject.getPublicity();
+    int hour = gsonObject.getHour();
+    int minute = gsonObject.getMinute();
 
     Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getUserId());
 
@@ -94,6 +115,9 @@ public class RoutesStoring extends HttpServlet {
       // Create new route entity and make it child of the user.
       Entity routeEntity = new Entity("Route", userEntity.getKey());
       routeEntity.setProperty("name", routeName);
+      routeEntity.setProperty("publicity", publicity);
+      routeEntity.setProperty("startHour", hour);
+      routeEntity.setProperty("startMinute", minute);
       datastore.put(routeEntity);
 
       for (Marker marker : routeMarkers) {
@@ -102,10 +126,8 @@ public class RoutesStoring extends HttpServlet {
 
         markerEntity.setProperty("lat", marker.getLat());
         markerEntity.setProperty("lng", marker.getLng());
-        markerEntity.setProperty("visitHour", marker.getVisitHour());
-        markerEntity.setProperty("visitMinute", marker.getVisitMinute());
-        markerEntity.setProperty("leaveHour", marker.getLeaveHour());
-        markerEntity.setProperty("leaveMinute", marker.getLeaveMinute());
+        markerEntity.setProperty("stayHour", marker.getStayHour());
+        markerEntity.setProperty("stayMinute", marker.getStayMinute());
         markerEntity.setProperty("markerName", marker.getMarkerName());
 
         // Store new marker.
