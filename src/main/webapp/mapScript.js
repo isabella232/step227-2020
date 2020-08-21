@@ -14,6 +14,7 @@
 
 let map;
 var markersArray = [];
+var listener;
 
 function initMap() {
   // Create a map object, and include the MapTypeId to add
@@ -30,7 +31,7 @@ function initMap() {
 
   checkLog().then((loggedIn) => {
     if (loggedIn == true) {
-      map.addListener("click", function (event) {
+      listener = map.addListener("click", function (event) {
         placeMarker(event.latLng);
       });
 
@@ -185,4 +186,5 @@ async function createRoute() {
       "Route successfully created!\nYou can see new created routes on your profile page!"
     );
   }
+  loadRoutes();
 }

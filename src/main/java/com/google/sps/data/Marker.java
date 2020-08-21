@@ -14,27 +14,26 @@
 
 package com.google.sps.data;
 
-// TODO(#13): Add owner's id property.
 /** Google maps's markers's class. */
 public class Marker {
   private double lat;
   private double lng;
 
-  private int visitHour;
-  private int visitMinute;
+  private long visitHour;
+  private long visitMinute;
 
-  private int leaveHour;
-  private int leaveMinute;
+  private long leaveHour;
+  private long leaveMinute;
 
   private String markerName;
 
   public Marker(
       double newLat,
       double newLng,
-      int newVisitHour,
-      int newVisitMinute,
-      int newLeaveHour,
-      int newLeaveMinute,
+      long newVisitHour,
+      long newVisitMinute,
+      long newLeaveHour,
+      long newLeaveMinute,
       String newMarkerName) {
     lat = newLat;
     lng = newLng;
@@ -69,19 +68,19 @@ public class Marker {
     return lng;
   }
 
-  public int getVisitHour() {
+  public long getVisitHour() {
     return visitHour;
   }
 
-  public int getVisitMinute() {
+  public long getVisitMinute() {
     return visitMinute;
   }
 
-  public int getLeaveHour() {
+  public long getLeaveHour() {
     return leaveHour;
   }
 
-  public int getLeaveMinute() {
+  public long getLeaveMinute() {
     return leaveMinute;
   }
 
@@ -97,19 +96,19 @@ public class Marker {
     lng = newLng;
   }
 
-  public void setVisitHour(int newHour) {
+  public void setVisitHour(long newHour) {
     visitHour = newHour;
   }
 
-  public void setVisitMinute(int newMinute) {
+  public void setVisitMinute(long newMinute) {
     visitMinute = newMinute;
   }
 
-  public void setLeaveHour(int newHour) {
+  public void setLeaveHour(long newHour) {
     leaveHour = newHour;
   }
 
-  public void setLeaveMinute(int newMinute) {
+  public void setLeaveMinute(long newMinute) {
     leaveMinute = newMinute;
   }
 

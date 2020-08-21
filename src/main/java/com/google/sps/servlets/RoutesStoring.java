@@ -93,7 +93,7 @@ public class RoutesStoring extends HttpServlet {
       Entity userEntity = datastore.get(userKey);
       // Create new route entity and make it child of the user.
       Entity routeEntity = new Entity("Route", userEntity.getKey());
-      routeEntity.setProperty("name", routeName);
+      routeEntity.setProperty("routeName", routeName);
       datastore.put(routeEntity);
 
       for (Marker marker : routeMarkers) {
