@@ -193,14 +193,27 @@ img {
 
 #route-name {
   height: 25px;
-  margin-top: 10px;
   width: 200px;
+  margin-left: 50px;
   text-align: center;
   font-size: 14px;
   font-weight: bold;
   padding: 5px;
   resize: none;
   overflow: hidden;
+}
+
+#start-hour {
+  margin-left: 9px;
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+}
+
+#start-minute {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
 }
 
 #places-table {
@@ -227,8 +240,8 @@ img {
 
 .marker-setting {
   visibility: hidden;
-  width: 350px;
-  height: 90px;
+  width: 360px;
+  height: 50px;
   position: absolute;
   right: 102%;
   bottom: 25%;
@@ -273,16 +286,13 @@ img {
   width: 90px;
   height: 25px;
 
-  margin-top: 30px;
-  margin-left: 10px;
   margin-right: 15px;
   float: left;
 }
 
 .setting-line {
   display: flex;
-  float: left;
-  margin-bottom: 5px;
+  padding: 10px;
 }
 
 .time-text {
@@ -290,26 +300,14 @@ img {
   display: inline-block;
 }
 
-#visit-hour {
+#stay-hour {
   margin-left: 9px;
   width: 25px;
   height: 25px;
   display: inline-block;
 }
 
-#visit-minute {
-  width: 25px;
-  height: 25px;
-  display: inline-block;
-}
-
-#leave-hour {
-  width: 25px;
-  height: 25px;
-  display: inline-block;
-}
-
-#leave-minute {
+#stay-minute {
   width: 25px;
   height: 25px;
   display: inline-block;
@@ -317,7 +315,7 @@ img {
 
 #submit-button {
   height: 25px;
-  margin-top: 15px;
+  margin-left: 5px;
 }
 
 .fa-ellipsis-v {
@@ -388,6 +386,27 @@ img {
   margin-left: auto;
   margin-right: auto;
   bottom: 35px;
+}
+
+#publicity {
+  display: none;
+}
+
+#publicity-section {
+  display: flex;
+  position: absolute;
+  bottom: 7px;
+  margin-left: 5px;
+}
+
+.fa-users-slash {
+  color: red;
+  padding: 5px;
+}
+
+.fa-users {
+  color: grey;
+  padding: 5px;
 }
 
 #share-section.show {

@@ -60,52 +60,43 @@
       </div>
       <div id="route-content">
         <div id="route-creation-section">
-          <textarea id="route-name" placeholder="Route name..."></textarea>
+          <div class="setting-line">
+            <textarea id="route-name" placeholder="Route name..."></textarea>
+
+            <div class="time-text">Start time</div>
+            <input type="text" id="start-hour" name="start-hour" value="-1" />
+            <div class="time-text">:</div>
+            <input
+              type="text"
+              id="start-minute"
+              name="start-minute"
+              value="-1"
+            />
+          </div>
+
           <div class="marker-setting">
             <div id="marker-form">
-              <input
-                type="text"
-                id="marker-name"
-                name="marker-name"
-                placeholder="Marker name"
-              />
-
               <div class="setting-line">
-                <div class="time-text">Visit time</div>
                 <input
                   type="text"
-                  id="visit-hour"
-                  name="visit-hour"
-                  value="-1"
+                  id="marker-name"
+                  name="marker-name"
+                  placeholder="Marker name"
                 />
+
+                <div class="time-text">Time in place</div>
+                <input type="text" id="stay-hour" name="stay-hour" value="-1" />
                 <div class="time-text">:</div>
                 <input
                   type="text"
-                  id="visit-minute"
-                  name="visit-minute"
+                  id="stay-minute"
+                  name="stay-minute"
                   value="-1"
                 />
-              </div>
 
-              <div class="setting-line">
-                <div class="time-text">Leave time</div>
-                <input
-                  type="text"
-                  id="leave-hour"
-                  name="leave-hour"
-                  value="-1"
-                />
-                <div class="time-text">:</div>
-                <input
-                  type="text"
-                  id="leave-minute"
-                  name="leave-minute"
-                  value="-1"
-                />
-              </div>
-
-              <div>
-                <input type="submit" id="submit-button" />
+                <div>
+                  <input type="submit" id="submit-button" />
+                </div>
               </div>
             </div>
           </div>
@@ -113,13 +104,18 @@
           <button id="create-route-button" onclick="createRoute()">
             CREATE ROUTE
           </button>
+          <div id="publicity-section">
+            <input type="number" id="publicity" value="0" />
+            <span class="fas fa-users" onclick="publicRoute()"></span>
+            <span class="fas fa-users-slash" onclick="notPublicRoute()"></span>
+          </div>
         </div>
         <div id="share-section">
           <input id="friend-code" placeholder="Enter your friend's code" />
           <button onclick="updateShareList()">Submit</button>
         </div>
         <button id="share-with-friends-button" onclick="showShareSection()">
-          Share with friends <span class="fas fa-users"></span>
+          Share with friends <span class="fas fa-people-arrows"></span>
         </button>
       </div>
       <div id="map"></div>
