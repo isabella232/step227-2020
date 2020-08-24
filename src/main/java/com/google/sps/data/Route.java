@@ -24,6 +24,7 @@ public final class Route {
   private long startHour;
   private long startMinute;
   private List<Marker> routeMarkers;
+  private List<Long> editorsArray;
 
   public Route(
       long routeId,
@@ -31,13 +32,15 @@ public final class Route {
       boolean isPublic,
       long startHour,
       long startMinute,
-      List<Marker> routeMarkers) {
+      List<Marker> routeMarkers,
+      List<Long> editorsArray) {
     this.routeId = routeId;
     this.routeName = routeName;
     this.isPublic = isPublic;
     this.startHour = startHour;
     this.startMinute = startMinute;
     this.routeMarkers = routeMarkers;
+    this.editorsArray = editorsArray;
   }
 
   public Route(long routeId, String routeName, boolean isPublic, long startHour, long startMinute) {
@@ -46,6 +49,10 @@ public final class Route {
     this.isPublic = isPublic;
     this.startHour = startHour;
     this.startMinute = startMinute;
+  }
+
+  public void setEditorsArray(List<Long> editorsArray) {
+    this.editorsArray = editorsArray;
   }
 
   public void setRouteMarkers(List<Marker> routeMarkers) {
@@ -74,5 +81,9 @@ public final class Route {
 
   public List<Marker> getRouteMarkers() {
     return routeMarkers;
+  }
+
+  public List<Long> getEditorsArray() {
+    return editorsArray;
   }
 }

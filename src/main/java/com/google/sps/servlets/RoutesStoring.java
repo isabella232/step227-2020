@@ -69,6 +69,7 @@ public class RoutesStoring extends HttpServlet {
     // Convert it to Gson Object.
     Route gsonObject = gson.fromJson(requestBody, Route.class);
     List<Marker> routeMarkers = gsonObject.getRouteMarkers();
+    List<Long> editorsArray = gsonObject.getEditorsArray();
     String routeName = gsonObject.getRouteName();
     boolean isPublic = gsonObject.getIsPublic();
     long startHour = gsonObject.getStartHour();
@@ -79,7 +80,7 @@ public class RoutesStoring extends HttpServlet {
     try {
       Entity userEntity = datastore.get(userKey);
       // Create new route entity and make it child of the user.
-      Entity routeEntity = new Entity("Route", userEntity.getKey());
+      Entity routeEntity = new Entity("Route");
 
       routeEntity.setProperty("routeName", routeName);
       routeEntity.setProperty("isPublic", isPublic);
@@ -87,6 +88,19 @@ public class RoutesStoring extends HttpServlet {
       routeEntity.setProperty("startMinute", startMinute);
 
       datastore.put(routeEntity);
+      for (long userId : editorsArray) {
+        Entity linkEntity = new Entity("RouteUserLink", KeyFactory.createKey("User", userId));
+        linkEntity.setProperty("routeId", routeEntity.getKey().getId());
+        linkEntity.setProperty("type", 2);
+        // Add entity for editor.
+        datastore.put(linkEntity);
+      }
+
+      Entity linkEntity = new Entity("RouteUserLink", userEntity.getKey());
+      linkEntity.setProperty("routeId", routeEntity.getKey().getId());
+      linkEntity.setProperty("type", 1);
+      // Add entity for owner.
+      datastore.put(linkEntity);
 
       for (Marker marker : routeMarkers) {
         // Create entities for markers and make them children of the route.
