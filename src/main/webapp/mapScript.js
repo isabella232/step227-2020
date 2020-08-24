@@ -166,30 +166,35 @@ async function createRoute() {
     // TODO(#17): Handle response from fetch.
     await fetch("/storeRoute", options)
       .then((response) => response.json())
-      .then((status) => {
-        if (status.hasOwnProperty("errorMessage")) {
-          alert(status.errorMessage);
+      .then((jsonResponse) => {
+        if (jsonResponse.hasOwnProperty("errorMessage")) {
+          alert(jsonResponse.errorMessage);
         } else {
-          console.log("receive new place's id " + status.toString());
+          let routesGrid = document.getElementById("routes-grid");
+          if (routesGrid.innerHTML === "No suggestions available!") {
+            routesGrid.innerHTML = "";
+          }
+          routesGrid.appendChild(createRouteCard(jsonResponse));
         }
       });
-
-    // Remove route details from the page.
-    document.getElementById("places-table").innerHTML = "";
-    document.getElementById("route-name").value = "";
-    document.getElementById("publicity").value = 0;
-    document.getElementById("start-hour").value = -1;
-    document.getElementById("start-minute").value = -1;
-    for (var i = 0; i < markersArray.length; i++) {
-      markersArray[i].marker.setMap(null);
-    }
-    markersArray = [];
-    editorsArray = [];
+    removeRouteInfo();
     alert(
       "Route successfully created!\nYou can see new created routes on your profile page!"
     );
   }
-  loadRoutes();
+}
+
+function removeRouteInfo() {
+  document.getElementById("places-table").innerHTML = "";
+  document.getElementById("route-name").value = "";
+  document.getElementById("publicity").value = 0;
+  document.getElementById("start-hour").value = -1;
+  document.getElementById("start-minute").value = -1;
+  for (var i = 0; i < markersArray.length; i++) {
+    markersArray[i].marker.setMap(null);
+  }
+  markersArray = [];
+  editorsArray = [];
 }
 
 function updateShareList() {
