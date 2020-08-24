@@ -13,60 +13,103 @@
 // limitations under the License.
 */
 
+/* Ensure proper box sizing */
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Header properties */
+#header {
+  background-image: url("pictures/back2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 300px;
+  width: 100%;
+  padding: 50px;
+}
+
+.headerbox {
+  float: left;
+  height: 170px;
+  width: 400px;
+  text-align: left;
+}
+
+.headerbox p {
+  font-size: 20px;
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-weight: 5px;
+  color: white;
+  text-shadow: -1px -1px 0px #000, 0px -1px 0px #000, 1px -1px 0px #000,
+    -1px 0px 0px #000, 1px 0px 0px #000, -1px 1px 0px #000, 0px 1px 0px #000,
+    1px 1px 0px #000;
+}
+
+.headerbox h1 {
+  font-size: 50px;
+  color: #f2f2f2;
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-weight: bold;
+  text-shadow: 5px 5px 10px black;
+  opacity: 1;
+}
+
+/* Navigation bar style */
+#navbar {
+  overflow: hidden;
+  background-color: #333;
+  height: 60px;
+}
+
+#navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  text-decoration: none;
+}
+
+.logo {
+  padding: 0px 10px;
+  float: left;
+}
+
+.logo img {
+  height: 60px;
+  width: 65px;
+  border-style: solid;
+}
+
+/* Right align sign in button */
+#navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+#navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add sticky effect to navigation bar */
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
 #content {
   text-align: center;
-}
-
-#navigation-bar {
   margin-top: 20px;
-  height: 40px;
-  width: 600px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-a#main-page-link {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
-
-  float: left;
-  margin-left: 20px;
-  height: 30px;
-  width: 30px;
-  text-align: center;
-  text-decoration: none;
-  border: 1px solid rgb(202, 202, 202);
-  border-radius: 50%;
-  color: initial;
-}
-
-a#main-page-link i {
-  margin-top: 6px;
-  color: rgb(180, 250, 10);
-}
-
-a#logout-link {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
-
-  float: right;
-  margin-right: 20px;
-  height: 30px;
-  width: 30px;
-  text-align: center;
-  text-decoration: none;
-  border: 1px solid rgb(202, 202, 202);
-  border-radius: 50%;
-  color: initial;
-}
-
-a#logout-link i {
-  margin-top: 6px;
-  color: rgb(210, 75, 10);
 }
 
 #profile-picture {
@@ -319,10 +362,6 @@ a:visited {
   color: black;
 }
 
-#reviews {
-  display: none;
-}
-
 #future-routes {
   display: none;
 }
@@ -337,17 +376,6 @@ a:visited {
 
 #new-route {
   display: none;
-}
-
-.review-details {
-  position: absolute;
-  height: 230px;
-  width: 230px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(1px);
-  border-radius: 5px 5px 0 0;
-  transition: 0.5s;
 }
 
 .card:hover .review-details {
@@ -368,10 +396,6 @@ a:visited {
   background: rgb(255, 255, 255, 0);
   border: 1px solid rgb(255, 255, 255, 0);
   outline: none;
-}
-
-#reviews-item {
-  color: grey;
 }
 
 #future-routes-item {
