@@ -14,6 +14,7 @@
 
 let map;
 var markersArray = [];
+var listener;
 
 function initMap() {
   // Create a map object, and include the MapTypeId to add
@@ -30,7 +31,7 @@ function initMap() {
 
   checkLog().then((loggedIn) => {
     if (loggedIn == true) {
-      map.addListener("click", function (event) {
+      listener = map.addListener("click", function (event) {
         placeMarker(event.latLng);
       });
 
@@ -129,9 +130,10 @@ function updateMarkerSettings(contentId) {
 
 async function createRoute() {
   var routeName = document.getElementById("route-name").value,
-    publicity = Boolean(document.getElementById("publicity").value == 1),
-    hour = document.getElementById("start-hour").value,
-    minute = document.getElementById("start-minute").value;
+    routeId = 0;
+  (isPublic = Boolean(document.getElementById("publicity").value == 1)),
+    (startHour = document.getElementById("start-hour").value),
+    (startMinute = document.getElementById("start-minute").value);
   if (routeName == "") {
     alert("Please add a name to your new route!");
   } else {
@@ -141,11 +143,12 @@ async function createRoute() {
     }
 
     var routeData = {
+      routeId: routeId,
       routeName: routeName,
-      markersData: markersData,
-      publicity: publicity,
-      hour: hour,
-      minute: minute,
+      routeMarkers: markersData,
+      isPublic: isPublic,
+      startHour: startHour,
+      startMinute: startMinute,
     };
     console.log(routeData);
 
@@ -182,6 +185,7 @@ async function createRoute() {
       "Route successfully created!\nYou can see new created routes on your profile page!"
     );
   }
+  loadRoutes();
 }
 
 function publicRoute() {

@@ -19,7 +19,9 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Marker;
+import com.google.sps.data.Route;
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,42 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 @WebServlet("/storeRoute")
 public class RoutesStoring extends HttpServlet {
-  static class RouteData {
-    String routeName;
-    Marker[] markersData;
-    boolean publicity;
-    int hour;
-    int minute;
-
-    RouteData(String routeName, Marker[] markersData, boolean publicity, int hour, int minute) {
-      this.routeName = routeName;
-      this.markersData = markersData;
-      this.publicity = publicity;
-      this.hour = hour;
-      this.minute = minute;
-    }
-
-    String getRouteName() {
-      return routeName;
-    }
-
-    Marker[] getMarkersData() {
-      return markersData;
-    }
-
-    boolean getPublicity() {
-      return publicity;
-    }
-
-    int getHour() {
-      return hour;
-    }
-
-    int getMinute() {
-      return minute;
-    }
-  }
-
   static class Error {
     String errorMessage;
 
@@ -101,12 +67,12 @@ public class RoutesStoring extends HttpServlet {
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
     // Convert it to Gson Object.
-    RouteData gsonObject = gson.fromJson(requestBody, RouteData.class);
-    Marker[] routeMarkers = gsonObject.getMarkersData();
+    Route gsonObject = gson.fromJson(requestBody, Route.class);
+    List<Marker> routeMarkers = gsonObject.getRouteMarkers();
     String routeName = gsonObject.getRouteName();
-    boolean publicity = gsonObject.getPublicity();
-    int hour = gsonObject.getHour();
-    int minute = gsonObject.getMinute();
+    boolean isPublic = gsonObject.getIsPublic();
+    long startHour = gsonObject.getStartHour();
+    long startMinute = gsonObject.getStartMinute();
 
     Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getUserId());
 
@@ -114,10 +80,12 @@ public class RoutesStoring extends HttpServlet {
       Entity userEntity = datastore.get(userKey);
       // Create new route entity and make it child of the user.
       Entity routeEntity = new Entity("Route", userEntity.getKey());
-      routeEntity.setProperty("name", routeName);
-      routeEntity.setProperty("publicity", publicity);
-      routeEntity.setProperty("startHour", hour);
-      routeEntity.setProperty("startMinute", minute);
+
+      routeEntity.setProperty("routeName", routeName);
+      routeEntity.setProperty("isPublic", isPublic);
+      routeEntity.setProperty("startHour", startHour);
+      routeEntity.setProperty("startMinute", startMinute);
+
       datastore.put(routeEntity);
 
       for (Marker marker : routeMarkers) {

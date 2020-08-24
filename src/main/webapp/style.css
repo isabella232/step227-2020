@@ -456,7 +456,7 @@ img {
   width: 500px;
 }
 
-.routes-grid {
+#routes-grid {
   display: grid;
   grid-gap: 40px;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

@@ -14,19 +14,18 @@
 
 package com.google.sps.data;
 
-// TODO(#13): Add owner's id property.
 /** Google maps's markers's class. */
 public class Marker {
   private double lat;
   private double lng;
 
-  private int stayHour;
-  private int stayMinute;
+  private long stayHour;
+  private long stayMinute;
 
   private String markerName;
 
   public Marker(
-      double newLat, double newLng, int newStayHour, int newStayMinute, String newMarkerName) {
+      double newLat, double newLng, long newStayHour, long newStayMinute, String newMarkerName) {
     lat = newLat;
     lng = newLng;
 
@@ -54,11 +53,11 @@ public class Marker {
     return lng;
   }
 
-  public int getStayHour() {
+  public long getStayHour() {
     return stayHour;
   }
 
-  public int getStayMinute() {
+  public long getStayMinute() {
     return stayMinute;
   }
 
@@ -74,11 +73,11 @@ public class Marker {
     lng = newLng;
   }
 
-  public void setStayHour(int newHour) {
+  public void setStayHour(long newHour) {
     stayHour = newHour;
   }
 
-  public void setStayMinute(int newMinute) {
+  public void setStayMinute(long newMinute) {
     stayMinute = newMinute;
   }
 

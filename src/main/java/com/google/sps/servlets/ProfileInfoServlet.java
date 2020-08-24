@@ -45,7 +45,7 @@ public class ProfileInfoServlet extends HttpServlet {
     String firstName = getParameter(request, "first-name", "Not set");
     String lastName = getParameter(request, "last-name", "Not set");
     String nickname = getParameter(request, "nickname", "Anonym");
-    boolean notifications = ((getParameter(request, "radio", "mute")) != "mute");
+    boolean notifications = (!(getParameter(request, "notifications", "unmute")).equals("mute"));
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Entity userEntity = new Entity("User", userService.getCurrentUser().getUserId());
