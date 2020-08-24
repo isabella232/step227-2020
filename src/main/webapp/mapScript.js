@@ -13,6 +13,7 @@
 // limitations under the License.
 
 let map;
+var globalIndex = 0;
 var markersArray = [];
 var listener;
 var editorsArray = [];
@@ -45,14 +46,15 @@ function initMap() {
           map: map,
         });
 
-        let index = markersArray.length,
+        let index = globalIndex,
           stayHour = 0,
           stayMinute = 0,
-          markerName = "Place " + markersArray.length.toString();
+          markerName = "Press the settings button to choose a name";
 
         markersArray.push({
           marker: marker,
           data: {
+            index: index,
             lat: location.lat(),
             lng: location.lng(),
             stayHour: stayHour,
@@ -61,6 +63,7 @@ function initMap() {
           },
         });
         addNewTableItem(markerName, index.toString());
+        globalIndex = globalIndex + 1;
       }
     }
   });
@@ -89,53 +92,66 @@ function addNewTableItem(name, index) {
   tabel.appendChild(newPlace);
 }
 
-function deletePlace(contentId) {
-  let tableItem = document.getElementById("place" + contentId);
-  tableItem.parentNode.removeChild(tableItem);
-  console.log("Remove place from the table");
-
-  markersArray[contentId].marker.setMap(null);
-  markersArray.splice(contentId, 1);
-  console.log("remove marker from the array and the map");
+function getActualIndex(placeIndex) {
+  var actualIndex = 0;
+  for (var i = 0; i < markersArray.length; i++) {
+    if (markersArray[i].data.index == placeIndex) {
+      actualIndex = i;
+      break;
+    }
+  }
+  return actualIndex;
 }
 
-function showSettings(contentId) {
+function deletePlace(placeIndex) {
+  let tableItem = document.getElementById("place" + placeIndex);
+  tableItem.parentNode.removeChild(tableItem);
+
+  var actualIndex = getActualIndex(placeIndex);
+  markersArray[actualIndex].marker.setMap(null);
+  markersArray.splice(actualIndex, 1);
+}
+
+function showSettings(placeIndex) {
+  var actualIndex = getActualIndex(placeIndex);
   var settings = document.getElementsByClassName("marker-setting")[0];
   document.getElementById("submit-button").onclick = function () {
-    updateMarkerSettings(contentId);
+    updateMarkerSettings(placeIndex);
   };
 
   // Show popup.
   // setting.style.visibility = "visible";
   settings.classList.toggle("show");
   document.getElementById("marker-name").value =
-    markersArray[contentId].data.markerName;
+    markersArray[actualIndex].data.markerName;
   document.getElementById("stay-hour").value =
-    markersArray[contentId].data.stayHour;
+    markersArray[actualIndex].data.stayHour;
   document.getElementById("stay-minute").value =
-    markersArray[contentId].data.stayMinute;
+    markersArray[actualIndex].data.stayMinute;
 }
 
-function updateMarkerSettings(contentId) {
+function updateMarkerSettings(placeIndex) {
   let markerName = document.getElementById("marker-name").value,
     stayHour = document.getElementById("stay-hour").value,
     stayMinute = document.getElementById("stay-minute").value;
 
-  markersArray[contentId].data.markerName = markerName;
-  markersArray[contentId].data.stayHour = stayHour;
-  markersArray[contentId].data.stayMinute = stayMinute;
+  var actualIndex = getActualIndex(placeIndex);
 
-  let tableItemElemens = document.getElementById("place" + contentId)
+  markersArray[actualIndex].data.markerName = markerName;
+  markersArray[actualIndex].data.stayHour = stayHour;
+  markersArray[actualIndex].data.stayMinute = stayMinute;
+
+  let tableItemElemens = document.getElementById("place" + placeIndex)
     .childNodes;
   tableItemElemens[1].innerHTML = markerName;
 }
 
 async function createRoute() {
-  var routeName = document.getElementById("route-name").value,
-    routeId = 0;
-  (isPublic = Boolean(document.getElementById("publicity").value == 1)),
-    (startHour = document.getElementById("start-hour").value),
-    (startMinute = document.getElementById("start-minute").value);
+  let routeName = document.getElementById("route-name").value,
+    routeId = 0,
+    isPublic = Boolean(document.getElementById("publicity").value == 1),
+    startHour = document.getElementById("start-hour").value,
+    startMinute = document.getElementById("start-minute").value;
   if (routeName == "") {
     alert("Please add a name to your new route!");
   } else {
@@ -170,11 +186,13 @@ async function createRoute() {
         if (jsonResponse.hasOwnProperty("errorMessage")) {
           alert(jsonResponse.errorMessage);
         } else {
-          let routesGrid = document.getElementById("routes-grid");
-          if (routesGrid.innerHTML === "No suggestions available!") {
-            routesGrid.innerHTML = "";
+          if (jsonResponse.isPublic === true) {
+            let routesGrid = document.getElementById("routes-grid");
+            if (routesGrid.innerHTML === "No suggestions available!") {
+              routesGrid.innerHTML = "";
+            }
+            routesGrid.appendChild(createRouteCard(jsonResponse));
           }
-          routesGrid.appendChild(createRouteCard(jsonResponse));
         }
       });
     removeRouteInfo();
@@ -187,9 +205,9 @@ async function createRoute() {
 function removeRouteInfo() {
   document.getElementById("places-table").innerHTML = "";
   document.getElementById("route-name").value = "";
-  document.getElementById("publicity").value = 0;
   document.getElementById("start-hour").value = -1;
   document.getElementById("start-minute").value = -1;
+  privateRoute();
   for (var i = 0; i < markersArray.length; i++) {
     markersArray[i].marker.setMap(null);
   }
@@ -214,7 +232,7 @@ function publicRoute() {
   document.getElementsByClassName("fa-users-slash")[0].style.color = "grey";
 }
 
-function notPublicRoute() {
+function privateRoute() {
   document.getElementById("publicity").value = 0;
   document.getElementsByClassName("fa-users")[0].style.color = "grey";
   document.getElementsByClassName("fa-users-slash")[0].style.color = "red";

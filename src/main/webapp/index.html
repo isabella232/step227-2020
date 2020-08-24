@@ -85,7 +85,9 @@
                   placeholder="Marker name"
                 />
 
-                <div class="time-text">Time in place</div>
+                <div class="time-text">
+                  How much time do you want to spend here?
+                </div>
                 <input type="text" id="stay-hour" name="stay-hour" value="-1" />
                 <div class="time-text">:</div>
                 <input
@@ -108,7 +110,7 @@
           <div id="publicity-section">
             <input type="number" id="publicity" value="0" />
             <span class="fas fa-users" onclick="publicRoute()"></span>
-            <span class="fas fa-users-slash" onclick="notPublicRoute()"></span>
+            <span class="fas fa-users-slash" onclick="privateRoute()"></span>
           </div>
         </div>
         <div id="share-section">
