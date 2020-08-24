@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Profile</title>
     <link rel="stylesheet" href="profileStyle.css" />
+    <link rel="stylesheet" href="commonStyle.css" />
     <script src="profileScript.js"></script>
     <script
       src="https://kit.fontawesome.com/3beeeddc2b.js"
@@ -12,16 +13,26 @@
   </head>
 
   <body onload="loadUserInfo()">
-    <div id="content">
-      <div id="navigation-bar">
-        <a href="index.html" id="main-page-link">
-          <i class="fas fa-globe-europe"></i>
-        </a>
-        <a id="logout-link">
-          <i class="fas fa-sign-out-alt"></i>
-        </a>
+    <!-- Header -->
+    <div id="header">
+      <div class="headerbox">
+        <h1>TheGlobetrotter</h1>
+        <p>
+          Plan your trips and share<br />
+          them with your friends!
+        </p>
       </div>
+    </div>
 
+    <!-- Navigation bar -->
+    <div id="navbar" class="sticky">
+      <div class="logo"><img src="pictures/logo.png" alt="Logo" /></div>
+      <a href="index.html">HOME</a>
+      <a id="logout-link" class="right">LOGOUT</a>
+    </div>
+
+    <!-- Main content -->
+    <div id="content">
       <div id="profile-picture">
         <div id="new-image">
           <span class="fas fa-plus"></span>
@@ -36,6 +47,7 @@
         <p id="friend-code-code">#AAAAA</p>
       </div>
 
+      <!-- User's info -->
       <div id="profile-info">
         <form method="POST" action="/user-info" id="profile-form">
           <div class="info-line">
@@ -93,6 +105,7 @@
         </form>
       </div>
 
+      <!-- Routes section -->
       <div id="content-bar">
         <button
           class="bar-item"
@@ -128,14 +141,6 @@
           onclick="openContent('new-route')"
         >
           Create new route
-        </button>
-        <button
-          class="bar-item"
-          id="reviews-item"
-          onclick="openContent('reviews')"
-          style="visibility: hidden;"
-        >
-          Reviews
         </button>
       </div>
 
@@ -418,48 +423,6 @@
                     <span class="fas fa-plus"></span>
                   </div>
                 </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="reviews" class="content-item" style="visibility: hidden;">
-        <div class="row">
-          <div class="column">
-            <div class="card">
-              <div class="container">
-                <div class="review-details">
-                  <p class="name">Savan</p>
-                  <p class="description">Some Basic info</p>
-                </div>
-
-                <div class="user-rating">
-                  <span class="fas fa-star checked"></span>
-                  <span class="fas fa-star checked"></span>
-                  <span class="fas fa-star checked"></span>
-                  <span class="far fa-star"></span>
-                  <span class="far fa-star"></span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="column">
-            <div class="card">
-              <div class="container">
-                <div class="review-details">
-                  <p class="name">Temple</p>
-                  <p class="description">Some Basic info</p>
-                </div>
-
-                <div class="user-rating">
-                  <span class="fas fa-star-half-alt"></span>
-                  <span class="far fa-star"></span>
-                  <span class="far fa-star"></span>
-                  <span class="far fa-star"></span>
-                  <span class="far fa-star"></span>
-                </div>
               </div>
             </div>
           </div>

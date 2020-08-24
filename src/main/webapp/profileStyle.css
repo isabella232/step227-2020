@@ -15,58 +15,7 @@
 
 #content {
   text-align: center;
-}
-
-#navigation-bar {
   margin-top: 20px;
-  height: 40px;
-  width: 600px;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-a#main-page-link {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
-
-  float: left;
-  margin-left: 20px;
-  height: 30px;
-  width: 30px;
-  text-align: center;
-  text-decoration: none;
-  border: 1px solid rgb(202, 202, 202);
-  border-radius: 50%;
-  color: initial;
-}
-
-a#main-page-link i {
-  margin-top: 6px;
-  color: rgb(180, 250, 10);
-}
-
-a#logout-link {
-  -webkit-appearance: button;
-  -moz-appearance: button;
-  appearance: button;
-
-  float: right;
-  margin-right: 20px;
-  height: 30px;
-  width: 30px;
-  text-align: center;
-  text-decoration: none;
-  border: 1px solid rgb(202, 202, 202);
-  border-radius: 50%;
-  color: initial;
-}
-
-a#logout-link i {
-  margin-top: 6px;
-  color: rgb(210, 75, 10);
 }
 
 #profile-picture {
@@ -319,10 +268,6 @@ a:visited {
   color: black;
 }
 
-#reviews {
-  display: none;
-}
-
 #future-routes {
   display: none;
 }
@@ -337,17 +282,6 @@ a:visited {
 
 #new-route {
   display: none;
-}
-
-.review-details {
-  position: absolute;
-  height: 230px;
-  width: 230px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(1px);
-  border-radius: 5px 5px 0 0;
-  transition: 0.5s;
 }
 
 .card:hover .review-details {
@@ -368,10 +302,6 @@ a:visited {
   background: rgb(255, 255, 255, 0);
   border: 1px solid rgb(255, 255, 255, 0);
   outline: none;
-}
-
-#reviews-item {
-  color: grey;
 }
 
 #future-routes-item {
