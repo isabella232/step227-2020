@@ -84,7 +84,9 @@ function createRouteCard(route) {
   let button2 = document.createElement("button");
   button2.className = "action-button";
   button2.innerHTML = "Add to future routes";
-  button2.onclick = function () {};
+  button2.onclick = function () {
+    addToProfile(route);
+  };
 
   let routeImage = document.createElement("img");
   routeImage.src = "pictures/praga-small.jpg";
@@ -138,4 +140,15 @@ function viewRoute(route) {
     location.reload();
   };
   document.getElementById("additional").appendChild(backButton);
+}
+
+async function addToProfile(route) {
+  let options = {
+    method: "POST",
+    body: JSON.stringify(route),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  await fetch("/storeRoute", options);
 }
