@@ -40,8 +40,7 @@ public class LoadAllRoutes extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Filter publicityFilter = new FilterPredicate(
-        "isPublic", FilterOperator.EQUAL, true);
+    Filter publicityFilter = new FilterPredicate("isPublic", FilterOperator.EQUAL, true);
     Query routesQuery = new Query("Route").setFilter(publicityFilter);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

@@ -47,7 +47,7 @@ public class Marker {
     markerName = "Place 0";
   }
 
-  public long getId () {
+  public long getId() {
     return id;
   }
 
@@ -71,7 +71,7 @@ public class Marker {
     return markerName;
   }
 
-  public void setId () {
+  public void setId() {
     this.id = id;
   }
 
