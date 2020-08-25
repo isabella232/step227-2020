@@ -183,7 +183,6 @@ async function createRoute() {
       },
     };
 
-    // TODO(#17): Handle response from fetch.
     await fetch("/storeRoute", options)
       .then((response) => response.json())
       .then((jsonResponse) => {
