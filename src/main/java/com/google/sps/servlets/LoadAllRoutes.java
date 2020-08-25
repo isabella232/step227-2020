@@ -19,6 +19,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.Filter;
+import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 import com.google.sps.data.Marker;
 import com.google.sps.data.Route;
@@ -37,7 +40,8 @@ public class LoadAllRoutes extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query routesQuery = new Query("Route");
+    Filter publicityFilter = new FilterPredicate("isPublic", FilterOperator.EQUAL, true);
+    Query routesQuery = new Query("Route").setFilter(publicityFilter);
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery queriedRoutes = datastore.prepare(routesQuery);
@@ -61,6 +65,7 @@ public class LoadAllRoutes extends HttpServlet {
       for (Entity markerEntity : associatedMarkers.asIterable()) {
         Marker marker =
             new Marker(
+                markerEntity.getKey().getId(),
                 (double) markerEntity.getProperty("lat"),
                 (double) markerEntity.getProperty("lng"),
                 (Long) markerEntity.getProperty("stayHour"),

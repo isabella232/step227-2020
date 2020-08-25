@@ -51,6 +51,10 @@ public final class Route {
     this.startMinute = startMinute;
   }
 
+  public void setRouteId(long routeId) {
+    this.routeId = routeId;
+  }
+
   public void setEditorsArray(List<Long> editorsArray) {
     this.editorsArray = editorsArray;
   }

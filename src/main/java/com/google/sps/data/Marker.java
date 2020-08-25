@@ -16,6 +16,8 @@ package com.google.sps.data;
 
 /** Google maps's markers's class. */
 public class Marker {
+  private long id;
+
   private double lat;
   private double lng;
 
@@ -25,7 +27,14 @@ public class Marker {
   private String markerName;
 
   public Marker(
-      double newLat, double newLng, long newStayHour, long newStayMinute, String newMarkerName) {
+      long newId,
+      double newLat,
+      double newLng,
+      long newStayHour,
+      long newStayMinute,
+      String newMarkerName) {
+    id = newId;
+
     lat = newLat;
     lng = newLng;
 
@@ -43,6 +52,10 @@ public class Marker {
     stayMinute = 0;
 
     markerName = "Place 0";
+  }
+
+  public long getId() {
+    return id;
   }
 
   public double getLat() {
@@ -63,6 +76,10 @@ public class Marker {
 
   public String getMarkerName() {
     return markerName;
+  }
+
+  public void setId(long newId) {
+    this.id = newId;
   }
 
   public void setLat(double newLat) {

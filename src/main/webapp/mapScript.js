@@ -13,12 +13,13 @@
 // limitations under the License.
 
 let map;
+var globalIndex = 0;
 var markersArray = [];
 var listener;
 var editorsArray = [];
 var viewersArray = [];
 
-function initMap() {
+function initInactiveMap() {
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
   map = new google.maps.Map(document.getElementById("map"), {
@@ -30,6 +31,10 @@ function initMap() {
       mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain"],
     },
   });
+}
+
+function initMap() {
+  initInactiveMap();
 
   checkLog().then((loggedIn) => {
     if (loggedIn == true) {
@@ -45,14 +50,15 @@ function initMap() {
           map: map,
         });
 
-        let index = markersArray.length,
+        let id = globalIndex,
           stayHour = 0,
           stayMinute = 0,
-          markerName = "Place " + markersArray.length.toString();
+          markerName = "Press the settings button to choose a name";
 
         markersArray.push({
           marker: marker,
           data: {
+            id: id,
             lat: location.lat(),
             lng: location.lng(),
             stayHour: stayHour,
@@ -60,23 +66,24 @@ function initMap() {
             markerName: markerName,
           },
         });
-        addNewTableItem(markerName, index.toString());
+        addNewTableItem(markerName, id.toString());
+        globalIndex = globalIndex + 1;
       }
     }
   });
 }
 
-function addNewTableItem(name, index) {
+function addNewTableItem(name, placeId) {
   let tabel = document.getElementById("places-table");
 
   let newPlace = document.createElement("li");
-  newPlace.id = "place" + index;
+  newPlace.id = "place" + placeId;
   newPlace.classList.add("new-place");
 
   let markerSign = '<span class="fas fa-ellipsis-v"></span>';
   let placeName = '<span id="place-name">' + name + "</span>";
-  let deleteFunction = "deletePlace('" + index + "')";
-  let showSelectFunction = "showSettings('" + index + "')";
+  let deleteFunction = "deletePlace('" + placeId + "')";
+  let showSelectFunction = "showSettings('" + placeId + "')";
   let settingsButton =
     '<span class="fas fa-cog" onclick="' + showSelectFunction + '"></span>';
   let deleteSign =
@@ -89,53 +96,69 @@ function addNewTableItem(name, index) {
   tabel.appendChild(newPlace);
 }
 
-function deletePlace(contentId) {
-  let tableItem = document.getElementById("place" + contentId);
+function findIndex(placeId) {
+  for (var i = 0; i < markersArray.length; i++) {
+    if (markersArray[i].data.id == placeId) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+function deletePlace(placeId) {
+  let tableItem = document.getElementById("place" + placeId);
   tableItem.parentNode.removeChild(tableItem);
-  console.log("Remove place from the table");
 
-  markersArray[contentId].marker.setMap(null);
-  markersArray.splice(contentId, 1);
-  console.log("remove marker from the array and the map");
+  var actualIndex = findIndex(placeId);
+  if (actualIndex != -1) {
+    markersArray[actualIndex].marker.setMap(null);
+    markersArray.splice(actualIndex, 1);
+  }
 }
 
-function showSettings(contentId) {
-  var settings = document.getElementsByClassName("marker-setting")[0];
-  document.getElementById("submit-button").onclick = function () {
-    updateMarkerSettings(contentId);
-  };
+function showSettings(placeId) {
+  var actualIndex = findIndex(placeId);
+  if (actualIndex != -1) {
+    var settings = document.getElementsByClassName("marker-setting")[0];
+    document.getElementById("submit-button").onclick = function () {
+      updateMarkerSettings(placeId);
+    };
 
-  // Show popup.
-  // setting.style.visibility = "visible";
-  settings.classList.toggle("show");
-  document.getElementById("marker-name").value =
-    markersArray[contentId].data.markerName;
-  document.getElementById("stay-hour").value =
-    markersArray[contentId].data.stayHour;
-  document.getElementById("stay-minute").value =
-    markersArray[contentId].data.stayMinute;
+    // Show popup.
+    // setting.style.visibility = "visible";
+    settings.classList.toggle("show");
+    document.getElementById("marker-name").value =
+      markersArray[actualIndex].data.markerName;
+    document.getElementById("stay-hour").value =
+      markersArray[actualIndex].data.stayHour;
+    document.getElementById("stay-minute").value =
+      markersArray[actualIndex].data.stayMinute;
+  }
 }
 
-function updateMarkerSettings(contentId) {
+function updateMarkerSettings(placeId) {
   let markerName = document.getElementById("marker-name").value,
     stayHour = document.getElementById("stay-hour").value,
     stayMinute = document.getElementById("stay-minute").value;
 
-  markersArray[contentId].data.markerName = markerName;
-  markersArray[contentId].data.stayHour = stayHour;
-  markersArray[contentId].data.stayMinute = stayMinute;
+  var actualIndex = findIndex(placeId);
+  if (actualIndex != -1) {
+    markersArray[actualIndex].data.markerName = markerName;
+    markersArray[actualIndex].data.stayHour = stayHour;
+    markersArray[actualIndex].data.stayMinute = stayMinute;
 
-  let tableItemElemens = document.getElementById("place" + contentId)
-    .childNodes;
-  tableItemElemens[1].innerHTML = markerName;
+    let tableItemElemens = document.getElementById("place" + placeId)
+      .childNodes;
+    tableItemElemens[1].innerHTML = markerName;
+  }
 }
 
 async function createRoute() {
-  var routeName = document.getElementById("route-name").value,
-    routeId = 0;
-  (isPublic = Boolean(document.getElementById("publicity").value == 1)),
-    (startHour = document.getElementById("start-hour").value),
-    (startMinute = document.getElementById("start-minute").value);
+  let routeName = document.getElementById("route-name").value,
+    routeId = 0,
+    isPublic = Boolean(document.getElementById("publicity").value == 1),
+    startHour = document.getElementById("start-hour").value,
+    startMinute = document.getElementById("start-minute").value;
   if (routeName == "") {
     alert("Please add a name to your new route!");
   } else {
@@ -163,33 +186,41 @@ async function createRoute() {
       },
     };
 
-    // TODO(#17): Handle response from fetch.
     await fetch("/storeRoute", options)
       .then((response) => response.json())
-      .then((status) => {
-        if (status.hasOwnProperty("errorMessage")) {
-          alert(status.errorMessage);
+      .then((jsonResponse) => {
+        if (jsonResponse.hasOwnProperty("errorMessage")) {
+          alert(jsonResponse.errorMessage);
         } else {
-          console.log("receive new place's id " + status.toString());
+          if (jsonResponse.isPublic === true) {
+            let routesGrid = document.getElementById("routes-grid");
+            if (routesGrid.innerHTML === "No suggestions available!") {
+              routesGrid.innerHTML = "";
+            }
+            routesGrid.appendChild(createRouteCard(jsonResponse));
+          }
         }
       });
-
-    // Remove route details from the page.
-    document.getElementById("places-table").innerHTML = "";
-    document.getElementById("route-name").value = "";
-    document.getElementById("publicity").value = 0;
-    document.getElementById("start-hour").value = -1;
-    document.getElementById("start-minute").value = -1;
-    for (var i = 0; i < markersArray.length; i++) {
-      markersArray[i].marker.setMap(null);
-    }
-    markersArray = [];
-    editorsArray = [];
+    removeRouteInfo();
     alert(
       "Route successfully created!\nYou can see new created routes on your profile page!"
     );
   }
-  loadRoutes();
+}
+
+function removeRouteInfo() {
+  document.getElementById("places-table").innerHTML = "";
+  document.getElementById("route-name").value = "";
+  document.getElementById("start-hour").value = -1;
+  document.getElementById("start-minute").value = -1;
+  privateRoute();
+  document.getElementsByClassName("marker-setting")[0].classList.toggle =
+    "hidden";
+  for (var i = 0; i < markersArray.length; i++) {
+    markersArray[i].marker.setMap(null);
+  }
+  markersArray = [];
+  editorsArray = [];
 }
 
 function updateShareList() {
@@ -209,7 +240,7 @@ function publicRoute() {
   document.getElementsByClassName("fa-users-slash")[0].style.color = "grey";
 }
 
-function notPublicRoute() {
+function privateRoute() {
   document.getElementById("publicity").value = 0;
   document.getElementsByClassName("fa-users")[0].style.color = "grey";
   document.getElementsByClassName("fa-users-slash")[0].style.color = "red";

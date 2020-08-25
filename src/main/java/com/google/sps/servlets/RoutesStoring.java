@@ -67,13 +67,13 @@ public class RoutesStoring extends HttpServlet {
         request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
 
     // Convert it to Gson Object.
-    Route gsonObject = gson.fromJson(requestBody, Route.class);
-    List<Marker> routeMarkers = gsonObject.getRouteMarkers();
-    List<Long> editorsArray = gsonObject.getEditorsArray();
-    String routeName = gsonObject.getRouteName();
-    boolean isPublic = gsonObject.getIsPublic();
-    long startHour = gsonObject.getStartHour();
-    long startMinute = gsonObject.getStartMinute();
+    Route routeObject = gson.fromJson(requestBody, Route.class);
+    List<Marker> routeMarkers = routeObject.getRouteMarkers();
+    List<Long> editorsArray = routeObject.getEditorsArray();
+    String routeName = routeObject.getRouteName();
+    boolean isPublic = routeObject.getIsPublic();
+    long startHour = routeObject.getStartHour();
+    long startMinute = routeObject.getStartMinute();
 
     Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getUserId());
 
@@ -118,9 +118,10 @@ public class RoutesStoring extends HttpServlet {
 
       // Respond with new created route id.
       Long routeId = routeEntity.getKey().getId();
+      routeObject.setRouteId(routeId);
 
       response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(routeId));
+      response.getWriter().println(gson.toJson(routeObject));
 
       // TODO(#14): Catch more specific exceptions.
     } catch (Exception e) {

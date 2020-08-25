@@ -70,19 +70,86 @@ function createRouteCard(route) {
   let routeDetails = document.createElement("div");
   routeDetails.className = "route-details";
 
-  let routeName = '<p class="route-name">' + route.routeName + "</p>";
-  let button1 =
-    '<button class="action-button"><span>See on the map </span></button><br />';
-  let button2 =
-    '<button class="action-button"><span>Add to future routes </span></button>';
+  let routeName = document.createElement("p");
+  routeName.className = "route-name";
+  routeName.innerHTML = route.routeName;
+
+  let button1 = document.createElement("button");
+  button1.className = "action-button";
+  button1.innerHTML = "View route";
+  button1.onclick = function () {
+    viewRoute(route);
+  };
+
+  let button2 = document.createElement("button");
+  button2.className = "action-button";
+  button2.innerHTML = "Add to future routes";
+  button2.onclick = function () {
+    addToProfile(route);
+  };
 
   let routeImage = document.createElement("img");
   routeImage.src = "pictures/praga-small.jpg";
   routeImage.alt = "praga";
 
-  routeDetails.innerHTML = routeName + button1 + button2;
+  routeDetails.appendChild(routeName);
+  routeDetails.appendChild(button1);
+  routeDetails.appendChild(button2);
+
   routeCard.appendChild(routeDetails);
   routeCard.appendChild(routeImage);
 
   return routeCard;
+}
+
+function viewRoute(route) {
+  removeRouteInfo();
+  initInactiveMap();
+
+  document.getElementById("create-route-button").style.visibility = "hidden";
+  document.getElementById("additional").innerHTML = "";
+
+  let routeName = document.getElementById("route-name");
+  routeName.value = route.routeName;
+
+  document.getElementById("start-hour").value = route.startHour;
+  document.getElementById("start-minute").value = route.startMinute;
+  publicRoute();
+
+  // Fill the table and add markers on the map
+  let tabel = document.getElementById("places-table");
+  for (var i = 0; i < route.routeMarkers.length; i++) {
+    let newPlace = document.createElement("li");
+    newPlace.classList.add("new-place");
+    newPlace.innerHTML = route.routeMarkers[i].markerName;
+    tabel.appendChild(newPlace);
+
+    new google.maps.Marker({
+      position: {
+        lat: route.routeMarkers[i].lat,
+        lng: route.routeMarkers[i].lng,
+      },
+      map: map,
+    });
+  }
+
+  // Add button to exit preview mode.
+  let backButton = document.createElement("button");
+  backButton.innerHTML = "BACK TO ROUTE CREATION";
+  backButton.onclick = function () {
+    location.reload();
+  };
+  document.getElementById("additional").appendChild(backButton);
+}
+
+async function addToProfile(route) {
+  // TODO(#26): Prevent duplicate routes
+  let options = {
+    method: "POST",
+    body: JSON.stringify(route),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  await fetch("/storeRoute", options);
 }
