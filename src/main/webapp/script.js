@@ -143,7 +143,7 @@ function viewRoute(route) {
 }
 
 async function addToProfile(route) {
-  // TODO(#18): Prevent duplicate routes
+  // TODO(#26): Prevent duplicate routes
   let options = {
     method: "POST",
     body: JSON.stringify(route),

@@ -50,7 +50,7 @@ function initMap() {
           map: map,
         });
 
-        let index = globalIndex,
+        let id = globalIndex,
           stayHour = 0,
           stayMinute = 0,
           markerName = "Press the settings button to choose a name";
@@ -58,7 +58,7 @@ function initMap() {
         markersArray.push({
           marker: marker,
           data: {
-            index: index,
+            id: id,
             lat: location.lat(),
             lng: location.lng(),
             stayHour: stayHour,
@@ -66,24 +66,24 @@ function initMap() {
             markerName: markerName,
           },
         });
-        addNewTableItem(markerName, index.toString());
+        addNewTableItem(markerName, id.toString());
         globalIndex = globalIndex + 1;
       }
     }
   });
 }
 
-function addNewTableItem(name, index) {
+function addNewTableItem(name, placeId) {
   let tabel = document.getElementById("places-table");
 
   let newPlace = document.createElement("li");
-  newPlace.id = "place" + index;
+  newPlace.id = "place" + placeId;
   newPlace.classList.add("new-place");
 
   let markerSign = '<span class="fas fa-ellipsis-v"></span>';
   let placeName = '<span id="place-name">' + name + "</span>";
-  let deleteFunction = "deletePlace('" + index + "')";
-  let showSelectFunction = "showSettings('" + index + "')";
+  let deleteFunction = "deletePlace('" + placeId + "')";
+  let showSelectFunction = "showSettings('" + placeId + "')";
   let settingsButton =
     '<span class="fas fa-cog" onclick="' + showSelectFunction + '"></span>';
   let deleteSign =
@@ -96,58 +96,61 @@ function addNewTableItem(name, index) {
   tabel.appendChild(newPlace);
 }
 
-function getActualIndex(placeIndex) {
-  var actualIndex = 0;
+function findIndex(placeId) {
   for (var i = 0; i < markersArray.length; i++) {
-    if (markersArray[i].data.index == placeIndex) {
-      actualIndex = i;
-      break;
+    if (markersArray[i].data.id == placeId) {
+      return i;
     }
   }
-  return actualIndex;
+  return -1;
 }
 
-function deletePlace(placeIndex) {
-  let tableItem = document.getElementById("place" + placeIndex);
+function deletePlace(placeId) {
+  let tableItem = document.getElementById("place" + placeId);
   tableItem.parentNode.removeChild(tableItem);
 
-  var actualIndex = getActualIndex(placeIndex);
-  markersArray[actualIndex].marker.setMap(null);
-  markersArray.splice(actualIndex, 1);
+  var actualIndex = findIndex(placeId);
+  if (actualIndex != -1) {
+    markersArray[actualIndex].marker.setMap(null);
+    markersArray.splice(actualIndex, 1);
+  }
 }
 
-function showSettings(placeIndex) {
-  var actualIndex = getActualIndex(placeIndex);
-  var settings = document.getElementsByClassName("marker-setting")[0];
-  document.getElementById("submit-button").onclick = function () {
-    updateMarkerSettings(placeIndex);
-  };
+function showSettings(placeId) {
+  var actualIndex = findIndex(placeId);
+  if (actualIndex != -1) {
+    var settings = document.getElementsByClassName("marker-setting")[0];
+    document.getElementById("submit-button").onclick = function () {
+      updateMarkerSettings(placeId);
+    };
 
-  // Show popup.
-  // setting.style.visibility = "visible";
-  settings.classList.toggle("show");
-  document.getElementById("marker-name").value =
-    markersArray[actualIndex].data.markerName;
-  document.getElementById("stay-hour").value =
-    markersArray[actualIndex].data.stayHour;
-  document.getElementById("stay-minute").value =
-    markersArray[actualIndex].data.stayMinute;
+    // Show popup.
+    // setting.style.visibility = "visible";
+    settings.classList.toggle("show");
+    document.getElementById("marker-name").value =
+      markersArray[actualIndex].data.markerName;
+    document.getElementById("stay-hour").value =
+      markersArray[actualIndex].data.stayHour;
+    document.getElementById("stay-minute").value =
+      markersArray[actualIndex].data.stayMinute;
+  }
 }
 
-function updateMarkerSettings(placeIndex) {
+function updateMarkerSettings(placeId) {
   let markerName = document.getElementById("marker-name").value,
     stayHour = document.getElementById("stay-hour").value,
     stayMinute = document.getElementById("stay-minute").value;
 
-  var actualIndex = getActualIndex(placeIndex);
+  var actualIndex = findIndex(placeId);
+  if (actualIndex != -1) {
+    markersArray[actualIndex].data.markerName = markerName;
+    markersArray[actualIndex].data.stayHour = stayHour;
+    markersArray[actualIndex].data.stayMinute = stayMinute;
 
-  markersArray[actualIndex].data.markerName = markerName;
-  markersArray[actualIndex].data.stayHour = stayHour;
-  markersArray[actualIndex].data.stayMinute = stayMinute;
-
-  let tableItemElemens = document.getElementById("place" + placeIndex)
-    .childNodes;
-  tableItemElemens[1].innerHTML = markerName;
+    let tableItemElemens = document.getElementById("place" + placeId)
+      .childNodes;
+    tableItemElemens[1].innerHTML = markerName;
+  }
 }
 
 async function createRoute() {
@@ -211,6 +214,8 @@ function removeRouteInfo() {
   document.getElementById("start-hour").value = -1;
   document.getElementById("start-minute").value = -1;
   privateRoute();
+  document.getElementsByClassName("marker-setting")[0].classList.toggle =
+    "hidden";
   for (var i = 0; i < markersArray.length; i++) {
     markersArray[i].marker.setMap(null);
   }

@@ -27,7 +27,14 @@ public class Marker {
   private String markerName;
 
   public Marker(
-      double newLat, double newLng, long newStayHour, long newStayMinute, String newMarkerName) {
+      long newId,
+      double newLat,
+      double newLng,
+      long newStayHour,
+      long newStayMinute,
+      String newMarkerName) {
+    id = newId;
+
     lat = newLat;
     lng = newLng;
 
@@ -71,8 +78,8 @@ public class Marker {
     return markerName;
   }
 
-  public void setId() {
-    this.id = id;
+  public void setId(long newId) {
+    this.id = newId;
   }
 
   public void setLat(double newLat) {

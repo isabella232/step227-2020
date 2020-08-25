@@ -65,6 +65,7 @@ public class LoadAllRoutes extends HttpServlet {
       for (Entity markerEntity : associatedMarkers.asIterable()) {
         Marker marker =
             new Marker(
+                markerEntity.getKey().getId(),
                 (double) markerEntity.getProperty("lat"),
                 (double) markerEntity.getProperty("lng"),
                 (Long) markerEntity.getProperty("stayHour"),
