@@ -19,7 +19,7 @@ var listener;
 var editorsArray = [];
 var viewersArray = [];
 
-function initMap() {
+function initInactiveMap() {
   // Create a map object, and include the MapTypeId to add
   // to the map type control.
   map = new google.maps.Map(document.getElementById("map"), {
@@ -31,6 +31,10 @@ function initMap() {
       mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain"],
     },
   });
+}
+
+function initMap() {
+  initInactiveMap();
 
   checkLog().then((loggedIn) => {
     if (loggedIn == true) {

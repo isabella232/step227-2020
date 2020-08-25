@@ -113,13 +113,15 @@
             <span class="fas fa-users-slash" onclick="privateRoute()"></span>
           </div>
         </div>
-        <div id="share-section">
-          <input id="friend-code" placeholder="Enter your friend's code" />
-          <button onclick="updateShareList()">Submit</button>
+        <div id="additional">
+          <div id="share-section">
+            <input id="friend-code" placeholder="Enter your friend's code" />
+            <button onclick="updateShareList()">Submit</button>
+          </div>
+          <button id="share-with-friends-button" onclick="showShareSection()">
+            Share with friends <span class="fas fa-people-arrows"></span>
+          </button>
         </div>
-        <button id="share-with-friends-button" onclick="showShareSection()">
-          Share with friends <span class="fas fa-people-arrows"></span>
-        </button>
       </div>
       <div id="map"></div>
     </div>
