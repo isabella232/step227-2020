@@ -159,6 +159,7 @@ async function createRoute() {
     isPublic = Boolean(document.getElementById("publicity").value == 1),
     startHour = document.getElementById("start-hour").value,
     startMinute = document.getElementById("start-minute").value;
+  (isCompleted = false), (numberOfRatings = 3), (sumOfRatings = 13.0);
   if (routeName == "") {
     alert("Please add a name to your new route!");
   } else {
@@ -172,9 +173,12 @@ async function createRoute() {
       routeName: routeName,
       routeMarkers: markersData,
       isPublic: isPublic,
+      isCompleted: isCompleted,
       startHour: startHour,
       startMinute: startMinute,
       editorsArray: editorsArray,
+      numberOfRatings: numberOfRatings,
+      sumOfRatings: sumOfRatings,
     };
     console.log(routeData);
 

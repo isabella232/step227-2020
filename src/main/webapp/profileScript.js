@@ -87,6 +87,7 @@ function loadRoutes() {
   fetch("/user-routes")
     .then((response) => response.json())
     .then((routesList) => {
+      console.log(routesList);
       for (i in routesList) {
         addRoute(routesList[i]);
       }
@@ -107,13 +108,41 @@ function addRoute(newRoute) {
   routeRating.classList.add("rating");
 
   routeDetails.innerHTML = newRoute["routeName"];
-  let emptyStart = '<span class="far fa-star"></span>';
-  routeRating.innerHTML = emptyStart.repeat(5);
+  let emptyStar = '<span class="far fa-star"></span>';
+  let halfStar = '<span class="fas fa-star-half-alt"></span>';
+  let fullStar = '<span class="fas fa-star checked"></span>';
+
+  let ratingCopy = 0;
+  if (newRoute["numberOfRatings"] != 0) {
+    ratingCopy = newRoute["sumOfRatings"] / newRoute["numberOfRatings"];
+  }
+  let numberOfFullStars = Math.floor(ratingCopy);
+  ratingCopy -= numberOfFullStars;
+
+  let numberOfHalfStars = 0;
+  if (ratingCopy < 0.2) {
+    numberOfHalfStars = 0;
+  } else if (ratingCopy <= 0.8) {
+    numberOfHalfStars = 1;
+  } else {
+    numberOfFullStars += 1;
+  }
+
+  routeRating.innerHTML =
+    fullStar.repeat(numberOfFullStars) +
+    halfStar.repeat(numberOfHalfStars) +
+    emptyStar.repeat(5 - numberOfFullStars - numberOfHalfStars);
 
   card.appendChild(container);
   container.appendChild(routeDetails);
   container.appendChild(routeImg);
   container.appendChild(routeRating);
 
-  document.getElementById("completed-routes").appendChild(card);
+  if (newRoute["userAccess"] != "OWNER") {
+    document.getElementById("shared-routes").appendChild(card);
+  } else if (newRoute["isCompleted"]) {
+    document.getElementById("completed-routes").appendChild(card);
+  } else {
+    document.getElementById("future-routes").appendChild(card);
+  }
 }

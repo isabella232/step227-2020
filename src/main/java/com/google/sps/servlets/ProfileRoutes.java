@@ -20,6 +20,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.sps.data.Route;
+import com.google.sps.data.UserAccessType;
 import java.io.IOException;
 import java.util.*;
 import javax.servlet.annotation.WebServlet;
@@ -56,15 +57,22 @@ public class ProfileRoutes extends HttpServlet {
         Map<Key, Entity> routesList = datastore.get(routesKeys);
 
         Route newRoute;
+        int i = 0;
         for (Entity connection : routesList.values()) {
           newRoute =
               new Route(
                   connection.getKey().getId(),
                   (String) connection.getProperty("routeName"),
                   (boolean) connection.getProperty("isPublic"),
+                  (boolean) connection.getProperty("isCompleted"),
                   (Long) connection.getProperty("startHour"),
-                  (Long) connection.getProperty("startMinute"));
+                  (Long) connection.getProperty("startMinute"),
+                  (Long) connection.getProperty("numberOfRatings"),
+                  (Double) connection.getProperty("sumOfRatings"));
+          int numericValue = ((Long) results.get(i).getProperty("userAccess")).intValue();
+          newRoute.setUserAccess(UserAccessType.getFromValue(numericValue));
           connectedRoutes.add(newRoute);
+          i++;
         }
 
       } catch (Exception e) {
