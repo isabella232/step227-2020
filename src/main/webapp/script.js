@@ -150,7 +150,7 @@ function viewRoute(route) {
 }
 
 async function addToProfile(route) {
-  route.status = "copy";
+  route.status = "COPY";
   let options = {
     method: "POST",
     body: JSON.stringify(route),
@@ -161,8 +161,8 @@ async function addToProfile(route) {
   await fetch("/storeRoute", options)
     .then((response) => response.json())
     .then((jsonResponse) => {
-      if (jsonResponse.hasOwnProperty("errorMessage")) {
-        alert(jsonResponse.errorMessage);
+      if (jsonResponse.hasOwnProperty("message")) {
+        alert(jsonResponse.message);
       }
     });
 }
@@ -202,8 +202,8 @@ async function submitComment(route, commentText) {
   await fetch("/post-comment", options)
     .then((response) => response.json())
     .then((jsonResponse) => {
-      if (jsonResponse.hasOwnProperty("errorMessage")) {
-        alert(jsonResponse.errorMessage);
+      if (jsonResponse.hasOwnProperty("message")) {
+        alert(jsonResponse.message);
       }
     });
 }

@@ -24,9 +24,10 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.sps.data.Error;
 import com.google.sps.data.Marker;
+import com.google.sps.data.Result;
 import com.google.sps.data.Route;
+import com.google.sps.data.RouteStatus;
 import com.google.sps.data.UserAccessType;
 import java.io.IOException;
 import java.util.List;
@@ -48,12 +49,11 @@ public class RoutesStoring extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Gson gson = new Gson();
+    response.setContentType("application/json;");
 
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
-      Error userError = new Error("Error: User is not logged in!");
-
-      response.setContentType("application/json;");
+      Result userError = new Result("Error: User is not logged in!", false);
       response.getWriter().println(gson.toJson(userError));
       return;
     }
@@ -73,26 +73,27 @@ public class RoutesStoring extends HttpServlet {
     long startMinute = routeObject.getStartMinute();
     long numberOfRatings = routeObject.getNumberOfRatings();
     double sumOfRatings = routeObject.getSumOfRatings();
+    RouteStatus routeStatus = routeObject.getStatus();
 
     Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getUserId());
 
     try {
       Entity routeEntity;
       // Check is this user already has this route stored.
-      if (routeObject.getStatus().compareTo("copy") == 0) {
+      if (routeStatus == RouteStatus.COPY) {
         Filter routeFilter =
             new FilterPredicate("routeId", FilterOperator.EQUAL, routeObject.getRouteId());
         Query routeQuery = new Query("RouteUserLink").setAncestor(userKey).setFilter(routeFilter);
         PreparedQuery checkExistance = datastore.prepare(routeQuery);
 
         if (checkExistance.countEntities(FetchOptions.Builder.withLimit(10)) > 0) {
-          Error userError = new Error("This route is already stored in your library!");
-          response.setContentType("application/json;");
-          response.getWriter().println(gson.toJson(userError));
+          Result duplicateError =
+              new Result("This route is already stored in your library!", false);
+          response.getWriter().println(gson.toJson(duplicateError));
           return;
         }
       }
-      if (routeObject.getStatus().compareTo("edit") == 0) {
+      if (routeStatus == RouteStatus.EDIT) {
         Key routeKey = KeyFactory.createKey("Route", routeObject.getRouteId());
         routeEntity = datastore.get(routeKey);
 
@@ -115,15 +116,17 @@ public class RoutesStoring extends HttpServlet {
 
       datastore.put(routeEntity);
 
-      for (long userId : editorsArray) {
-        Entity linkEntity = new Entity("RouteUserLink", KeyFactory.createKey("User", userId));
-        linkEntity.setProperty("routeId", routeEntity.getKey().getId());
-        linkEntity.setProperty("userAccess", UserAccessType.EDITOR);
-        // Add entity for editor.
-        datastore.put(linkEntity);
+      if (!(routeStatus == RouteStatus.COPY)) {
+        for (long userId : editorsArray) {
+          Entity linkEntity = new Entity("RouteUserLink", KeyFactory.createKey("User", userId));
+          linkEntity.setProperty("routeId", routeEntity.getKey().getId());
+          linkEntity.setProperty("userAccess", UserAccessType.EDITOR);
+          // Add entity for editor.
+          datastore.put(linkEntity);
+        }
       }
 
-      if (!(routeObject.getStatus().compareTo("new") == 0)) {
+      if (!(routeStatus == RouteStatus.EDIT)) {
         Entity linkEntity = new Entity("RouteUserLink", userKey);
         linkEntity.setProperty("routeId", routeEntity.getKey().getId());
         linkEntity.setProperty("type", 1);
@@ -146,16 +149,32 @@ public class RoutesStoring extends HttpServlet {
         datastore.put(markerEntity);
       }
 
-      // Respond with new created route id.
-      Long routeId = routeEntity.getKey().getId();
-      routeObject.setRouteId(routeId);
-
-      response.setContentType("application/json;");
-      response.getWriter().println(gson.toJson(routeObject));
+      switch (routeStatus) {
+        case NEW:
+          {
+            // Respond with new created route.
+            Long routeId = routeEntity.getKey().getId();
+            routeObject.setRouteId(routeId);
+            response.getWriter().println(gson.toJson(routeObject));
+            break;
+          }
+        case EDIT:
+          {
+            Result editStatus = new Result("Route editted successfully!", true);
+            response.getWriter().println(gson.toJson(editStatus));
+            break;
+          }
+        case COPY:
+          {
+            Result copyStatus = new Result("Route added to your library", true);
+            response.getWriter().println(gson.toJson(copyStatus));
+            break;
+          }
+      }
 
       // TODO(#14): Catch more specific exceptions.
     } catch (Exception e) {
-      Error userError = new Error("Error getting User from DataStore");
+      Result userError = new Result("Error getting User from DataStore", false);
 
       response.setContentType("application/json;");
       response.getWriter().println(gson.toJson(userError));

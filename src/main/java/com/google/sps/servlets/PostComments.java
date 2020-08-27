@@ -19,7 +19,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.sps.data.Error;
+import com.google.sps.data.Result;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public class PostComments extends HttpServlet {
 
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
-      Error userError = new Error("You are not logged in!");
+      Result userError = new Result("You are not logged in!", false);
       response.getWriter().println(gson.toJson(userError));
       return;
     }
@@ -87,12 +87,12 @@ public class PostComments extends HttpServlet {
       commentEntity.setProperty("nickname", userEntity.getProperty("nickname"));
 
       datastore.put(commentEntity);
-      Error errorStatus = new Error("Comment submitted!");
-      response.getWriter().println(gson.toJson(errorStatus));
+      Result commentSubmitted = new Result("Comment submitted!", true);
+      response.getWriter().println(gson.toJson(commentSubmitted));
 
     } catch (Exception e) {
-      Error errorStatus = new Error("User not found!");
-      response.getWriter().println(gson.toJson(errorStatus));
+      Result userError = new Result("User not found!", false);
+      response.getWriter().println(gson.toJson(userError));
     }
   }
 

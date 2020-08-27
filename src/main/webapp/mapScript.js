@@ -177,7 +177,7 @@ function createRouteData() {
     editorsArray: editorsArray,
     numberOfRatings: numberOfRatings,
     sumOfRatings: sumOfRatings,
-    status: "new",
+    status: "NEW",
   };
   console.log(routeData);
   return routeData;
@@ -199,8 +199,8 @@ async function createRoute() {
     await fetch("/storeRoute", options)
       .then((response) => response.json())
       .then((jsonResponse) => {
-        if (jsonResponse.hasOwnProperty("errorMessage")) {
-          alert(jsonResponse.errorMessage);
+        if (jsonResponse.hasOwnProperty("message")) {
+          alert(jsonResponse.message);
         } else {
           if (jsonResponse.isPublic) {
             let routesGrid = document.getElementById("routes-grid");
@@ -321,7 +321,7 @@ function editMode(route) {
 async function editRoute(route) {
   let routeData = createRouteData();
   routeData.routeId = route.routeId;
-  routeData.status = "edit";
+  routeData.status = "EDIT";
 
   if (routeData.routeName == "") {
     alert("Please add a name to your new route!");
@@ -337,8 +337,8 @@ async function editRoute(route) {
     await fetch("/storeRoute", options)
       .then((response) => response.json())
       .then((jsonResponse) => {
-        if (jsonResponse.hasOwnProperty("errorMessage")) {
-          alert(jsonResponse.errorMessage);
+        if (jsonResponse.hasOwnProperty("message")) {
+          alert(jsonResponse.message);
         }
       });
     alert("Route successfully edited!");
