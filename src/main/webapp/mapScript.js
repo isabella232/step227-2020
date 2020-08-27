@@ -159,6 +159,7 @@ function createRouteData() {
     isPublic = Boolean(document.getElementById("publicity").value == 1),
     startHour = document.getElementById("start-hour").value,
     startMinute = document.getElementById("start-minute").value;
+  (isCompleted = false), (numberOfRatings = 3), (sumOfRatings = 13.0);
 
   var markersData = [];
   for (var i = 0; i < markersArray.length; i++) {
@@ -170,9 +171,12 @@ function createRouteData() {
     routeName: routeName,
     routeMarkers: markersData,
     isPublic: isPublic,
+    isCompleted: isCompleted,
     startHour: startHour,
     startMinute: startMinute,
     editorsArray: editorsArray,
+    numberOfRatings: numberOfRatings,
+    sumOfRatings: sumOfRatings,
     status: "new",
   };
   console.log(routeData);

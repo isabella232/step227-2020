@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.sps.data.Error;
 import com.google.sps.data.Marker;
 import com.google.sps.data.Route;
+import com.google.sps.data.UserAccessType;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,8 +68,11 @@ public class RoutesStoring extends HttpServlet {
     List<Long> editorsArray = routeObject.getEditorsArray();
     String routeName = routeObject.getRouteName();
     boolean isPublic = routeObject.getIsPublic();
+    boolean isCompleted = routeObject.getIsCompleted();
     long startHour = routeObject.getStartHour();
     long startMinute = routeObject.getStartMinute();
+    long numberOfRatings = routeObject.getNumberOfRatings();
+    double sumOfRatings = routeObject.getSumOfRatings();
 
     Key userKey = KeyFactory.createKey("User", userService.getCurrentUser().getUserId());
 
@@ -103,15 +107,18 @@ public class RoutesStoring extends HttpServlet {
 
       routeEntity.setProperty("routeName", routeName);
       routeEntity.setProperty("isPublic", isPublic);
+      routeEntity.setProperty("isCompleted", isCompleted);
       routeEntity.setProperty("startHour", startHour);
       routeEntity.setProperty("startMinute", startMinute);
+      routeEntity.setProperty("numberOfRatings", numberOfRatings);
+      routeEntity.setProperty("sumOfRatings", sumOfRatings);
 
       datastore.put(routeEntity);
 
       for (long userId : editorsArray) {
         Entity linkEntity = new Entity("RouteUserLink", KeyFactory.createKey("User", userId));
         linkEntity.setProperty("routeId", routeEntity.getKey().getId());
-        linkEntity.setProperty("type", 2);
+        linkEntity.setProperty("userAccess", UserAccessType.EDITOR);
         // Add entity for editor.
         datastore.put(linkEntity);
       }

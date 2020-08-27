@@ -21,29 +21,39 @@ public final class Route {
   private long routeId;
   private String routeName;
   private boolean isPublic;
+  private boolean isCompleted;
   private long startHour;
   private long startMinute;
   private List<Marker> routeMarkers;
   private List<Long> editorsArray;
   private String status;
+  private long numberOfRatings;
+  private double sumOfRatings;
+  private UserAccessType userAccess;
 
   public Route(
       long routeId,
       String routeName,
       boolean isPublic,
+      boolean isCompleted,
       long startHour,
       long startMinute,
       List<Marker> routeMarkers,
       List<Long> editorsArray,
-      String status) {
+      String status,
+      long numberOfRatings,
+      double sumOfRatings) {
     this.routeId = routeId;
     this.routeName = routeName;
     this.isPublic = isPublic;
+    this.isCompleted = isCompleted;
     this.startHour = startHour;
     this.startMinute = startMinute;
     this.routeMarkers = routeMarkers;
     this.editorsArray = editorsArray;
     this.status = status;
+    this.numberOfRatings = numberOfRatings;
+    this.sumOfRatings = sumOfRatings;
   }
 
   public Route(long routeId, String routeName, boolean isPublic, long startHour, long startMinute) {
@@ -54,8 +64,31 @@ public final class Route {
     this.startMinute = startMinute;
   }
 
+  public Route(
+      long routeId,
+      String routeName,
+      boolean isPublic,
+      boolean isCompleted,
+      long startHour,
+      long startMinute,
+      long numberOfRatings,
+      double sumOfRatings) {
+    this.routeId = routeId;
+    this.routeName = routeName;
+    this.isPublic = isPublic;
+    this.isCompleted = isCompleted;
+    this.startHour = startHour;
+    this.startMinute = startMinute;
+    this.numberOfRatings = numberOfRatings;
+    this.sumOfRatings = sumOfRatings;
+  }
+
   public void setRouteId(long routeId) {
     this.routeId = routeId;
+  }
+
+  public void setUserAccess(UserAccessType userAccess) {
+    this.userAccess = userAccess;
   }
 
   public void setEditorsArray(List<Long> editorsArray) {
@@ -78,6 +111,10 @@ public final class Route {
     return isPublic;
   }
 
+  public boolean getIsCompleted() {
+    return isCompleted;
+  }
+
   public long getStartHour() {
     return startHour;
   }
@@ -96,5 +133,17 @@ public final class Route {
 
   public String getStatus() {
     return status;
+  }
+
+  public double getRating() {
+    return sumOfRatings / numberOfRatings;
+  }
+
+  public Long getNumberOfRatings() {
+    return numberOfRatings;
+  }
+
+  public double getSumOfRatings() {
+    return sumOfRatings;
   }
 }
