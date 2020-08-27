@@ -25,6 +25,7 @@ public final class Route {
   private long startMinute;
   private List<Marker> routeMarkers;
   private List<Long> editorsArray;
+  private String status;
 
   public Route(
       long routeId,
@@ -33,7 +34,8 @@ public final class Route {
       long startHour,
       long startMinute,
       List<Marker> routeMarkers,
-      List<Long> editorsArray) {
+      List<Long> editorsArray,
+      String status) {
     this.routeId = routeId;
     this.routeName = routeName;
     this.isPublic = isPublic;
@@ -41,6 +43,7 @@ public final class Route {
     this.startMinute = startMinute;
     this.routeMarkers = routeMarkers;
     this.editorsArray = editorsArray;
+    this.status = status;
   }
 
   public Route(long routeId, String routeName, boolean isPublic, long startHour, long startMinute) {
@@ -89,5 +92,9 @@ public final class Route {
 
   public List<Long> getEditorsArray() {
     return editorsArray;
+  }
+
+  public String getStatus() {
+    return status;
   }
 }

@@ -59,7 +59,8 @@ function loadRoutes() {
       routes.forEach((route) => {
         routesGrid.appendChild(createRouteCard(route));
       });
-      if (routesGrid === "") routesGrid.innerHTML = "No suggestions available!";
+      if (routesGrid.innerHTML == "")
+        routesGrid.innerHTML = "No suggestions available!";
     });
 }
 
@@ -107,7 +108,8 @@ function viewRoute(route) {
   initInactiveMap();
 
   document.getElementById("create-route-button").style.visibility = "hidden";
-  document.getElementById("additional").innerHTML = "";
+  document.getElementById("share-with-friends-button").style.visibility =
+    "hidden";
 
   let routeName = document.getElementById("route-name");
   routeName.value = route.routeName;
@@ -133,17 +135,20 @@ function viewRoute(route) {
     });
   }
 
+  let commentsPanel = document.createElement("textarea");
+
   // Add button to exit preview mode.
   let backButton = document.createElement("button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
     location.reload();
   };
+  document.getElementById("additional").innerHTML = "";
   document.getElementById("additional").appendChild(backButton);
 }
 
 async function addToProfile(route) {
-  // TODO(#26): Prevent duplicate routes
+  route.status = "copy";
   let options = {
     method: "POST",
     body: JSON.stringify(route),
@@ -151,5 +156,11 @@ async function addToProfile(route) {
       "Content-Type": "application/json",
     },
   };
-  await fetch("/storeRoute", options);
+  await fetch("/storeRoute", options)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      if (jsonResponse.hasOwnProperty("errorMessage")) {
+        alert(jsonResponse.errorMessage);
+      }
+    });
 }

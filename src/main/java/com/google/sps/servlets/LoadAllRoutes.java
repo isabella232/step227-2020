@@ -27,6 +27,7 @@ import com.google.sps.data.Marker;
 import com.google.sps.data.Route;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -65,7 +66,7 @@ public class LoadAllRoutes extends HttpServlet {
       for (Entity markerEntity : associatedMarkers.asIterable()) {
         Marker marker =
             new Marker(
-                markerEntity.getKey().getId(),
+                (Long) markerEntity.getProperty("index"),
                 (double) markerEntity.getProperty("lat"),
                 (double) markerEntity.getProperty("lng"),
                 (Long) markerEntity.getProperty("stayHour"),
@@ -74,6 +75,9 @@ public class LoadAllRoutes extends HttpServlet {
         markers.add(marker);
       }
 
+      Collections.sort(
+          markers,
+          (o1, o2) -> (new Long(o1.getId()).intValue()) - (new Long(o2.getId()).intValue()));
       route.setRouteMarkers(markers);
       routes.add(route);
     }
