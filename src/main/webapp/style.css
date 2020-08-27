@@ -97,6 +97,11 @@
   border-radius: 7px 7px 0 0;
 }
 
+.comments-panel {
+  width: 400px;
+  height: 75px;
+}
+
 #route-name {
   height: 25px;
   width: 200px;

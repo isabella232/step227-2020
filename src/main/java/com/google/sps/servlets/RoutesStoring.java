@@ -24,6 +24,7 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.sps.data.Error;
 import com.google.sps.data.Marker;
 import com.google.sps.data.Route;
 import java.io.IOException;
@@ -38,18 +39,6 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 @WebServlet("/storeRoute")
 public class RoutesStoring extends HttpServlet {
-  static class Error {
-    String errorMessage;
-
-    Error(String errorMessage) {
-      this.errorMessage = errorMessage;
-    }
-
-    String getErrorMessage() {
-      return errorMessage;
-    }
-  }
-
   String json;
 
   /** Processes POST request by storing routes. */

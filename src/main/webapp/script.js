@@ -135,7 +135,7 @@ function viewRoute(route) {
     });
   }
 
-  let commentsPanel = document.createElement("textarea");
+  let commentsPanel = createCommentsPanel(route);
 
   // Add button to exit preview mode.
   let backButton = document.createElement("button");
@@ -143,8 +143,10 @@ function viewRoute(route) {
   backButton.onclick = function () {
     location.reload();
   };
-  document.getElementById("additional").innerHTML = "";
-  document.getElementById("additional").appendChild(backButton);
+  let additionalContent = document.getElementById("additional");
+  additionalContent.innerHTML = "";
+  additionalContent.appendChild(commentsPanel);
+  additionalContent.appendChild(backButton);
 }
 
 async function addToProfile(route) {
@@ -157,6 +159,47 @@ async function addToProfile(route) {
     },
   };
   await fetch("/storeRoute", options)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      if (jsonResponse.hasOwnProperty("errorMessage")) {
+        alert(jsonResponse.errorMessage);
+      }
+    });
+}
+
+function createCommentsPanel(route) {
+  var commentForm = document.createElement("div");
+  var commentArea = document.createElement("input");
+  commentArea.setAttribute("type", "text");
+  commentArea.setAttribute("name", "comment");
+  commentArea.setAttribute("placeholder", "Leave a comment...");
+  commentArea.classList.add("comments-panel");
+
+  // Create a submit button
+  var submit = document.createElement("button");
+  submit.innerHTML = "Submit comment";
+  submit.onclick = function () {
+    submitComment(route, commentArea.value);
+  };
+
+  commentForm.appendChild(commentArea);
+  commentForm.appendChild(submit);
+  return commentForm;
+}
+
+async function submitComment(route, commentText) {
+  let commentData = {
+    routeId: route.routeId,
+    commentText: commentText,
+  };
+  let options = {
+    method: "POST",
+    body: JSON.stringify(commentData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  await fetch("/post-comment", options)
     .then((response) => response.json())
     .then((jsonResponse) => {
       if (jsonResponse.hasOwnProperty("errorMessage")) {
