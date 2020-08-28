@@ -59,7 +59,8 @@ function loadRoutes() {
       routes.forEach((route) => {
         routesGrid.appendChild(createRouteCard(route));
       });
-      if (routesGrid === "") routesGrid.innerHTML = "No suggestions available!";
+      if (routesGrid.innerHTML == "")
+        routesGrid.innerHTML = "No suggestions available!";
     });
 }
 
@@ -107,7 +108,8 @@ function viewRoute(route) {
   initInactiveMap();
 
   document.getElementById("create-route-button").style.visibility = "hidden";
-  document.getElementById("additional").innerHTML = "";
+  document.getElementById("share-with-friends-button").style.visibility =
+    "hidden";
 
   let routeName = document.getElementById("route-name");
   routeName.value = route.routeName;
@@ -133,17 +135,22 @@ function viewRoute(route) {
     });
   }
 
+  let commentsPanel = createCommentsPanel(route);
+
   // Add button to exit preview mode.
   let backButton = document.createElement("button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
     location.reload();
   };
-  document.getElementById("additional").appendChild(backButton);
+  let additionalContent = document.getElementById("additional");
+  additionalContent.innerHTML = "";
+  additionalContent.appendChild(commentsPanel);
+  additionalContent.appendChild(backButton);
 }
 
 async function addToProfile(route) {
-  // TODO(#26): Prevent duplicate routes
+  route.status = "COPY";
   let options = {
     method: "POST",
     body: JSON.stringify(route),
@@ -151,5 +158,52 @@ async function addToProfile(route) {
       "Content-Type": "application/json",
     },
   };
-  await fetch("/storeRoute", options);
+  await fetch("/storeRoute", options)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      if (jsonResponse.hasOwnProperty("message")) {
+        alert(jsonResponse.message);
+      }
+    });
+}
+
+function createCommentsPanel(route) {
+  var commentForm = document.createElement("div");
+  var commentArea = document.createElement("input");
+  commentArea.setAttribute("type", "text");
+  commentArea.setAttribute("name", "comment");
+  commentArea.setAttribute("placeholder", "Leave a comment...");
+  commentArea.classList.add("comments-panel");
+
+  // Create a submit button
+  var submit = document.createElement("button");
+  submit.innerHTML = "Submit comment";
+  submit.onclick = function () {
+    submitComment(route, commentArea.value);
+  };
+
+  commentForm.appendChild(commentArea);
+  commentForm.appendChild(submit);
+  return commentForm;
+}
+
+async function submitComment(route, commentText) {
+  let commentData = {
+    routeId: route.routeId,
+    commentText: commentText,
+  };
+  let options = {
+    method: "POST",
+    body: JSON.stringify(commentData),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  await fetch("/post-comment", options)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      if (jsonResponse.hasOwnProperty("message")) {
+        alert(jsonResponse.message);
+      }
+    });
 }

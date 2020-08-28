@@ -153,35 +153,41 @@ function updateMarkerSettings(placeId) {
   }
 }
 
-async function createRoute() {
-  let routeName = document.getElementById("route-name").value,
-    routeId = 0,
+function createRouteData() {
+  let routeId = 0,
+    routeName = document.getElementById("route-name").value,
     isPublic = Boolean(document.getElementById("publicity").value == 1),
     startHour = document.getElementById("start-hour").value,
     startMinute = document.getElementById("start-minute").value;
   (isCompleted = false), (numberOfRatings = 3), (sumOfRatings = 13.0);
-  if (routeName == "") {
+
+  var markersData = [];
+  for (var i = 0; i < markersArray.length; i++) {
+    markersData.push(markersArray[i].data);
+  }
+
+  var routeData = {
+    routeId: routeId,
+    routeName: routeName,
+    routeMarkers: markersData,
+    isPublic: isPublic,
+    isCompleted: isCompleted,
+    startHour: startHour,
+    startMinute: startMinute,
+    editorsArray: editorsArray,
+    numberOfRatings: numberOfRatings,
+    sumOfRatings: sumOfRatings,
+    status: "NEW",
+  };
+  console.log(routeData);
+  return routeData;
+}
+
+async function createRoute() {
+  let routeData = createRouteData();
+  if (routeData.routeName == "") {
     alert("Please add a name to your new route!");
   } else {
-    var markersData = [];
-    for (var i = 0; i < markersArray.length; i++) {
-      markersData.push(markersArray[i].data);
-    }
-
-    var routeData = {
-      routeId: routeId,
-      routeName: routeName,
-      routeMarkers: markersData,
-      isPublic: isPublic,
-      isCompleted: isCompleted,
-      startHour: startHour,
-      startMinute: startMinute,
-      editorsArray: editorsArray,
-      numberOfRatings: numberOfRatings,
-      sumOfRatings: sumOfRatings,
-    };
-    console.log(routeData);
-
     let options = {
       method: "POST",
       body: JSON.stringify(routeData),
@@ -193,12 +199,12 @@ async function createRoute() {
     await fetch("/storeRoute", options)
       .then((response) => response.json())
       .then((jsonResponse) => {
-        if (jsonResponse.hasOwnProperty("errorMessage")) {
-          alert(jsonResponse.errorMessage);
+        if (jsonResponse.hasOwnProperty("message")) {
+          alert(jsonResponse.message);
         } else {
-          if (jsonResponse.isPublic === true) {
+          if (jsonResponse.isPublic) {
             let routesGrid = document.getElementById("routes-grid");
-            if (routesGrid.innerHTML === "No suggestions available!") {
+            if (routesGrid.innerHTML == "No suggestions available!") {
               routesGrid.innerHTML = "";
             }
             routesGrid.appendChild(createRouteCard(jsonResponse));
@@ -218,8 +224,6 @@ function removeRouteInfo() {
   document.getElementById("start-hour").value = -1;
   document.getElementById("start-minute").value = -1;
   privateRoute();
-  document.getElementsByClassName("marker-setting")[0].classList.toggle =
-    "hidden";
   for (var i = 0; i < markersArray.length; i++) {
     markersArray[i].marker.setMap(null);
   }
@@ -248,4 +252,95 @@ function privateRoute() {
   document.getElementById("publicity").value = 0;
   document.getElementsByClassName("fa-users")[0].style.color = "grey";
   document.getElementsByClassName("fa-users-slash")[0].style.color = "red";
+}
+
+function editMode(route) {
+  removeRouteInfo();
+  initMap();
+  markersArray = [];
+  globalIndex = route.routeMarkers.length;
+
+  // Change submit button properties.
+  let submitButton = document.getElementById("create-route-button");
+  submitButton.innerHTML = "SAVE CHANGES";
+  submitButton.style.visibility = "visible";
+  submitButton.onclick = function () {
+    editRoute(route);
+  };
+
+  // Update route details.
+  let routeName = document.getElementById("route-name");
+  routeName.value = route.routeName;
+
+  document.getElementById("start-hour").value = route.startHour;
+  document.getElementById("start-minute").value = route.startMinute;
+  document.getElementById("share-with-friends-button").style.visibility =
+    "visible";
+  if (route.isPublic) {
+    publicRoute();
+  } else {
+    privateRoute();
+  }
+
+  // Fill the table and add markers on the map.
+  for (var i = 0; i < route.routeMarkers.length; i++) {
+    let markerData = route.routeMarkers[i];
+    addNewTableItem(markerData.markerName, i);
+
+    let marker = new google.maps.Marker({
+      position: {
+        lat: route.routeMarkers[i].lat,
+        lng: route.routeMarkers[i].lng,
+      },
+      map: map,
+    });
+
+    markersArray.push({
+      marker: marker,
+      data: {
+        id: i,
+        lat: markerData.lat,
+        lng: markerData.lng,
+        stayHour: markerData.stayHour,
+        stayMinute: markerData.stayMinute,
+        markerName: markerData.markerName,
+      },
+    });
+  }
+
+  // Add button to exit edit mode.
+  let backButton = document.createElement("button");
+  backButton.innerHTML = "BACK TO ROUTE CREATION";
+  backButton.onclick = function () {
+    location.reload();
+  };
+  document.getElementById("additional").innerHTML = "";
+  document.getElementById("additional").appendChild(backButton);
+}
+
+async function editRoute(route) {
+  let routeData = createRouteData();
+  routeData.routeId = route.routeId;
+  routeData.status = "EDIT";
+
+  if (routeData.routeName == "") {
+    alert("Please add a name to your new route!");
+  } else {
+    let options = {
+      method: "POST",
+      body: JSON.stringify(routeData),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    await fetch("/storeRoute", options)
+      .then((response) => response.json())
+      .then((jsonResponse) => {
+        if (jsonResponse.hasOwnProperty("message")) {
+          alert(jsonResponse.message);
+        }
+      });
+    alert("Route successfully edited!");
+  }
 }

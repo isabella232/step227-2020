@@ -19,6 +19,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.sps.data.Result;
 import com.google.sps.data.Route;
 import com.google.sps.data.UserAccessType;
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class ProfileRoutes extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     UserService userService = UserServiceFactory.getUserService();
+    Gson gson = new Gson();
 
     List<Route> connectedRoutes = new ArrayList<>();
 
@@ -77,9 +79,11 @@ public class ProfileRoutes extends HttpServlet {
 
       } catch (Exception e) {
         // TODO(#14): Catch more specific exceptions.
+        Result queryError = new Result("Error accessing data from DataStore", false);
+        response.setContentType("application/json;");
+        response.getWriter().println(gson.toJson(queryError));
       }
     }
-    Gson gson = new Gson();
     String json = gson.toJson(connectedRoutes);
 
     // Return response to the request.
