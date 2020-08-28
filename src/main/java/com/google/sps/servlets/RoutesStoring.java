@@ -133,7 +133,7 @@ public class RoutesStoring extends HttpServlet {
         // Add entity for owner.
         datastore.put(linkEntity);
       }
-      
+
       for (Marker marker : routeMarkers) {
         // Create entities for markers and make them children of the route.
         Entity markerEntity = new Entity("Marker", routeEntity.getKey());
