@@ -84,9 +84,9 @@ public class RoutesStoring extends HttpServlet {
         Filter routeFilter =
             new FilterPredicate("routeId", FilterOperator.EQUAL, routeObject.getRouteId());
         Query routeQuery = new Query("RouteUserLink").setAncestor(userKey).setFilter(routeFilter);
-        PreparedQuery checkExistance = datastore.prepare(routeQuery);
+        PreparedQuery checkExistence = datastore.prepare(routeQuery);
 
-        if (checkExistance.countEntities(FetchOptions.Builder.withLimit(10)) > 0) {
+        if (checkExistence.countEntities(FetchOptions.Builder.withLimit(10)) > 0) {
           Result duplicateError =
               new Result("This route is already stored in your library!", false);
           response.getWriter().println(gson.toJson(duplicateError));
@@ -97,6 +97,7 @@ public class RoutesStoring extends HttpServlet {
         Key routeKey = KeyFactory.createKey("Route", routeObject.getRouteId());
         routeEntity = datastore.get(routeKey);
 
+        // TODO(#29): Batch multiple updates together where possible.
         Query markersQuery = new Query("Marker").setAncestor(routeKey);
         PreparedQuery associatedMarkers = datastore.prepare(markersQuery);
         for (Entity markerEntity : associatedMarkers.asIterable()) {
@@ -116,7 +117,7 @@ public class RoutesStoring extends HttpServlet {
 
       datastore.put(routeEntity);
 
-      if (!(routeStatus == RouteStatus.COPY)) {
+      if (routeStatus != RouteStatus.COPY) {
         for (long userId : editorsArray) {
           Entity linkEntity = new Entity("RouteUserLink", KeyFactory.createKey("User", userId));
           linkEntity.setProperty("routeId", routeEntity.getKey().getId());
@@ -126,7 +127,7 @@ public class RoutesStoring extends HttpServlet {
         }
       }
 
-      if (!(routeStatus == RouteStatus.EDIT)) {
+      if (routeStatus != RouteStatus.EDIT) {
         Entity linkEntity = new Entity("RouteUserLink", userKey);
         linkEntity.setProperty("routeId", routeEntity.getKey().getId());
         linkEntity.setProperty("type", 1);
@@ -155,6 +156,7 @@ public class RoutesStoring extends HttpServlet {
             // Respond with new created route.
             Long routeId = routeEntity.getKey().getId();
             routeObject.setRouteId(routeId);
+            // TODO(#31): Return a more consistent class from the servlet.
             response.getWriter().println(gson.toJson(routeObject));
             break;
           }

@@ -14,6 +14,7 @@
 
 package com.google.sps.data;
 
+/** Represents the response of the servlets, including their success status. */
 public class Result {
   private String message;
   private boolean success;
