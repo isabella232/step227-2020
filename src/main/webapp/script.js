@@ -137,8 +137,9 @@ function viewRoute(route) {
     });
   }
 
-  let commentForm = createCommentForm(route);
+  let ratingScore = generateRating(route);
   let commentsPanel = createCommentsPanel(route);
+  let commentForm = createCommentForm(route);
 
   // Add button to exit preview mode.
   let backButton = document.createElement("button");
@@ -149,6 +150,7 @@ function viewRoute(route) {
   };
   let additionalContent = document.getElementById("additional");
   additionalContent.innerHTML = "";
+  additionalContent.appendChild(ratingScore);
   additionalContent.appendChild(commentsPanel);
   additionalContent.appendChild(commentForm);
   additionalContent.appendChild(backButton);
@@ -170,6 +172,19 @@ async function addToProfile(route) {
         alert(jsonResponse.message);
       }
     });
+}
+
+function generateRating(route) {
+  let ratingElement = document.createElement("p");
+  ratingElement.classList.add("route-rating");
+
+  console.log(route.sumOfRatings);
+  console.log(route.numberOfRatings);
+
+  let rating = route.sumOfRatings / route.numberOfRatings;
+  ratingElement.innerHTML = `Route rating: ${rating}`.bold();
+
+  return ratingElement;
 }
 
 function createCommentForm(route) {

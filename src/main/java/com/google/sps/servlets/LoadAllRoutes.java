@@ -53,11 +53,23 @@ public class LoadAllRoutes extends HttpServlet {
     for (Entity routeEntity : queriedRoutes.asIterable()) {
       String routeName = (String) routeEntity.getProperty("routeName");
       boolean isPublic = (Boolean) routeEntity.getProperty("isPublic");
+      boolean isCompleted = (Boolean) routeEntity.getProperty("isCompleted");
       long startHour = (Long) routeEntity.getProperty("startHour");
       long startMinute = (Long) routeEntity.getProperty("startMinute");
+      long numberOfRatings = (Long) routeEntity.getProperty("numberOfRatings");
+      double sumOfRatings = (double) routeEntity.getProperty("sumOfRatings");
 
       long routeId = routeEntity.getKey().getId();
-      Route route = new Route(routeId, routeName, isPublic, startHour, startMinute);
+      Route route =
+          new Route(
+              routeId,
+              routeName,
+              isPublic,
+              isCompleted,
+              startHour,
+              startMinute,
+              numberOfRatings,
+              sumOfRatings);
 
       Query markersQuery = new Query("Marker").setAncestor(routeEntity.getKey());
       PreparedQuery associatedMarkers = datastore.prepare(markersQuery);
@@ -71,7 +83,8 @@ public class LoadAllRoutes extends HttpServlet {
                 (double) markerEntity.getProperty("lng"),
                 (Long) markerEntity.getProperty("stayHour"),
                 (Long) markerEntity.getProperty("stayMinute"),
-                (String) markerEntity.getProperty("markerName"));
+                (String) markerEntity.getProperty("markerName"),
+                (double) markerEntity.getProperty("rating"));
         markers.add(marker);
       }
 

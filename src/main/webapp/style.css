@@ -164,6 +164,13 @@
   border-radius: 7px;
 }
 
+.route-rating {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  margin: 0;
+  padding-top: 5px;
+}
+
 .comment-form {
   width: 400px;
   height: 75px;

@@ -20,6 +20,7 @@ var viewersArray = [];
 var invalidPlace = {
   name: "Invalid",
   formatted_address: "Invalid",
+  rating: 0,
 };
 
 function initInactiveMap() {
@@ -92,7 +93,7 @@ function findPlaceId(location, placeIdFunction) {
 function findPlaceDetails(placeId, placeDetailsFunction) {
   var request = {
     placeId: placeId,
-    fields: ["name", "formatted_address", "geometry"],
+    fields: ["name", "formatted_address", "rating"],
   };
 
   service = new google.maps.places.PlacesService(map);
@@ -142,6 +143,8 @@ function createMarker(marker, place) {
     stayMinute = 0,
     markerName = place.name;
 
+  console.log(place.rating);
+
   markersArray.push({
     marker: marker,
     data: {
@@ -151,6 +154,7 @@ function createMarker(marker, place) {
       stayHour: stayHour,
       stayMinute: stayMinute,
       markerName: markerName,
+      rating: place.rating,
     },
   });
 
@@ -259,11 +263,20 @@ function createRouteData() {
     routeName = document.getElementById("route-name").value,
     isPublic = Boolean(document.getElementById("publicity").value == 1),
     startHour = document.getElementById("start-hour").value,
-    startMinute = document.getElementById("start-minute").value;
-  (isCompleted = false), (numberOfRatings = 3), (sumOfRatings = 13.0);
+    startMinute = document.getElementById("start-minute").value,
+    isCompleted = false,
+    numberOfRatings = markersArray.length;
 
   var markersData = [];
+  var sumOfRatings = 0;
   for (var i = 0; i < markersArray.length; i++) {
+    let rating = markersArray[i].data.rating;
+    if (rating != undefined) {
+      sumOfRatings += rating;
+    } else {
+      markersArray[i].data.rating = 0;
+    }
+
     markersData.push(markersArray[i].data);
   }
 
@@ -405,6 +418,7 @@ function editMode(route) {
         stayHour: markerData.stayHour,
         stayMinute: markerData.stayMinute,
         markerName: markerData.markerName,
+        rating: markerData.rating,
       },
     });
   }

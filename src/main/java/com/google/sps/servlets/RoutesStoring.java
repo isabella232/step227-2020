@@ -145,6 +145,7 @@ public class RoutesStoring extends HttpServlet {
         markerEntity.setProperty("stayHour", marker.getStayHour());
         markerEntity.setProperty("stayMinute", marker.getStayMinute());
         markerEntity.setProperty("markerName", marker.getMarkerName());
+        markerEntity.setProperty("rating", marker.getRating());
 
         // Store new marker.
         datastore.put(markerEntity);

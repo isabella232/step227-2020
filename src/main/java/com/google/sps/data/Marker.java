@@ -25,6 +25,7 @@ public class Marker {
   private long stayMinute;
 
   private String markerName;
+  private double rating;
 
   public Marker(
       long newId,
@@ -32,7 +33,8 @@ public class Marker {
       double newLng,
       long newStayHour,
       long newStayMinute,
-      String newMarkerName) {
+      String newMarkerName,
+      double rating) {
     id = newId;
 
     lat = newLat;
@@ -42,6 +44,7 @@ public class Marker {
     stayMinute = newStayMinute;
 
     markerName = newMarkerName;
+    rating = rating;
   }
 
   public Marker() {
@@ -78,6 +81,10 @@ public class Marker {
     return markerName;
   }
 
+  public double getRating() {
+    return rating;
+  }
+
   public void setId(long newId) {
     this.id = newId;
   }
@@ -100,5 +107,9 @@ public class Marker {
 
   public void setMarkerName(String newName) {
     markerName = newName;
+  }
+
+  public void setRating(double newRating) {
+    rating = newRating;
   }
 }
