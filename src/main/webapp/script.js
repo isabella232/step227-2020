@@ -104,6 +104,8 @@ function createRouteCard(route) {
 }
 
 function viewRoute(route) {
+  document.getElementById("route-content").style.visibility = "visible";
+  document.getElementById("login-required").className = "move-left";
   removeRouteInfo();
   initInactiveMap();
 
@@ -169,9 +171,7 @@ async function addToProfile(route) {
 
 function createCommentsPanel(route) {
   var commentForm = document.createElement("div");
-  var commentArea = document.createElement("input");
-  commentArea.setAttribute("type", "text");
-  commentArea.setAttribute("name", "comment");
+  var commentArea = document.createElement("textarea");
   commentArea.setAttribute("placeholder", "Leave a comment...");
   commentArea.classList.add("comments-panel");
 

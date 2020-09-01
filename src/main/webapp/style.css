@@ -100,9 +100,6 @@
   max-width: 50%;
   height: 150px;
 
-  left: 50%;
-  top: 70%;
-  margin-left: -150px;
   padding: 10px;
 
   background: rgba(255, 255, 255, 0.8);
@@ -112,6 +109,16 @@
   color: #666;
   font-size: 30px;
   text-align: center;
+}
+.centered {
+  left: 50%;
+  top: 70%;
+  margin-left: -150px;
+}
+
+.move-left {
+  left: 1%;
+  top: 55%;
 }
 
 #route-content {
