@@ -15,9 +15,12 @@
 let map;
 var globalIndex = 0;
 var markersArray = [];
-var listener;
 var editorsArray = [];
 var viewersArray = [];
+var invalidPlace = {
+  name: "Invalid",
+  formatted_address: "Invalid",
+};
 
 function initInactiveMap() {
   // Create a map object, and include the MapTypeId to add
@@ -33,43 +36,141 @@ function initInactiveMap() {
   });
 }
 
+function addSearchBar() {
+  const input = document.getElementById("pac-input");
+  const searchBox = new google.maps.places.SearchBox(input);
+  // Bias the SearchBox results towards current map's viewport.
+  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+  map.addListener("bounds_changed", () => {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  searchBox.addListener("places_changed", () => {
+    const places = searchBox.getPlaces();
+
+    if (places.length == 0) {
+      return;
+    }
+
+    const bounds = new google.maps.LatLngBounds();
+    places.forEach((place) => {
+      if (!place.geometry) {
+        console.log("Returned place contains no geometry");
+        return;
+      }
+
+      if (place.geometry.viewport) {
+        // Only geocodes have viewport.
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+    map.fitBounds(bounds);
+  });
+}
+
+function findPlaceId(location, placeIdFunction) {
+  var geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ location: location }, function (results, status) {
+    placeId = -1;
+    if (status === "OK") {
+      if (results[0]) {
+        console.log(results[0].place_id);
+        placeId = results[0].place_id;
+      } else {
+        console.log("No results found");
+      }
+    } else {
+      console.log("Geocoder failed due to: " + status);
+    }
+    placeIdFunction(placeId);
+  });
+}
+
+function findPlaceDetails(placeId, placeDetailsFunction) {
+  var request = {
+    placeId: placeId,
+    fields: ["name", "formatted_address", "geometry"],
+  };
+
+  service = new google.maps.places.PlacesService(map);
+  service.getDetails(request, (place, status) => {
+    if (status === google.maps.places.PlacesServiceStatus.OK) {
+      placeDetailsFunction(place);
+    } else {
+      console.log("Failed due to" + status);
+      placeDetailsFunction(invalidPlace);
+    }
+  });
+}
+
 function initMap() {
   initInactiveMap();
+  addSearchBar();
 
   checkLog().then((loggedIn) => {
     if (loggedIn == true) {
-      listener = map.addListener("click", function (event) {
+      map.addListener("click", function (event) {
         placeMarker(event.latLng);
       });
 
-      console.log("Initialise new map");
-
-      async function placeMarker(location) {
+      function placeMarker(location) {
         let marker = new google.maps.Marker({
           position: location,
           map: map,
         });
 
-        let id = globalIndex,
-          stayHour = 0,
-          stayMinute = 0,
-          markerName = "Press the settings button to choose a name";
-
-        markersArray.push({
-          marker: marker,
-          data: {
-            id: id,
-            lat: location.lat(),
-            lng: location.lng(),
-            stayHour: stayHour,
-            stayMinute: stayMinute,
-            markerName: markerName,
-          },
+        findPlaceId(location, function placeId(placeId) {
+          if (placeId == -1) {
+            createMarker(marker, invalidPlace);
+          } else {
+            findPlaceDetails(placeId, function placeDetails(place) {
+              createMarker(marker, place);
+            });
+          }
         });
-        addNewTableItem(markerName, id.toString());
-        globalIndex = globalIndex + 1;
       }
     }
+  });
+}
+
+function createMarker(marker, place) {
+  let id = globalIndex,
+    stayHour = 0,
+    stayMinute = 0,
+    markerName = place.name;
+
+  markersArray.push({
+    marker: marker,
+    data: {
+      id: id,
+      lat: marker.position.lat(),
+      lng: marker.position.lng(),
+      stayHour: stayHour,
+      stayMinute: stayMinute,
+      markerName: markerName,
+    },
+  });
+
+  // Create table item for marker.
+  addNewTableItem(markerName, id.toString());
+  globalIndex = globalIndex + 1;
+
+  // Add info window for marker.
+  const infowindow = new google.maps.InfoWindow();
+  infowindow.setContent(
+    "<div><strong>" +
+      place.name +
+      "</strong><br>" +
+      "<br>" +
+      place.formatted_address +
+      "</div>"
+  );
+  infowindow.open(map, marker);
+  google.maps.event.addListener(marker, "click", function () {
+    infowindow.open(map, this);
   });
 }
 

@@ -14,6 +14,7 @@
 
 package com.google.sps.data;
 
+/** Represents the status of a route sent to the "/storeRoute" servlet. */
 public enum RouteStatus {
   NEW,
   COPY,
