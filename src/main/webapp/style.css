@@ -160,13 +160,39 @@
 
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(1px);
-  border: 1px solid rgb(88, 88, 88);
-  border-radius: 7px 7px 0 0;
+  border: 3px solid rgb(88, 88, 88);
+  border-radius: 7px;
+}
+
+.comment-form {
+  width: 400px;
+  height: 75px;
+
+  margin-top: 5px;
 }
 
 .comments-panel {
-  width: 400px;
-  height: 75px;
+  width: 500px;
+  height: 150px;
+  overflow: auto;
+  padding: 10px;
+
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(1px);
+  border-radius: 7px;
+}
+
+.comment-element {
+  background-color: rgba(169, 169, 169, 0.404);
+  border-radius: 7px;
+
+  padding: 10px;
+  margin: 5px;
+}
+
+.comment-element p {
+  text-align: left;
+  margin: 10px 0;
 }
 
 #route-name {
