@@ -121,7 +121,7 @@ public class RoutesStoring extends HttpServlet {
         for (long userId : editorsArray) {
           Entity linkEntity = new Entity("RouteUserLink", KeyFactory.createKey("User", userId));
           linkEntity.setProperty("routeId", routeEntity.getKey().getId());
-          linkEntity.setProperty("userAccess", UserAccessType.EDITOR);
+          linkEntity.setProperty("userAccess", UserAccessType.EDITOR.getValue());
           // Add entity for editor.
           datastore.put(linkEntity);
         }
@@ -130,7 +130,7 @@ public class RoutesStoring extends HttpServlet {
       if (routeStatus != RouteStatus.EDIT) {
         Entity linkEntity = new Entity("RouteUserLink", userKey);
         linkEntity.setProperty("routeId", routeEntity.getKey().getId());
-        linkEntity.setProperty("type", 1);
+        linkEntity.setProperty("userAccess", UserAccessType.OWNER.getValue());
         // Add entity for owner.
         datastore.put(linkEntity);
       }

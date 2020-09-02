@@ -143,8 +143,8 @@ function viewRoute(route) {
 
   // Add button to exit preview mode.
   let backButton = document.createElement("button");
+  backButton.classList.add("back-button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
-  backButton.style.background = "#ffb3b3";
   backButton.onclick = function () {
     location.reload();
   };
@@ -178,11 +178,13 @@ function generateRating(route) {
   let ratingElement = document.createElement("p");
   ratingElement.classList.add("route-rating");
 
-  console.log(route.sumOfRatings);
-  console.log(route.numberOfRatings);
-
-  let rating = route.sumOfRatings / route.numberOfRatings;
-  ratingElement.innerHTML = `Route rating: ${rating}`.bold();
+  // Check for division by 0 and display according rating.
+  if (route.numberOfRatings == 0) {
+    ratingElement.innerHTML = "No rating available".bold();
+  } else {
+    let rating = route.sumOfRatings / route.numberOfRatings;
+    ratingElement.innerHTML = `Route rating: ${rating}`.bold();
+  }
 
   return ratingElement;
 }
