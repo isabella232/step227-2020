@@ -19,7 +19,6 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.sps.data.Result;
 import com.google.sps.data.Route;
 import com.google.sps.data.UserAccessType;
 import java.io.IOException;
@@ -45,49 +44,40 @@ public class ProfileRoutes extends HttpServlet {
       String userId = userService.getCurrentUser().getUserId();
       Key userKey = KeyFactory.createKey("User", userId);
 
-      try {
-        // Get all connected routes.
-        Query query = new Query("RouteUserLink").setAncestor(userKey);
-        List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
+      // Get all connected routes.
+      Query query = new Query("RouteUserLink").setAncestor(userKey);
+      List<Entity> results = datastore.prepare(query).asList(FetchOptions.Builder.withDefaults());
 
-        List<Key> routesKeys = new ArrayList<Key>();
-        for (int i = 0; i < results.size(); i++) {
-          routesKeys.add(
-              KeyFactory.createKey("Route", (Long) results.get(i).getProperty("routeId")));
-        }
-
-        Map<Key, Entity> routesList = datastore.get(routesKeys);
-
-        Route newRoute;
-        int i = 0;
-        for (Entity connection : routesList.values()) {
-          newRoute =
-              new Route(
-                  connection.getKey().getId(),
-                  (String) connection.getProperty("routeName"),
-                  (boolean) connection.getProperty("isPublic"),
-                  (boolean) connection.getProperty("isCompleted"),
-                  (Long) connection.getProperty("startHour"),
-                  (Long) connection.getProperty("startMinute"),
-                  (Long) connection.getProperty("numberOfRatings"),
-                  (Double) connection.getProperty("sumOfRatings"));
-          int numericValue = ((Long) results.get(i).getProperty("userAccess")).intValue();
-          newRoute.setUserAccess(UserAccessType.getFromValue(numericValue));
-          connectedRoutes.add(newRoute);
-          i++;
-        }
-
-      } catch (Exception e) {
-        // TODO(#14): Catch more specific exceptions.
-        Result queryError = new Result("Error accessing data from DataStore", false);
-        response.setContentType("application/json;");
-        response.getWriter().println(gson.toJson(queryError));
+      List<Key> routesKeys = new ArrayList<Key>();
+      for (int i = 0; i < results.size(); i++) {
+        routesKeys.add(KeyFactory.createKey("Route", (Long) results.get(i).getProperty("routeId")));
       }
-    }
-    String json = gson.toJson(connectedRoutes);
 
-    // Return response to the request.
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
+      Map<Key, Entity> routesList = datastore.get(routesKeys);
+
+      Route newRoute;
+      int i = 0;
+      for (Entity connection : routesList.values()) {
+        newRoute =
+            new Route(
+                connection.getKey().getId(),
+                (String) connection.getProperty("routeName"),
+                (boolean) connection.getProperty("isPublic"),
+                (boolean) connection.getProperty("isCompleted"),
+                (Long) connection.getProperty("startHour"),
+                (Long) connection.getProperty("startMinute"),
+                (Long) connection.getProperty("numberOfRatings"),
+                (Double) connection.getProperty("sumOfRatings"));
+        int numericValue = ((Long) results.get(i).getProperty("userAccess")).intValue();
+        newRoute.setUserAccess(UserAccessType.getFromValue(numericValue));
+        connectedRoutes.add(newRoute);
+        i++;
+      }
+      String json = gson.toJson(connectedRoutes);
+
+      // Return response to the request.
+      response.setContentType("application/json;");
+      response.getWriter().println(json);
+    }
   }
 }

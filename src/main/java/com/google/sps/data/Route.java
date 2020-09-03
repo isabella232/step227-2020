@@ -25,7 +25,7 @@ public final class Route {
   private long startHour;
   private long startMinute;
   private List<Marker> routeMarkers;
-  private List<Long> editorsArray;
+  private List<String> editorsArray;
   private RouteStatus status;
   private long numberOfRatings;
   private double sumOfRatings;
@@ -39,7 +39,7 @@ public final class Route {
       long startHour,
       long startMinute,
       List<Marker> routeMarkers,
-      List<Long> editorsArray,
+      List<String> editorsArray,
       long numberOfRatings,
       double sumOfRatings,
       RouteStatus status) {
@@ -91,7 +91,7 @@ public final class Route {
     this.userAccess = userAccess;
   }
 
-  public void setEditorsArray(List<Long> editorsArray) {
+  public void setEditorsArray(List<String> editorsArray) {
     this.editorsArray = editorsArray;
   }
 
@@ -127,7 +127,7 @@ public final class Route {
     return routeMarkers;
   }
 
-  public List<Long> getEditorsArray() {
+  public List<String> getEditorsArray() {
     return editorsArray;
   }
 

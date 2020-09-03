@@ -63,22 +63,22 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 350px;
+  width: 500px;
   height: auto;
   max-width: 100%;
-  border-bottom: 1px solid rgb(202, 202, 202);
+  border: 1px solid rgb(202, 202, 202);
 }
 
 #friend-code #text {
   display: block;
-  width: 120px;
+  width: 250px;
   float: left;
   margin: 0;
   padding: 3px;
 }
 
 #friend-code #friend-code-code {
-  margin-left: 110px;
+  margin-left: 200px;
   margin-top: 0;
   width: 40%;
   padding: 3px;

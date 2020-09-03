@@ -20,12 +20,19 @@ public final class User {
   private final String lastName;
   private final String nickname;
   private final boolean notifications;
+  private final String friendCode;
 
-  public User(String firstName, String lastName, String nickname, boolean notifications) {
+  public User(
+      String firstName,
+      String lastName,
+      String nickname,
+      boolean notifications,
+      String friendCode) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.nickname = nickname;
     this.notifications = notifications;
+    this.friendCode = friendCode;
   }
 
   public String getFirstName() {
@@ -42,5 +49,9 @@ public final class User {
 
   public boolean getNotifications() {
     return notifications;
+  }
+
+  public String getFriendCode() {
+    return friendCode;
   }
 }
