@@ -104,6 +104,8 @@ function createRouteCard(route) {
 }
 
 function viewRoute(route) {
+  document.getElementById("route-content").style.visibility = "visible";
+  document.getElementById("login-required").className = "move-left";
   removeRouteInfo();
   initInactiveMap();
 
@@ -135,17 +137,22 @@ function viewRoute(route) {
     });
   }
 
+  let ratingScore = generateRating(route);
   let commentsPanel = createCommentsPanel(route);
+  let commentForm = createCommentForm(route);
 
   // Add button to exit preview mode.
   let backButton = document.createElement("button");
+  backButton.classList.add("back-button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
     location.reload();
   };
   let additionalContent = document.getElementById("additional");
   additionalContent.innerHTML = "";
+  additionalContent.appendChild(ratingScore);
   additionalContent.appendChild(commentsPanel);
+  additionalContent.appendChild(commentForm);
   additionalContent.appendChild(backButton);
 }
 
@@ -167,13 +174,26 @@ async function addToProfile(route) {
     });
 }
 
-function createCommentsPanel(route) {
+function generateRating(route) {
+  let ratingElement = document.createElement("p");
+  ratingElement.classList.add("route-rating");
+
+  // Check for division by 0 and display according rating.
+  if (route.numberOfRatings == 0) {
+    ratingElement.innerHTML = "No rating available".bold();
+  } else {
+    let rating = route.sumOfRatings / route.numberOfRatings;
+    ratingElement.innerHTML = `Route rating: ${rating}`.bold();
+  }
+
+  return ratingElement;
+}
+
+function createCommentForm(route) {
   var commentForm = document.createElement("div");
-  var commentArea = document.createElement("input");
-  commentArea.setAttribute("type", "text");
-  commentArea.setAttribute("name", "comment");
+  var commentArea = document.createElement("textarea");
   commentArea.setAttribute("placeholder", "Leave a comment...");
-  commentArea.classList.add("comments-panel");
+  commentArea.classList.add("comment-form");
 
   // Create a submit button
   var submit = document.createElement("button");
@@ -199,11 +219,47 @@ async function submitComment(route, commentText) {
       "Content-Type": "application/json",
     },
   };
-  await fetch("/post-comment", options)
+  await fetch("/comments", options)
     .then((response) => response.json())
     .then((jsonResponse) => {
       if (jsonResponse.hasOwnProperty("message")) {
         alert(jsonResponse.message);
       }
     });
+}
+
+function createCommentsPanel(route) {
+  var commentsPanel = document.createElement("div");
+  commentsPanel.classList.add("comments-panel");
+
+  let url = `/comments?routeId=${route.routeId}`;
+
+  fetch(url)
+    .then((response) => response.json())
+    .then((comments) => {
+      comments.forEach((comment) => {
+        let commentElement = createCommentElement(comment);
+        commentsPanel.appendChild(commentElement);
+      });
+      if (commentsPanel == "")
+        commentsPanel.innerHTML = "No comments available!";
+    });
+
+  return commentsPanel;
+}
+
+function createCommentElement(comment) {
+  let commentElement = document.createElement("div");
+  commentElement.className = "comment-element";
+
+  let commentText = document.createElement("p");
+  commentText.innerHTML = comment.commentText;
+
+  let signature = document.createElement("p");
+  signature.innerHTML = comment.nickname.bold();
+
+  commentElement.appendChild(signature);
+  commentElement.appendChild(commentText);
+
+  return commentElement;
 }

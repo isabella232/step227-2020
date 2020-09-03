@@ -13,6 +13,16 @@
 // limitations under the License.
 */
 
+/* Define varibles for colors */
+:root {
+  --light-red: #ffb3b3;
+  --transparent-white: rgba(255, 255, 255, 0.8);
+  --transparent-black: rgba(0, 0, 0, 0.2);
+  --light-green: rgba(0, 51, 0, 0.3);
+  --very-light-gray: rgba(200, 200, 200);
+  --transparent-gray: rgba(169, 169, 169, 0.4);
+}
+
 /* Hide profile button if user is not logged in*/
 #profile {
   visibility: hidden;
@@ -56,7 +66,7 @@
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 6px var(--transparent-black);
   background-color: #fff;
   font-family: Roboto;
 }
@@ -100,18 +110,25 @@
   max-width: 50%;
   height: 150px;
 
-  left: 50%;
-  top: 70%;
-  margin-left: -150px;
   padding: 10px;
 
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--transparent-white);
   backdrop-filter: blur(1px);
   border: 1px solid rgb(88, 88, 88);
   border-radius: 7px 7px 7px 7px;
   color: #666;
   font-size: 30px;
   text-align: center;
+}
+.centered {
+  left: 50%;
+  top: 70%;
+  margin-left: -150px;
+}
+
+.move-left {
+  left: 1%;
+  top: 55%;
 }
 
 #route-content {
@@ -131,7 +148,7 @@
   height: 25px;
   width: auto;
   border: solid rgb(163, 163, 163) 1px;
-  background-color: rgb(255, 255, 255, 0.8);
+  background-color: var(--transparent-white);
   color: rgb(116, 116, 116);
   border-radius: 7px;
   cursor: pointer;
@@ -151,15 +168,52 @@
   margin-right: 13px;
   margin-top: 5px;
 
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--transparent-white);
   backdrop-filter: blur(1px);
-  border: 1px solid rgb(88, 88, 88);
-  border-radius: 7px 7px 0 0;
+  border: 3px solid rgb(88, 88, 88);
+  border-radius: 7px;
+}
+
+.route-rating {
+  background: var(--transparent-white);
+  backdrop-filter: blur(1px);
+  margin: 0;
+  padding-top: 5px;
+}
+
+.comment-form {
+  width: 400px;
+  height: 75px;
+
+  margin-top: 5px;
 }
 
 .comments-panel {
-  width: 400px;
-  height: 75px;
+  width: 500px;
+  height: 150px;
+  overflow: auto;
+  padding: 10px;
+
+  background: var(--transparent-white);
+  backdrop-filter: blur(1px);
+  border-radius: 7px;
+}
+
+.comment-element {
+  background-color: var(--transparent-gray);
+  border-radius: 7px;
+
+  padding: 10px;
+  margin: 5px;
+}
+
+.comment-element p {
+  text-align: left;
+  margin: 10px 0;
+}
+
+#back-button {
+  background: var(--light-red);
 }
 
 #route-name {
@@ -204,8 +258,8 @@
 
 .new-place {
   height: 25px;
-  border: 1px solid rgb(200, 200, 200);
-  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--very-light-gray);
+  background: var(--transparent-white);
   backdrop-filter: blur(1px);
 }
 
@@ -217,7 +271,7 @@
   right: 102%;
   bottom: 25%;
 
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--transparent-white);
   border: 1px solid black;
   border-radius: 7px;
 }
@@ -301,7 +355,7 @@
   padding-top: 2px;
   padding-right: 10px;
 
-  border-right: 1px solid rgb(200, 200, 200);
+  border-right: 1px solid var(--very-light-gray);
 }
 
 .fa-cog {
@@ -316,7 +370,7 @@
   padding-top: 2px;
   padding-left: 10px;
 
-  border-left: 1px solid rgb(200, 200, 200);
+  border-left: 1px solid var(--very-light-gray);
 }
 
 .fa-cog:hover {
@@ -335,7 +389,7 @@
   padding-top: 2px;
   padding-left: 10px;
 
-  border-left: 1px solid rgb(200, 200, 200);
+  border-left: 1px solid var(--very-light-gray);
 }
 
 .fa-minus-square:hover {
@@ -349,7 +403,7 @@
   height: 100px;
 
   border: solid rgb(163, 163, 163) 1px;
-  background-color: rgb(255, 255, 255, 0.8);
+  background-color: var(--transparent-white);
   border-radius: 7px;
 
   right: 0;
@@ -402,7 +456,7 @@
 #routes-section {
   padding: 10px;
   text-align: center;
-  background-color: rgba(0, 51, 0, 0.3);
+  background-color: var(--light-green);
   line-height: 50%;
   font-family: Georgia, serif;
 }
@@ -436,7 +490,7 @@
 
 /* Cards design. */
 .route-card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 var(--transparent-black);
   text-align: center;
   height: 255px;
   width: 305px;
@@ -446,7 +500,7 @@
 }
 
 .route-card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 16px 0 var(--transparent-black);
 }
 
 .route-card img {
@@ -462,7 +516,7 @@
   position: absolute;
   width: 295px;
   text-align: center;
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--transparent-white);
   backdrop-filter: blur(1px);
   border-radius: 5px 5px 0 0;
   transition: 0.7s;
@@ -490,7 +544,7 @@
   border-radius: 4px;
   background-color: rgba(46, 42, 42, 0.596);
   border: none;
-  color: #ffffff;
+  color: white;
   text-align: center;
   font-size: 10px;
   padding: 10px;
