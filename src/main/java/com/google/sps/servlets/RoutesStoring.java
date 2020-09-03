@@ -120,13 +120,15 @@ public class RoutesStoring extends HttpServlet {
 
       if (routeStatus != RouteStatus.COPY) {
         for (String friendCode : editorsArray) {
+          // Find the user with the corresponding friend code.
           Filter friendCodeFilter =
               new FilterPredicate("friendCode", FilterOperator.EQUAL, friendCode);
           Query friendQuery = new Query("User").setFilter(friendCodeFilter);
           List<Entity> friend =
               datastore.prepare(friendQuery).asList(FetchOptions.Builder.withDefaults());
 
-          if (friend.size() == 1) {
+          // If the user is found, make him editor.
+          if (friend.size() != 0) {
             Entity linkEntity = new Entity("RouteUserLink", friend.get(0).getKey());
             linkEntity.setProperty("routeId", routeEntity.getKey().getId());
             linkEntity.setProperty("userAccess", UserAccessType.EDITOR.getValue());

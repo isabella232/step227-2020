@@ -20,6 +20,8 @@ public final class User {
   private final String lastName;
   private final String nickname;
   private final boolean notifications;
+
+  // Personal code used for sharing routes with other users.
   private final String friendCode;
 
   public User(

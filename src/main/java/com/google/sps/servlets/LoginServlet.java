@@ -35,6 +35,8 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
+  static final int FRIEND_CODE_LENGTH = 18;
+
   static class LoginStatus {
     boolean loggedIn;
     String actionUrl;
@@ -72,7 +74,7 @@ public class LoginServlet extends HttpServlet {
       PreparedQuery checkForUser = datastore.prepare(userQuery);
 
       // If user entity doesn't already exist, create one.
-      if (checkForUser.countEntities(FetchOptions.Builder.withLimit(10)) == 0) {
+      if (checkForUser.countEntities(FetchOptions.Builder.withDefaults()) == 0) {
         Entity userEntity = new Entity("User", userId);
         userEntity.setProperty("firstName", "Not set");
         userEntity.setProperty("lastName", "Not set");
@@ -100,14 +102,15 @@ public class LoginServlet extends HttpServlet {
       String values = "0123456789abcdefghijklmnopqrstuvwxyz";
       SecureRandom secureRandom = SecureRandom.getInstanceStrong();
 
-      // Generate a string of length 12.
+      // Generate a random string of length 12.
       String randomString =
           secureRandom
-              .ints(12, 0, values.length())
+              .ints(FRIEND_CODE_LENGTH, 0, values.length())
               .mapToObj(i -> values.charAt(i))
               .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
               .toString();
       return randomString;
+      // TODO(#36): Fail the user creation and log an error.
     } catch (NoSuchAlgorithmException e) {
       return "";
     }
