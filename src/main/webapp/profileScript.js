@@ -66,6 +66,9 @@ function loadUserInfo() {
       document.getElementById("first-name").value = currentUser.firstName;
       document.getElementById("last-name").value = currentUser.lastName;
       document.getElementById("nickname").value = currentUser.nickname;
+      document.getElementById(
+        "friend-code-code"
+      ).innerHTML = currentUser.friendCode.bold();
       if (currentUser.notifications === true) {
         document.getElementById("notifications-on").checked = true;
       } else {

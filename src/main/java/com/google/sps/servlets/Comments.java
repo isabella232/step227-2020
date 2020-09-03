@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -60,7 +61,7 @@ public class Comments extends HttpServlet {
 
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
-      Result userError = new Result("You are not logged in!", false);
+      Result<Comment> userError = new Result<Comment>(false, "You are not logged in!");
       response.getWriter().println(gson.toJson(userError));
       return;
     }
@@ -81,18 +82,20 @@ public class Comments extends HttpServlet {
 
     try {
       Entity userEntity = datastore.get(userKey);
+      String nickname = (String) userEntity.getProperty("nickname");
 
       // Store the comments as entities.
       Entity commentEntity = new Entity("Comment", routeKey);
       commentEntity.setProperty("text", comment);
-      commentEntity.setProperty("nickname", userEntity.getProperty("nickname"));
+      commentEntity.setProperty("nickname", nickname);
 
       datastore.put(commentEntity);
-      Result commentSubmitted = new Result("Comment submitted!", true);
+      Result<Comment> commentSubmitted =
+          new Result<Comment>(true, "Comment submitted", new Comment(comment, nickname));
       response.getWriter().println(gson.toJson(commentSubmitted));
 
-    } catch (Exception e) {
-      Result userError = new Result("User not found!", false);
+    } catch (EntityNotFoundException e) {
+      Result<Comment> userError = new Result<Comment>(false, "User not found!");
       response.getWriter().println(gson.toJson(userError));
     }
   }

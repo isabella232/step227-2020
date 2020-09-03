@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
@@ -34,9 +35,9 @@ public class ProfileInfoServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     UserService userService = UserServiceFactory.getUserService();
+    response.setContentType("text/html;");
     // Check if user is logged in.
     if (!userService.isUserLoggedIn()) {
-      response.setContentType("text/html;");
       response.getWriter().println("<p>ERROR: You are not logged in</p>");
       response.getWriter().println("<a href=\"index.html\">Go to home page</button>");
       return;
@@ -48,13 +49,21 @@ public class ProfileInfoServlet extends HttpServlet {
     boolean notifications = (!(getParameter(request, "notifications", "unmute")).equals("mute"));
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    Entity userEntity = new Entity("User", userService.getCurrentUser().getUserId());
-    userEntity.setProperty("firstName", firstName);
-    userEntity.setProperty("lastName", lastName);
-    userEntity.setProperty("nickname", nickname);
-    userEntity.setProperty("notifications", notifications);
+    String userId = userService.getCurrentUser().getUserId();
+    Key userKey = KeyFactory.createKey("User", userId);
 
-    datastore.put(userEntity);
+    try {
+      Entity userEntity = datastore.get(userKey);
+      userEntity.setProperty("firstName", firstName);
+      userEntity.setProperty("lastName", lastName);
+      userEntity.setProperty("nickname", nickname);
+      userEntity.setProperty("notifications", notifications);
+      userEntity.setProperty("friendCode", userEntity.getProperty("friendCode"));
+
+      datastore.put(userEntity);
+    } catch (EntityNotFoundException e) {
+      response.getWriter().println("<p>ERROR: User not found!</p>");
+    }
 
     // Redirect back to the profile page.
     response.sendRedirect("/profile.html");
@@ -90,12 +99,13 @@ public class ProfileInfoServlet extends HttpServlet {
                 (String) userEntity.getProperty("firstName"),
                 (String) userEntity.getProperty("lastName"),
                 (String) userEntity.getProperty("nickname"),
-                (boolean) userEntity.getProperty("notifications"));
-      } catch (Exception e) {
-        currentUser = new User("Not set", "Not set", "Not set", false);
+                (boolean) userEntity.getProperty("notifications"),
+                (String) userEntity.getProperty("friendCode"));
+      } catch (EntityNotFoundException e) {
+        currentUser = new User("Not set", "Not set", "Not set", false, "Not set");
       }
     } else {
-      currentUser = new User("Undefined", "Undefined", "Undefined", false);
+      currentUser = new User("Undefined", "Undefined", "Undefined", false, "Undefined");
     }
 
     Gson gson = new Gson();
