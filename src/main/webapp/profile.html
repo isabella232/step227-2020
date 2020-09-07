@@ -33,16 +33,27 @@
 
     <!-- Main content -->
     <div id="content">
-      <div id="profile-picture">
+      <div id="profile-picture" onclick="showSubmitAvatar()">
+        <div id="submit-avatar">
+          <label for="avatar">Choose a profile picture:</label>
+          <form
+            action="/profile-image"
+            method="POST"
+            enctype="multipart/form-data"
+          >
+            <input
+              type="file"
+              id="avatar"
+              name="avatar"
+              accept="image/png, image/jpeg"
+            />
+            <input type="submit" value="Submit" />
+          </form>
+        </div>
         <div id="new-image">
           <span class="fas fa-plus"></span>
         </div>
-        <div id="avatar">
-          <img
-            src="./pictures/defaultProfilePicture.jpeg"
-            alt="Profile picture"
-          />
-        </div>
+        <div id="avatar-image"></div>
       </div>
 
       <div id="friend-code">
