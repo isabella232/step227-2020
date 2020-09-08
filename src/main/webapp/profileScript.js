@@ -100,10 +100,15 @@ function loadRoutes() {
 
 function addRoute(newRoute) {
   let card = document.createElement("div");
+  card.id = "route" + newRoute.routeId;
   let container = document.createElement("div");
-  let routeDetails = document.createElement("div");
+
   let routeImg = document.createElement("img");
-  let routeRating = document.createElement("div");
+  routeImg.src = "pictures/praga-small.jpg";
+  routeImg.alt = "praga";
+
+  let routeDetails = addRouteDetails(newRoute);
+  let routeRating = createRatingElement(newRoute);
 
   card.classList.add("card");
   container.classList.add("container");
@@ -111,7 +116,64 @@ function addRoute(newRoute) {
   routeImg.classList.add("route-img");
   routeRating.classList.add("rating");
 
-  routeDetails.innerHTML = newRoute["routeName"];
+  card.appendChild(container);
+  container.appendChild(routeDetails);
+  container.appendChild(routeImg);
+  container.appendChild(routeRating);
+
+  if (newRoute["userAccess"] != "OWNER") {
+    document.getElementById("shared-routes").appendChild(card);
+  } else if (newRoute["isCompleted"]) {
+    document.getElementById("completed-routes").appendChild(card);
+  } else {
+    document.getElementById("future-routes").appendChild(card);
+  }
+}
+
+function addRouteDetails(newRoute) {
+  let routeDetails = document.createElement("div");
+
+  let routeName = document.createElement("p");
+  routeName.className = "route-name";
+  routeName.innerHTML = newRoute.routeName.bold();
+
+  let viewButton = document.createElement("button");
+  viewButton.className = "action-button";
+  viewButton.innerHTML = "View route";
+  viewButton.onclick = function () {
+    var url = `/index.html?routeId=${newRoute.routeId}&mode=view`;
+    window.open(url, "_self");
+  };
+
+  let editButton = document.createElement("button");
+  editButton.className = "action-button";
+  editButton.innerHTML = "Edit route";
+  editButton.onclick = function () {
+    var url = `/index.html?routeId=${newRoute.routeId}&mode=edit`;
+    window.open(url, "_self");
+  };
+
+  let completedButton = document.createElement("button");
+  completedButton.className = "action-button";
+  completedButton.innerHTML = "Mark as completed";
+  completedButton.onclick = function () {
+    markAsCompleted(newRoute);
+  };
+
+  routeDetails.appendChild(routeName);
+  routeDetails.appendChild(viewButton);
+  routeDetails.appendChild(editButton);
+
+  if (!newRoute.isCompleted) {
+    routeDetails.appendChild(completedButton);
+  }
+
+  return routeDetails;
+}
+
+function createRatingElement(newRoute) {
+  let routeRating = document.createElement("div");
+
   let emptyStar = '<span class="far fa-star"></span>';
   let halfStar = '<span class="fas fa-star-half-alt"></span>';
   let fullStar = '<span class="fas fa-star checked"></span>';
@@ -137,18 +199,27 @@ function addRoute(newRoute) {
     halfStar.repeat(numberOfHalfStars) +
     emptyStar.repeat(5 - numberOfFullStars - numberOfHalfStars);
 
-  card.appendChild(container);
-  container.appendChild(routeDetails);
-  container.appendChild(routeImg);
-  container.appendChild(routeRating);
+  return routeRating;
+}
 
-  if (newRoute["userAccess"] != "OWNER") {
-    document.getElementById("shared-routes").appendChild(card);
-  } else if (newRoute["isCompleted"]) {
-    document.getElementById("completed-routes").appendChild(card);
-  } else {
-    document.getElementById("future-routes").appendChild(card);
-  }
+async function markAsCompleted(route) {
+  let options = {
+    method: "POST",
+    body: JSON.stringify(route),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  await fetch("/markAsCompleted", options)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      if (jsonResponse.success) {
+        document.getElementById("route" + route.routeId).remove();
+        addRoute(jsonResponse.object);
+      }
+      alert(jsonResponse.message);
+    });
 }
 
 function showSubmitAvatar() {

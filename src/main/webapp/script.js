@@ -15,6 +15,7 @@
 function loadPage() {
   checkLog();
   loadRoutes();
+  checkMode();
 }
 
 //** Checks login status and display HTML elements accordingly. */
@@ -43,12 +44,6 @@ async function checkLog() {
   return loggedIn;
 }
 
-// Show an area to share a route with friends.
-function showShareSection() {
-  var section = document.getElementById("share-section");
-  section.classList.toggle("show");
-}
-
 /** Fetches routes from the server and adds them to the suggestions section. */
 function loadRoutes() {
   let routesGrid = document.getElementById("routes-grid");
@@ -64,6 +59,27 @@ function loadRoutes() {
     });
 }
 
+function checkMode() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("mode") && params.has(`routeId`)) {
+    let url = `/getRoute?routeId=${params.get("routeId")}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          if (params.get("mode") == "view") {
+            viewRoute(result.object);
+          } else {
+            editMode(result.object);
+          }
+        } else {
+          alert(result.message);
+        }
+      });
+  }
+}
+
 function createRouteCard(route) {
   let routeCard = document.createElement("div");
   routeCard.className = "route-card";
@@ -75,17 +91,17 @@ function createRouteCard(route) {
   routeName.className = "route-name";
   routeName.innerHTML = route.routeName;
 
-  let button1 = document.createElement("button");
-  button1.className = "action-button";
-  button1.innerHTML = "View route";
-  button1.onclick = function () {
+  let viewButton = document.createElement("button");
+  viewButton.className = "action-button";
+  viewButton.innerHTML = "View route";
+  viewButton.onclick = function () {
     viewRoute(route);
   };
 
-  let button2 = document.createElement("button");
-  button2.className = "action-button";
-  button2.innerHTML = "Add to future routes";
-  button2.onclick = function () {
+  let copyButton = document.createElement("button");
+  copyButton.className = "action-button";
+  copyButton.innerHTML = "Add to my profile";
+  copyButton.onclick = function () {
     addToProfile(route);
   };
 
@@ -94,8 +110,8 @@ function createRouteCard(route) {
   routeImage.alt = "praga";
 
   routeDetails.appendChild(routeName);
-  routeDetails.appendChild(button1);
-  routeDetails.appendChild(button2);
+  routeDetails.appendChild(viewButton);
+  routeDetails.appendChild(copyButton);
 
   routeCard.appendChild(routeDetails);
   routeCard.appendChild(routeImage);
@@ -123,18 +139,31 @@ function viewRoute(route) {
   // Fill the table and add markers on the map
   let tabel = document.getElementById("places-table");
   for (var i = 0; i < route.routeMarkers.length; i++) {
+    let marker = route.routeMarkers[i];
     let newPlace = document.createElement("li");
     newPlace.classList.add("new-place");
-    newPlace.innerHTML = route.routeMarkers[i].markerName;
+    newPlace.innerHTML = marker.markerName;
     tabel.appendChild(newPlace);
 
-    new google.maps.Marker({
+    let mapMarker = new google.maps.Marker({
       position: {
-        lat: route.routeMarkers[i].lat,
-        lng: route.routeMarkers[i].lng,
+        lat: marker.lat,
+        lng: marker.lng,
       },
       map: map,
     });
+
+    // Add info window for marker.
+    const infowindow = new google.maps.InfoWindow();
+    infowindow.setContent(
+      "<div><strong>" +
+        marker.markerName +
+        "</strong><br>" +
+        "<span>Rating: </span>" +
+        marker.rating +
+        "</div>"
+    );
+    infowindow.open(map, mapMarker);
   }
 
   let ratingScore = generateRating(route);
@@ -222,15 +251,18 @@ async function submitComment(route, commentText) {
   await fetch("/comments", options)
     .then((response) => response.json())
     .then((jsonResponse) => {
-      if (jsonResponse.hasOwnProperty("message")) {
-        alert(jsonResponse.message);
+      if (jsonResponse.success) {
+        let commentsPanel = document.getElementById("comments-panel");
+        let comment = createCommentElement(jsonResponse.object);
+        commentsPanel.appendChild(comment);
       }
+      alert(jsonResponse.message);
     });
 }
 
 function createCommentsPanel(route) {
   var commentsPanel = document.createElement("div");
-  commentsPanel.classList.add("comments-panel");
+  commentsPanel.id = "comments-panel";
 
   let url = `/comments?routeId=${route.routeId}`;
 

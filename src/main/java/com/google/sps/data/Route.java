@@ -99,6 +99,10 @@ public final class Route {
     this.routeMarkers = routeMarkers;
   }
 
+  public void setIsCompleted(boolean isCompleted) {
+    this.isCompleted = isCompleted;
+  }
+
   public String getRouteName() {
     return routeName;
   }

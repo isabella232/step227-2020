@@ -168,6 +168,8 @@ function createMarker(marker, place) {
     "<div><strong>" +
       place.name +
       "</strong><br>" +
+      "<span>Rating: </span>" +
+      place.rating +
       "<br>" +
       place.formatted_address +
       "</div>"
@@ -313,22 +315,16 @@ async function createRoute() {
     await fetch("/storeRoute", options)
       .then((response) => response.json())
       .then((jsonResponse) => {
-        if (jsonResponse.hasOwnProperty("message")) {
-          alert(jsonResponse.message);
-        } else {
-          if (jsonResponse.isPublic) {
-            let routesGrid = document.getElementById("routes-grid");
-            if (routesGrid.innerHTML == "No suggestions available!") {
-              routesGrid.innerHTML = "";
-            }
-            routesGrid.appendChild(createRouteCard(jsonResponse));
+        if (jsonResponse.success && jsonResponse.object.isPublic) {
+          let routesGrid = document.getElementById("routes-grid");
+          if (routesGrid.innerHTML == "No suggestions available!") {
+            routesGrid.innerHTML = "";
           }
+          routesGrid.appendChild(createRouteCard(jsonResponse.object));
         }
+        alert(jsonResponse.message);
       });
     removeRouteInfo();
-    alert(
-      "Route successfully created!\nYou can see new created routes on your profile page!"
-    );
   }
 }
 
@@ -366,6 +362,12 @@ function privateRoute() {
   document.getElementById("publicity").value = 0;
   document.getElementsByClassName("fa-users")[0].style.color = "grey";
   document.getElementsByClassName("fa-users-slash")[0].style.color = "red";
+}
+
+// Show an area to share a route with friends.
+function showShareSection() {
+  var section = document.getElementById("share-section");
+  section.classList.toggle("show");
 }
 
 function editMode(route) {
@@ -452,10 +454,7 @@ async function editRoute(route) {
     await fetch("/storeRoute", options)
       .then((response) => response.json())
       .then((jsonResponse) => {
-        if (jsonResponse.hasOwnProperty("message")) {
-          alert(jsonResponse.message);
-        }
+        alert(jsonResponse.message);
       });
-    alert("Route successfully edited!");
   }
 }
