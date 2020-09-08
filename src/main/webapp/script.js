@@ -91,17 +91,17 @@ function createRouteCard(route) {
   routeName.className = "route-name";
   routeName.innerHTML = route.routeName;
 
-  let button1 = document.createElement("button");
-  button1.className = "action-button";
-  button1.innerHTML = "View route";
-  button1.onclick = function () {
+  let viewButton = document.createElement("button");
+  viewButton.className = "action-button";
+  viewButton.innerHTML = "View route";
+  viewButton.onclick = function () {
     viewRoute(route);
   };
 
-  let button2 = document.createElement("button");
-  button2.className = "action-button";
-  button2.innerHTML = "Add to future routes";
-  button2.onclick = function () {
+  let copyButton = document.createElement("button");
+  copyButton.className = "action-button";
+  copyButton.innerHTML = "Add to my profile";
+  copyButton.onclick = function () {
     addToProfile(route);
   };
 
@@ -110,8 +110,8 @@ function createRouteCard(route) {
   routeImage.alt = "praga";
 
   routeDetails.appendChild(routeName);
-  routeDetails.appendChild(button1);
-  routeDetails.appendChild(button2);
+  routeDetails.appendChild(viewButton);
+  routeDetails.appendChild(copyButton);
 
   routeCard.appendChild(routeDetails);
   routeCard.appendChild(routeImage);

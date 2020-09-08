@@ -137,35 +137,35 @@ function addRouteDetails(newRoute) {
   routeName.className = "route-name";
   routeName.innerHTML = newRoute.routeName.bold();
 
-  let button1 = document.createElement("button");
-  button1.className = "action-button";
-  button1.innerHTML = "View route";
-  button1.onclick = function () {
+  let viewButton = document.createElement("button");
+  viewButton.className = "action-button";
+  viewButton.innerHTML = "View route";
+  viewButton.onclick = function () {
     var url = `/index.html?routeId=${newRoute.routeId}&mode=view`;
     window.open(url, "_self");
   };
 
-  let button2 = document.createElement("button");
-  button2.className = "action-button";
-  button2.innerHTML = "Edit route";
-  button2.onclick = function () {
+  let editButton = document.createElement("button");
+  editButton.className = "action-button";
+  editButton.innerHTML = "Edit route";
+  editButton.onclick = function () {
     var url = `/index.html?routeId=${newRoute.routeId}&mode=edit`;
     window.open(url, "_self");
   };
 
-  let button3 = document.createElement("button");
-  button3.className = "action-button";
-  button3.innerHTML = "Mark as completed";
-  button3.onclick = function () {
+  let completedButton = document.createElement("button");
+  completedButton.className = "action-button";
+  completedButton.innerHTML = "Mark as completed";
+  completedButton.onclick = function () {
     markAsCompleted(newRoute);
   };
 
   routeDetails.appendChild(routeName);
-  routeDetails.appendChild(button1);
-  routeDetails.appendChild(button2);
+  routeDetails.appendChild(viewButton);
+  routeDetails.appendChild(editButton);
 
   if (!newRoute.isCompleted) {
-    routeDetails.appendChild(button3);
+    routeDetails.appendChild(completedButton);
   }
 
   return routeDetails;
