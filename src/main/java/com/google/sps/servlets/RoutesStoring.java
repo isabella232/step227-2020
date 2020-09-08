@@ -117,7 +117,6 @@ public class RoutesStoring extends HttpServlet {
       routeEntity.setProperty("sumOfRatings", sumOfRatings);
 
       datastore.put(routeEntity);
-
       if (routeStatus != RouteStatus.COPY) {
         for (String friendCode : editorsArray) {
           // Find the user with the corresponding friend code.

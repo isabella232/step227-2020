@@ -58,6 +58,7 @@ function showFavPlaceDetails(contentName, createClosePopup = true) {
 function loadUserInfo() {
   addLogoutLink();
   loadRoutes();
+  showAvatar();
   console.log("Load user's routes");
 
   fetch("/user-info")
@@ -218,5 +219,23 @@ async function markAsCompleted(route) {
         addRoute(jsonResponse.object);
       }
       alert(jsonResponse.message);
+    });
+}
+
+function showSubmitAvatar() {
+  document.getElementById("submit-avatar").classList.toggle("show");
+}
+
+function showAvatar() {
+  fetch("/profile-image", {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((avatarName) => {
+      let avatarImage = document.createElement("img");
+      avatarImage.src =
+        "https://storage.cloud.google.com/user-image-globes/" + avatarName;
+      avatarImage.alt = "Profile picture";
+      document.getElementById("avatar-image").appendChild(avatarImage);
     });
 }
