@@ -34,7 +34,7 @@ public class Marker {
       long newStayHour,
       long newStayMinute,
       String newMarkerName,
-      double rating) {
+      double newRating) {
     id = newId;
 
     lat = newLat;
@@ -44,7 +44,7 @@ public class Marker {
     stayMinute = newStayMinute;
 
     markerName = newMarkerName;
-    rating = rating;
+    rating = newRating;
   }
 
   public Marker() {

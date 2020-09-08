@@ -15,6 +15,7 @@
 function loadPage() {
   checkLog();
   loadRoutes();
+  checkMode();
 }
 
 //** Checks login status and display HTML elements accordingly. */
@@ -43,12 +44,6 @@ async function checkLog() {
   return loggedIn;
 }
 
-// Show an area to share a route with friends.
-function showShareSection() {
-  var section = document.getElementById("share-section");
-  section.classList.toggle("show");
-}
-
 /** Fetches routes from the server and adds them to the suggestions section. */
 function loadRoutes() {
   let routesGrid = document.getElementById("routes-grid");
@@ -62,6 +57,27 @@ function loadRoutes() {
       if (routesGrid.innerHTML == "")
         routesGrid.innerHTML = "No suggestions available!";
     });
+}
+
+function checkMode() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("mode") && params.has(`routeId`)) {
+    let url = `/getRoute?routeId=${params.get("routeId")}`;
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success) {
+          if (params.get("mode") == "view") {
+            viewRoute(result.object);
+          } else {
+            editMode(result.object);
+          }
+        } else {
+          alert(result.message);
+        }
+      });
+  }
 }
 
 function createRouteCard(route) {
@@ -123,18 +139,31 @@ function viewRoute(route) {
   // Fill the table and add markers on the map
   let tabel = document.getElementById("places-table");
   for (var i = 0; i < route.routeMarkers.length; i++) {
+    let marker = route.routeMarkers[i];
     let newPlace = document.createElement("li");
     newPlace.classList.add("new-place");
-    newPlace.innerHTML = route.routeMarkers[i].markerName;
+    newPlace.innerHTML = marker.markerName;
     tabel.appendChild(newPlace);
 
-    new google.maps.Marker({
+    let mapMarker = new google.maps.Marker({
       position: {
-        lat: route.routeMarkers[i].lat,
-        lng: route.routeMarkers[i].lng,
+        lat: marker.lat,
+        lng: marker.lng,
       },
       map: map,
     });
+
+    // Add info window for marker.
+    const infowindow = new google.maps.InfoWindow();
+    infowindow.setContent(
+      "<div><strong>" +
+        marker.markerName +
+        "</strong><br>" +
+        "<span>Rating: </span>" +
+        marker.rating +
+        "</div>"
+    );
+    infowindow.open(map, mapMarker);
   }
 
   let ratingScore = generateRating(route);
@@ -222,15 +251,18 @@ async function submitComment(route, commentText) {
   await fetch("/comments", options)
     .then((response) => response.json())
     .then((jsonResponse) => {
-      if (jsonResponse.hasOwnProperty("message")) {
-        alert(jsonResponse.message);
+      if (jsonResponse.success) {
+        let commentsPanel = document.getElementById("comments-panel");
+        let comment = createCommentElement(jsonResponse.object);
+        commentsPanel.appendChild(comment);
       }
+      alert(jsonResponse.message);
     });
 }
 
 function createCommentsPanel(route) {
   var commentsPanel = document.createElement("div");
-  commentsPanel.classList.add("comments-panel");
+  commentsPanel.id = "comments-panel";
 
   let url = `/comments?routeId=${route.routeId}`;
 

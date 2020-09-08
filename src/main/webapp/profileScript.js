@@ -99,10 +99,15 @@ function loadRoutes() {
 
 function addRoute(newRoute) {
   let card = document.createElement("div");
+  card.id = "route" + newRoute.routeId;
   let container = document.createElement("div");
-  let routeDetails = document.createElement("div");
+
   let routeImg = document.createElement("img");
-  let routeRating = document.createElement("div");
+  routeImg.src = "pictures/praga-small.jpg";
+  routeImg.alt = "praga";
+
+  let routeDetails = addRouteDetails(newRoute);
+  let routeRating = createRatingElement(newRoute);
 
   card.classList.add("card");
   container.classList.add("container");
@@ -110,7 +115,64 @@ function addRoute(newRoute) {
   routeImg.classList.add("route-img");
   routeRating.classList.add("rating");
 
-  routeDetails.innerHTML = newRoute["routeName"];
+  card.appendChild(container);
+  container.appendChild(routeDetails);
+  container.appendChild(routeImg);
+  container.appendChild(routeRating);
+
+  if (newRoute["userAccess"] != "OWNER") {
+    document.getElementById("shared-routes").appendChild(card);
+  } else if (newRoute["isCompleted"]) {
+    document.getElementById("completed-routes").appendChild(card);
+  } else {
+    document.getElementById("future-routes").appendChild(card);
+  }
+}
+
+function addRouteDetails(newRoute) {
+  let routeDetails = document.createElement("div");
+
+  let routeName = document.createElement("p");
+  routeName.className = "route-name";
+  routeName.innerHTML = newRoute.routeName.bold();
+
+  let button1 = document.createElement("button");
+  button1.className = "action-button";
+  button1.innerHTML = "View route";
+  button1.onclick = function () {
+    var url = `/index.html?routeId=${newRoute.routeId}&mode=view`;
+    window.open(url, "_self");
+  };
+
+  let button2 = document.createElement("button");
+  button2.className = "action-button";
+  button2.innerHTML = "Edit route";
+  button2.onclick = function () {
+    var url = `/index.html?routeId=${newRoute.routeId}&mode=edit`;
+    window.open(url, "_self");
+  };
+
+  let button3 = document.createElement("button");
+  button3.className = "action-button";
+  button3.innerHTML = "Mark as completed";
+  button3.onclick = function () {
+    markAsCompleted(newRoute);
+  };
+
+  routeDetails.appendChild(routeName);
+  routeDetails.appendChild(button1);
+  routeDetails.appendChild(button2);
+
+  if (!newRoute.isCompleted) {
+    routeDetails.appendChild(button3);
+  }
+
+  return routeDetails;
+}
+
+function createRatingElement(newRoute) {
+  let routeRating = document.createElement("div");
+
   let emptyStar = '<span class="far fa-star"></span>';
   let halfStar = '<span class="fas fa-star-half-alt"></span>';
   let fullStar = '<span class="fas fa-star checked"></span>';
@@ -136,16 +198,25 @@ function addRoute(newRoute) {
     halfStar.repeat(numberOfHalfStars) +
     emptyStar.repeat(5 - numberOfFullStars - numberOfHalfStars);
 
-  card.appendChild(container);
-  container.appendChild(routeDetails);
-  container.appendChild(routeImg);
-  container.appendChild(routeRating);
+  return routeRating;
+}
 
-  if (newRoute["userAccess"] != "OWNER") {
-    document.getElementById("shared-routes").appendChild(card);
-  } else if (newRoute["isCompleted"]) {
-    document.getElementById("completed-routes").appendChild(card);
-  } else {
-    document.getElementById("future-routes").appendChild(card);
-  }
+async function markAsCompleted(route) {
+  let options = {
+    method: "POST",
+    body: JSON.stringify(route),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  await fetch("/markAsCompleted", options)
+    .then((response) => response.json())
+    .then((jsonResponse) => {
+      if (jsonResponse.success) {
+        document.getElementById("route" + route.routeId).remove();
+        addRoute(jsonResponse.object);
+      }
+      alert(jsonResponse.message);
+    });
 }
