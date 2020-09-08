@@ -38,7 +38,7 @@ public class GetRoute extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Gson gson = new Gson();
     response.setContentType("application/json;");
-    
+
     // Get routeId from the query string.
     Long routeId = Long.parseLong(request.getParameter("routeId"));
     Key routeKey = KeyFactory.createKey("Route", routeId);

@@ -64,7 +64,7 @@ public class MarkAsCompleted extends HttpServlet {
     try {
       Key routeKey = KeyFactory.createKey("Route", routeObject.getRouteId());
       Entity routeEntity = datastore.get(routeKey);
-      
+
       // Update the isCompleted property.
       routeEntity.setProperty("routeName", routeName);
       routeEntity.setProperty("isPublic", isPublic);
