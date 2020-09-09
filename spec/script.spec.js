@@ -12,4 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const script = require('../src/main/webapp/script.js');
+const script = require("../src/main/webapp/script.js");

@@ -12,4 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const mapScript = require('../src/main/webapp/mapScript.js');
+const mapScript = require("../src/main/webapp/mapScript.js");

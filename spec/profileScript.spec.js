@@ -12,4 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const profileScript = require('../src/main/webapp/profileScript.js');
+const profileScript = require("../src/main/webapp/profileScript.js");
