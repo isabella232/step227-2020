@@ -429,7 +429,7 @@ function editMode(route) {
   let backButton = document.createElement("button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
-    location.reload();
+    window.open("/index.html", "_self");
   };
   document.getElementById("additional").innerHTML = "";
   document.getElementById("additional").appendChild(backButton);

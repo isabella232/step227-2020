@@ -175,7 +175,7 @@ function viewRoute(route) {
   backButton.classList.add("back-button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
-    location.reload();
+    window.open("/index.html", "_self");
   };
   let additionalContent = document.getElementById("additional");
   additionalContent.innerHTML = "";
