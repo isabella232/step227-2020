@@ -13,6 +13,8 @@
 // limitations under the License.
 
 let map;
+let directionsService;
+let directionsRenderer;
 var globalIndex = 0;
 var markersArray = [];
 var editorsArray = [];
@@ -107,9 +109,88 @@ function findPlaceDetails(placeId, placeDetailsFunction) {
   });
 }
 
+function showSteps(directionResult, waypoints) {
+  // For each step, place a marker, and add the text to the marker's infowindow.
+  // Also attach the marker to an array so we can keep track of it and remove it
+  // when calculating new routes.
+  const myRoute = directionResult.routes[0].legs[0];
+
+  for (let i = 0; i < myRoute.steps.length; i++) {
+    const marker = (waypoints[i] = waypoints[i] || new google.maps.Marker());
+    marker.setMap(map);
+    marker.setPosition(myRoute.steps[i].start_location);
+  }
+}
+
+function calculateAndDisplayRoute(
+  directionsRenderer,
+  directionsService,
+  waypoints,
+  originLatLng,
+  destinationLatLng
+) {
+  // First, remove any existing markers from the map.
+  for (let i = 0; i < markersArray.length; i++) {
+    markersArray[i].marker.setMap(null);
+  }
+
+  directionsService.route(
+    {
+      origin: originLatLng,
+      destination: destinationLatLng,
+      travelMode: google.maps.TravelMode.TRANSIT,
+    },
+    (result, status) => {
+      // Route the directions and pass the response to a function to create
+      // markers for each step.
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+        showSteps(result, waypoints);
+      } else {
+        window.alert("Directions request failed due to " + status);
+      }
+    }
+  );
+}
+
+function initRoute() {
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+}
+
+function drawRoute() {
+  let originLatLng = new google.maps.LatLng({
+    lat: markersArray[0].data.lat,
+    lng: markersArray[0].data.lng,
+  });
+  let destinationLatLng = new google.maps.LatLng({
+    lat: markersArray[markersArray.length - 1].data.lat,
+    lng: markersArray[markersArray.length - 1].data.lng,
+  });
+
+  let waypoints = [];
+  for (var i = 1; i < markersArray.length - 1; i++) {
+    waypoints.push(markersArray[i].marker);
+  }
+
+  calculateAndDisplayRoute(
+    directionsRenderer,
+    directionsService,
+    waypoints,
+    originLatLng,
+    destinationLatLng
+  );
+  console.log(waypoints);
+
+  /*let transitOptions = {
+    arrivalTime: Date
+  }*/
+}
+
 function initMap() {
   initInactiveMap();
   addSearchBar();
+  initRoute();
 
   checkLog().then((loggedIn) => {
     if (loggedIn == true) {
@@ -178,6 +259,8 @@ function createMarker(marker, place) {
   google.maps.event.addListener(marker, "click", function () {
     infowindow.open(map, this);
   });
+  initRoute();
+  drawRoute();
 }
 
 function addNewTableItem(name, placeId) {
@@ -374,6 +457,7 @@ function editMode(route) {
   removeRouteInfo();
   initMap();
   markersArray = [];
+  directionsRenderer.setMap(null);
   globalIndex = route.routeMarkers.length;
 
   // Change submit button properties.
@@ -424,6 +508,8 @@ function editMode(route) {
       },
     });
   }
+  initRoute();
+  drawRoute();
 
   // Add button to exit edit mode.
   let backButton = document.createElement("button");
