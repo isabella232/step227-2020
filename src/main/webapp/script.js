@@ -124,6 +124,7 @@ function viewRoute(route) {
   document.getElementById("login-required").className = "move-left";
   removeRouteInfo();
   initInactiveMap();
+  initRoute();
 
   document.getElementById("create-route-button").style.visibility = "hidden";
   document.getElementById("share-with-friends-button").style.visibility =
@@ -138,6 +139,7 @@ function viewRoute(route) {
 
   // Fill the table and add markers on the map
   let tabel = document.getElementById("places-table");
+  var waypoints = [];
   for (var i = 0; i < route.routeMarkers.length; i++) {
     let marker = route.routeMarkers[i];
     let newPlace = document.createElement("li");
@@ -164,7 +166,29 @@ function viewRoute(route) {
         "</div>"
     );
     infowindow.open(map, mapMarker);
+
+    if (i > 0 || i < route.routeMarkers.length - 1) {
+      let waypointLatLng = new google.maps.LatLng({
+        lat: marker.lat,
+        lng: marker.lng,
+      });
+      waypoints.push({
+        location: waypointLatLng,
+        stopover: true,
+      });
+    }
   }
+
+  let originLatLng = new google.maps.LatLng({
+    lat: route.routeMarkers[0].lat,
+    lng: route.routeMarkers[0].lng,
+  });
+  let destinationLatLng = new google.maps.LatLng({
+    lat: route.routeMarkers[route.routeMarkers.length - 1].lat,
+    lng: route.routeMarkers[route.routeMarkers.length - 1].lng,
+  });
+
+  calculateAndDisplayRoute(waypoints, originLatLng, destinationLatLng);
 
   let ratingScore = generateRating(route);
   let commentsPanel = createCommentsPanel(route);
@@ -175,7 +199,7 @@ function viewRoute(route) {
   backButton.classList.add("back-button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
-    location.reload();
+    window.open("/index.html", "_self");
   };
   let additionalContent = document.getElementById("additional");
   additionalContent.innerHTML = "";

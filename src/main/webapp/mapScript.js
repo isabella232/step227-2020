@@ -109,56 +109,13 @@ function findPlaceDetails(placeId, placeDetailsFunction) {
   });
 }
 
-function showSteps(directionResult, waypoints) {
-  // For each step, place a marker, and add the text to the marker's infowindow.
-  // Also attach the marker to an array so we can keep track of it and remove it
-  // when calculating new routes.
-  const myRoute = directionResult.routes[0].legs[0];
-
-  for (let i = 0; i < myRoute.steps.length; i++) {
-    const marker = (waypoints[i] = waypoints[i] || new google.maps.Marker());
-    marker.setMap(map);
-    marker.setPosition(myRoute.steps[i].start_location);
-  }
-}
-
-function calculateAndDisplayRoute(
-  directionsRenderer,
-  directionsService,
-  waypoints,
-  originLatLng,
-  destinationLatLng
-) {
-  // First, remove any existing markers from the map.
-  for (let i = 0; i < markersArray.length; i++) {
-    markersArray[i].marker.setMap(null);
-  }
-
-  directionsService.route(
-    {
-      origin: originLatLng,
-      destination: destinationLatLng,
-      travelMode: google.maps.TravelMode.TRANSIT,
-    },
-    (result, status) => {
-      // Route the directions and pass the response to a function to create
-      // markers for each step.
-      if (status === "OK") {
-        directionsRenderer.setDirections(result);
-        showSteps(result, waypoints);
-      } else {
-        window.alert("Directions request failed due to " + status);
-      }
-    }
-  );
-}
-
 function initRoute() {
   directionsService = new google.maps.DirectionsService();
-  directionsRenderer = new google.maps.DirectionsRenderer({ map: map });
+  directionsRenderer = new google.maps.DirectionsRenderer();
 }
 
 function drawRoute() {
+  // Set source, destination and waypoints.
   let originLatLng = new google.maps.LatLng({
     lat: markersArray[0].data.lat,
     lng: markersArray[0].data.lng,
@@ -168,23 +125,40 @@ function drawRoute() {
     lng: markersArray[markersArray.length - 1].data.lng,
   });
 
-  let waypoints = [];
+  var waypoints = [];
   for (var i = 1; i < markersArray.length - 1; i++) {
-    waypoints.push(markersArray[i].marker);
+    let waypointLatLng = new google.maps.LatLng({
+      lat: markersArray[i].data.lat,
+      lng: markersArray[i].data.lng,
+    });
+    waypoints.push({
+      location: waypointLatLng,
+      stopover: true,
+    });
   }
 
-  calculateAndDisplayRoute(
-    directionsRenderer,
-    directionsService,
-    waypoints,
-    originLatLng,
-    destinationLatLng
-  );
-  console.log(waypoints);
+  calculateAndDisplayRoute(waypoints, originLatLng, destinationLatLng);
+}
 
-  /*let transitOptions = {
-    arrivalTime: Date
-  }*/
+function calculateAndDisplayRoute(waypoints, originLatLng, destinationLatLng) {
+  directionsService.route(
+    {
+      origin: originLatLng,
+      destination: destinationLatLng,
+      waypoints: waypoints,
+      optimizeWaypoints: true,
+      travelMode: google.maps.TravelMode.DRIVING,
+    },
+    (result, status) => {
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+      } else {
+        window.alert("Directions request failed due to " + status);
+      }
+    }
+  );
+
+  directionsRenderer.setMap(map);
 }
 
 function initMap() {
@@ -259,7 +233,6 @@ function createMarker(marker, place) {
   google.maps.event.addListener(marker, "click", function () {
     infowindow.open(map, this);
   });
-  initRoute();
   drawRoute();
 }
 
@@ -304,6 +277,7 @@ function deletePlace(placeId) {
     markersArray[actualIndex].marker.setMap(null);
     markersArray.splice(actualIndex, 1);
   }
+  drawRoute();
 }
 
 function showSettings(placeId) {
@@ -508,14 +482,13 @@ function editMode(route) {
       },
     });
   }
-  initRoute();
   drawRoute();
 
   // Add button to exit edit mode.
   let backButton = document.createElement("button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
-    location.reload();
+    window.open("/index.html", "_self");
   };
   document.getElementById("additional").innerHTML = "";
   document.getElementById("additional").appendChild(backButton);
