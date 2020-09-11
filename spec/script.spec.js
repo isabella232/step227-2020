@@ -13,3 +13,14 @@
 // limitations under the License.
 
 const script = require("../src/main/webapp/script.js");
+
+describe("addToProfile function", function () {
+  it("should call fetch function", function (done) {
+    spyOn(global, "fetch");
+
+    script.addToProfile().then(() => {
+      expect(global.fetch).toHaveBeenCalle();
+      done();
+    });
+  });
+});

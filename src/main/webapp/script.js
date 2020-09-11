@@ -197,11 +197,10 @@ async function addToProfile(route) {
   await fetch("/storeRoute", options)
     .then((response) => response.json())
     .then((jsonResponse) => {
-      if (jsonResponse.hasOwnProperty("message")) {
-        alert(jsonResponse.message);
-      }
+      alert(jsonResponse.message);
     });
 }
+exports.addToProfile = addToProfile;
 
 function generateRating(route) {
   let ratingElement = document.createElement("p");

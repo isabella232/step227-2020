@@ -13,3 +13,136 @@
 // limitations under the License.
 
 const mapScript = require("../src/main/webapp/mapScript.js");
+
+/*
+describe("FindPlaceId function", function() {
+    it('should track that the callback function is called', function() {
+        let location = { lat: -34.397, lng: 150.644 },
+          placeIdFunction = function() {};
+        expect(mapScript.findPlaceId(location, placeIdFunction)).toBe(true);
+    });
+});*/
+
+describe("createMarker function", function () {
+  it("should add new value to the markersArray array", function () {
+    var position = {
+      lat: function () {
+        return 35;
+      },
+      lng: function () {
+        return 25;
+      },
+    };
+
+    let marker = { position: position },
+      place = { name: "Place", rating: 4 };
+    globalIndex = 0;
+    var markersArray = [];
+
+    spyOn(mapScript, "createMarker").and.callFake(function (marker, place) {
+      let id = globalIndex,
+        stayHour = 0,
+        stayMinute = 0,
+        markerName = place.name;
+
+      markersArray.push({
+        marker: marker,
+        data: {
+          id: id,
+          lat: marker.position.lat(),
+          lng: marker.position.lng(),
+          stayHour: stayHour,
+          stayMinute: stayMinute,
+          markerName: markerName,
+          rating: place.rating,
+        },
+      });
+    });
+    mapScript.createMarker(marker, place);
+
+    expect(markersArray.length).toBe(1);
+  });
+});
+
+/*
+describe("addNewTableItem function", function() {
+    it('should add new item in the table', function() {
+    
+      let name = "name",
+        placeId = 0;
+
+      var dummyElement = document.createElement('div');
+      document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(dummyElement);
+
+      mapScript.addNewTableItem(name, placeId);
+
+      expect(dummyElement.innerHTML).not.toEqual("");
+    });
+});*/
+
+describe("findIndex function", function () {
+  it("should return -1 when the id is not found", function () {
+    var markersArray = [];
+
+    expect(mapScript.findIndex(123, markersArray)).toEqual(-1);
+  });
+});
+
+describe("findIndex function", function () {
+  it("should return the associated index", function () {
+    var markersArray = [];
+    markersArray.push({
+      marker: null,
+      data: {
+        id: 123,
+      },
+    });
+
+    markersArray.push({
+      marker: null,
+      data: {
+        id: 125,
+      },
+    });
+
+    expect(mapScript.findIndex(125, markersArray)).toEqual(1);
+  });
+});
+
+describe("deletePlaceFromArray function", function () {
+  it("should delete the element with the associated id", function () {
+    var marker = {
+      setMap: function () {},
+    };
+
+    var markersArray = [];
+    markersArray.push({
+      marker: marker,
+      data: {
+        id: 123,
+      },
+    });
+
+    markersArray.push({
+      marker: marker,
+      data: {
+        id: 125,
+      },
+    });
+
+    mapScript.deletePlaceFromArray(123, markersArray);
+    expect(markersArray[0].data.id).toEqual(125);
+  });
+});
+
+/*
+describe("fetchEdittedData function", function () {
+  it("should call fetch function", function (done) {
+    spyOn(global, "fetch");
+
+    mapScript.fetchEdittedData().then(() => {
+      expect(global.fetch).toHaveBeenCalle();
+      done();
+    });
+  });
+});*/
