@@ -80,6 +80,7 @@ public class LoginServlet extends HttpServlet {
         userEntity.setProperty("lastName", "Not set");
         userEntity.setProperty("nickname", "Anonym");
         userEntity.setProperty("notifications", false);
+        userEntity.setProperty("avatarName", "default.png");
 
         String friendCode = generateFriendCode();
         userEntity.setProperty("friendCode", friendCode);
