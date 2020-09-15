@@ -111,7 +111,9 @@ function findPlaceDetails(placeId, placeDetailsFunction) {
 
 function initRoute() {
   directionsService = new google.maps.DirectionsService();
-  directionsRenderer = new google.maps.DirectionsRenderer();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    preserveViewport: true,
+  });
 }
 
 function drawRoute() {
