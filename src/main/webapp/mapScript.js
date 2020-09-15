@@ -13,6 +13,8 @@
 // limitations under the License.
 
 let map;
+let directionsService;
+let directionsRenderer;
 var globalIndex = 0;
 var markersArray = [];
 var editorsArray = [];
@@ -107,9 +109,64 @@ function findPlaceDetails(placeId, placeDetailsFunction) {
   });
 }
 
+function initRoute() {
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    preserveViewport: true,
+  });
+}
+
+function drawRoute() {
+  // Set source, destination and waypoints.
+  let originLatLng = new google.maps.LatLng({
+    lat: markersArray[0].data.lat,
+    lng: markersArray[0].data.lng,
+  });
+  let destinationLatLng = new google.maps.LatLng({
+    lat: markersArray[markersArray.length - 1].data.lat,
+    lng: markersArray[markersArray.length - 1].data.lng,
+  });
+
+  var waypoints = [];
+  for (var i = 1; i < markersArray.length - 1; i++) {
+    let waypointLatLng = new google.maps.LatLng({
+      lat: markersArray[i].data.lat,
+      lng: markersArray[i].data.lng,
+    });
+    waypoints.push({
+      location: waypointLatLng,
+      stopover: true,
+    });
+  }
+
+  calculateAndDisplayRoute(waypoints, originLatLng, destinationLatLng);
+}
+
+function calculateAndDisplayRoute(waypoints, originLatLng, destinationLatLng) {
+  directionsService.route(
+    {
+      origin: originLatLng,
+      destination: destinationLatLng,
+      waypoints: waypoints,
+      optimizeWaypoints: true,
+      travelMode: google.maps.TravelMode.DRIVING,
+    },
+    (result, status) => {
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+      } else {
+        window.alert("Directions request failed due to " + status);
+      }
+    }
+  );
+
+  directionsRenderer.setMap(map);
+}
+
 function initMap() {
   initInactiveMap();
   addSearchBar();
+  initRoute();
 
   checkLog().then((loggedIn) => {
     if (loggedIn == true) {
@@ -178,6 +235,7 @@ function createMarker(marker, place) {
   google.maps.event.addListener(marker, "click", function () {
     infowindow.open(map, this);
   });
+  drawRoute();
 }
 
 function addNewTableItem(name, placeId) {
@@ -221,6 +279,7 @@ function deletePlace(placeId) {
     markersArray[actualIndex].marker.setMap(null);
     markersArray.splice(actualIndex, 1);
   }
+  drawRoute();
 }
 
 function showSettings(placeId) {
@@ -374,6 +433,7 @@ function editMode(route) {
   removeRouteInfo();
   initMap();
   markersArray = [];
+  directionsRenderer.setMap(null);
   globalIndex = route.routeMarkers.length;
 
   // Change submit button properties.
@@ -424,12 +484,13 @@ function editMode(route) {
       },
     });
   }
+  drawRoute();
 
   // Add button to exit edit mode.
   let backButton = document.createElement("button");
   backButton.innerHTML = "BACK TO ROUTE CREATION";
   backButton.onclick = function () {
-    location.reload();
+    window.open("/index.html", "_self");
   };
   document.getElementById("additional").innerHTML = "";
   document.getElementById("additional").appendChild(backButton);
