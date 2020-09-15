@@ -83,7 +83,9 @@ async function addLogoutLink() {
   const response = await fetch("/login");
   const loginInfo = await response.json();
 
-  document.getElementById("logout-link").href = loginInfo.actionUrl;
+  if (loginInfo.success) {
+    document.getElementById("logout-link").href = loginInfo.object.actionUrl;
+  }
 }
 
 // Load all routes for the logged user.
@@ -232,10 +234,15 @@ function showAvatar() {
   })
     .then((response) => response.json())
     .then((avatarName) => {
-      let avatarImage = document.createElement("img");
-      avatarImage.src =
-        "https://storage.cloud.google.com/user-image-globes/" + avatarName;
-      avatarImage.alt = "Profile picture";
-      document.getElementById("avatar-image").appendChild(avatarImage);
+      if (avatarName.success) {
+        let avatarImage = document.createElement("img");
+        avatarImage.src =
+          "https://storage.cloud.google.com/user-image-globes/" +
+          avatarName.object;
+        avatarImage.alt = "Profile picture";
+        document.getElementById("avatar-image").appendChild(avatarImage);
+      } else {
+        alert(avatarName.message);
+      }
     });
 }

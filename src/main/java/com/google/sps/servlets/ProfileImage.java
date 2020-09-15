@@ -18,10 +18,12 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.sps.data.Result;
 import com.google.sps.data.UserImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,8 +54,10 @@ public class ProfileImage extends HttpServlet {
       InputStream fileInputStream = filePart.getInputStream();
 
       UserImage.uploadObject("theglobetrotter-step-2020", fileName, fileInputStream);
-    } catch (Exception e) {
-      // TODO(#14): Catch more specific exceptions.
+    } catch (EntityNotFoundException e) {
+      response.getWriter().println("<p>Error getting user from datastore!</p>");
+    } catch (ServletException e) {
+      response.getWriter().println("<p>Error uploading image to the server</p>");
     }
 
     response.sendRedirect("/profile.html");
@@ -63,6 +67,7 @@ public class ProfileImage extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String fileName = "default.png";
+    Result<String> result;
     try {
       UserService userService = UserServiceFactory.getUserService();
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -71,14 +76,15 @@ public class ProfileImage extends HttpServlet {
       Key userKey = KeyFactory.createKey("User", userId);
       Entity userEntity = datastore.get(userKey);
       fileName = (String) userEntity.getProperty("avatarName");
-    } catch (Exception e) {
-      // TODO(#14): Catch more specific exceptions.
+      result = new Result<String>(true, "File name successsfully retrieved", fileName);
+    } catch (EntityNotFoundException e) {
+      result = new Result<String>(false, "Error: User is not logged in!");
     }
 
     Gson gson = new Gson();
 
     // Respond with the user details.
     response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(fileName));
+    response.getWriter().println(gson.toJson(result));
   }
 }
