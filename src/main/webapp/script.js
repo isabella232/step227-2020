@@ -28,13 +28,13 @@ async function checkLog() {
     const logButton = document.getElementById("log-button");
     logButton.href = loginInfo.object.actionUrl;
 
-    // User is logged in.
     if (loginInfo.object.loggedIn === true) {
+      // User is logged in.
       document.getElementById("profile").style.visibility = "visible";
       logButton.innerText = "LOGOUT";
       document.getElementById("route-content").style.visibility = "visible";
-      // User is not logged in.
     } else {
+      // User is not logged in.
       document.getElementById("profile").style.visibility = "hidden";
       logButton.innerText = "LOGIN";
       document.getElementById("login-required").style.visibility = "visible";

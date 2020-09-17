@@ -54,13 +54,12 @@ public class ProfileImage extends HttpServlet {
       InputStream fileInputStream = filePart.getInputStream();
 
       UserImage.uploadObject("theglobetrotter-step-2020", fileName, fileInputStream);
+      // TODO(#14) Log exceptions using cloud logging service.
     } catch (EntityNotFoundException e) {
       response.getWriter().println("<p>Error getting user from datastore!</p>");
     } catch (ServletException e) {
       response.getWriter().println("<p>Error uploading image to the server</p>");
     }
-
-    response.sendRedirect("/profile.html");
   }
 
   /** Return response with the name for user's profile picture. */
