@@ -23,6 +23,7 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.sps.data.Result;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -58,6 +59,7 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     LoginStatus loginStatus;
+    Result<LoginStatus> result;
 
     UserService userService = UserServiceFactory.getUserService();
     if (userService.isUserLoggedIn()) {
@@ -83,19 +85,25 @@ public class LoginServlet extends HttpServlet {
         userEntity.setProperty("avatarName", "default.png");
 
         String friendCode = generateFriendCode();
-        userEntity.setProperty("friendCode", friendCode);
-
-        datastore.put(userEntity);
+        if (friendCode == "") {
+          result = new Result<LoginStatus>(false, "Error generating the friend code!");
+        } else {
+          userEntity.setProperty("friendCode", friendCode);
+          datastore.put(userEntity);
+          result = new Result<LoginStatus>(true, "User successfully created", loginStatus);
+        }
+      } else {
+        result = new Result<LoginStatus>(true, "User successfully logged in", loginStatus);
       }
-
     } else {
       String loginUrl = userService.createLoginURL("/");
       loginStatus = new LoginStatus(false, loginUrl);
+      result = new Result<LoginStatus>(true, "User successfully logged out", loginStatus);
     }
 
     response.setContentType("application/json;");
     Gson gson = new Gson();
-    response.getWriter().println(gson.toJson(loginStatus));
+    response.getWriter().println(gson.toJson(result));
   }
 
   public String generateFriendCode() {
@@ -111,7 +119,6 @@ public class LoginServlet extends HttpServlet {
               .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
               .toString();
       return randomString;
-      // TODO(#36): Fail the user creation and log an error.
     } catch (NoSuchAlgorithmException e) {
       return "";
     }

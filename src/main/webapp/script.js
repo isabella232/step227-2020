@@ -20,28 +20,29 @@ function loadPage() {
 
 //** Checks login status and display HTML elements accordingly. */
 async function checkLog() {
-  var loggedIn;
   const response = await fetch("/login");
   const loginInfo = await response.json();
 
-  // Add correspondent link to the log button.
-  const logButton = document.getElementById("log-button");
-  logButton.href = loginInfo.actionUrl;
+  if (loginInfo.success) {
+    // Add correspondent link to the log button.
+    const logButton = document.getElementById("log-button");
+    logButton.href = loginInfo.object.actionUrl;
 
-  // User is logged in.
-  if (loginInfo.loggedIn === true) {
-    document.getElementById("profile").style.visibility = "visible";
-    logButton.innerText = "LOGOUT";
-    document.getElementById("route-content").style.visibility = "visible";
-    loggedIn = true;
-    // User is not logged in.
+    if (loginInfo.object.loggedIn === true) {
+      // User is logged in.
+      document.getElementById("profile").style.visibility = "visible";
+      logButton.innerText = "LOGOUT";
+      document.getElementById("route-content").style.visibility = "visible";
+    } else {
+      // User is not logged in.
+      document.getElementById("profile").style.visibility = "hidden";
+      logButton.innerText = "LOGIN";
+      document.getElementById("login-required").style.visibility = "visible";
+    }
   } else {
-    document.getElementById("profile").style.visibility = "hidden";
-    logButton.innerText = "LOGIN";
-    document.getElementById("login-required").style.visibility = "visible";
-    loggedIn = false;
+    alert(loginInfo.message);
+    window.open(loginInfo.object.actionUrl, "_self");
   }
-  return loggedIn;
 }
 
 /** Fetches routes from the server and adds them to the suggestions section. */
