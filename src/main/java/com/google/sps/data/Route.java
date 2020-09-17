@@ -103,6 +103,14 @@ public final class Route {
     this.isCompleted = isCompleted;
   }
 
+  public void setNumberOfRatings(long numberOfRatings) {
+    this.numberOfRatings = numberOfRatings;
+  }
+
+  public void setSumOfRatings(double sumOfRatings) {
+    this.sumOfRatings = sumOfRatings;
+  }
+
   public String getRouteName() {
     return routeName;
   }
@@ -143,7 +151,7 @@ public final class Route {
     return sumOfRatings / numberOfRatings;
   }
 
-  public Long getNumberOfRatings() {
+  public long getNumberOfRatings() {
     return numberOfRatings;
   }
 
