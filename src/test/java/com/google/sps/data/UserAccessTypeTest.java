@@ -25,6 +25,7 @@ public final class UserAccessTypeTest {
   private static final UserAccessType owner = UserAccessType.OWNER;
   private static final UserAccessType editor = UserAccessType.EDITOR;
   private static final UserAccessType viewer = UserAccessType.VIEWER;
+  private static final UserAccessType not_set = UserAccessType.NOT_SET;
 
   @Test
   public void getOwnerType() {
@@ -42,5 +43,11 @@ public final class UserAccessTypeTest {
   public void getViewerType() {
     UserAccessType actual = UserAccessType.getFromValue(3);
     Assert.assertEquals(actual, viewer);
+  }
+
+  @Test
+  public void getViewerType() {
+    UserAccessType actual = UserAccessType.getFromValue(100);
+    Assert.assertEquals(actual, not_set);
   }
 }
