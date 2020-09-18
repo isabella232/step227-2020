@@ -46,7 +46,7 @@ public final class UserAccessTypeTest {
   }
 
   @Test
-  public void getViewerType() {
+  public void getNotSetType() {
     UserAccessType actual = UserAccessType.getFromValue(100);
     Assert.assertEquals(actual, not_set);
   }

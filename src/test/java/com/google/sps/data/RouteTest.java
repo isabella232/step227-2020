@@ -46,7 +46,7 @@ public final class RouteTest {
   }
 
   @Test
-  public void getDecimalRating() {
+  public void getZeroRating() {
     ROUTE_0.setNumberOfRatings(0);
     ROUTE_0.setSumOfRatings(22);
 
