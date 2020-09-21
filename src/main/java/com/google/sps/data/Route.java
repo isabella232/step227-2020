@@ -104,6 +104,14 @@ public final class Route {
     this.isCompleted = isCompleted;
   }
 
+  public void setNumberOfRatings(long numberOfRatings) {
+    this.numberOfRatings = numberOfRatings;
+  }
+
+  public void setSumOfRatings(double sumOfRatings) {
+    this.sumOfRatings = sumOfRatings;
+  }
+
   public void setImage(String newName) {
     this.imageName = newName;
   }
@@ -145,10 +153,13 @@ public final class Route {
   }
 
   public double getRating() {
+    if (numberOfRatings == 0) {
+      return 0.0;
+    }
     return sumOfRatings / numberOfRatings;
   }
 
-  public Long getNumberOfRatings() {
+  public long getNumberOfRatings() {
     return numberOfRatings;
   }
 
