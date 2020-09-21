@@ -22,36 +22,42 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class RouteTest {
 
-  private static Route ROUTE_0 = new Route(0L, "Route0", true, 9L, 30L);
-  private static final double delta = 0.0001;
+  private static Route createRouteMock() {
+    return new Route(0L, "Route0", true, 9L, 30L);
+  }
+
+  private static final double DELTA = 0.0001;
 
   @Test
   public void getNonDecimalRating() {
-    ROUTE_0.setNumberOfRatings(5);
-    ROUTE_0.setSumOfRatings(20);
+    Route RouteMock = createRouteMock();
+    RouteMock.setNumberOfRatings(5);
+    RouteMock.setSumOfRatings(20);
 
     double expectedRating = 4;
-    double actualRating = ROUTE_0.getRating();
-    Assert.assertEquals(actualRating, expectedRating, delta);
+    double actualRating = RouteMock.getRating();
+    Assert.assertEquals(actualRating, expectedRating, DELTA);
   }
 
   @Test
   public void getDecimalRating() {
-    ROUTE_0.setNumberOfRatings(5);
-    ROUTE_0.setSumOfRatings(22);
+    Route RouteMock = createRouteMock();
+    RouteMock.setNumberOfRatings(5);
+    RouteMock.setSumOfRatings(22);
 
     double expectedRating = 4.4;
-    double actualRating = ROUTE_0.getRating();
-    Assert.assertEquals(actualRating, expectedRating, delta);
+    double actualRating = RouteMock.getRating();
+    Assert.assertEquals(actualRating, expectedRating, DELTA);
   }
 
   @Test
   public void getZeroRating() {
-    ROUTE_0.setNumberOfRatings(0);
-    ROUTE_0.setSumOfRatings(22);
+    Route RouteMock = createRouteMock();
+    RouteMock.setNumberOfRatings(0);
+    RouteMock.setSumOfRatings(22);
 
     double expectedRating = 0.0;
-    double actualRating = ROUTE_0.getRating();
-    Assert.assertEquals(actualRating, expectedRating, delta);
+    double actualRating = RouteMock.getRating();
+    Assert.assertEquals(actualRating, expectedRating, DELTA);
   }
 }

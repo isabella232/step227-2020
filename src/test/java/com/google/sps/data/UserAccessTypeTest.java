@@ -22,32 +22,32 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class UserAccessTypeTest {
 
-  private static final UserAccessType owner = UserAccessType.OWNER;
-  private static final UserAccessType editor = UserAccessType.EDITOR;
-  private static final UserAccessType viewer = UserAccessType.VIEWER;
-  private static final UserAccessType not_set = UserAccessType.NOT_SET;
+  private static final UserAccessType OWNER = UserAccessType.OWNER;
+  private static final UserAccessType EDITOR = UserAccessType.EDITOR;
+  private static final UserAccessType VIEWER = UserAccessType.VIEWER;
+  private static final UserAccessType NOT_SET = UserAccessType.NOT_SET;
 
   @Test
   public void getOwnerType() {
     UserAccessType actual = UserAccessType.getFromValue(1);
-    Assert.assertEquals(actual, owner);
+    Assert.assertEquals(actual, OWNER);
   }
 
   @Test
   public void getEditorType() {
     UserAccessType actual = UserAccessType.getFromValue(2);
-    Assert.assertEquals(actual, editor);
+    Assert.assertEquals(actual, EDITOR);
   }
 
   @Test
   public void getViewerType() {
     UserAccessType actual = UserAccessType.getFromValue(3);
-    Assert.assertEquals(actual, viewer);
+    Assert.assertEquals(actual, VIEWER);
   }
 
   @Test
   public void getNotSetType() {
     UserAccessType actual = UserAccessType.getFromValue(100);
-    Assert.assertEquals(actual, not_set);
+    Assert.assertEquals(actual, NOT_SET);
   }
 }
