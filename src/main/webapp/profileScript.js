@@ -106,10 +106,12 @@ function addRoute(newRoute) {
   let container = document.createElement("div");
 
   let routeImg = document.createElement("img");
-  routeImg.src = "pictures/praga-small.jpg";
-  routeImg.alt = "praga";
+  routeImg.src =
+    "https://storage.cloud.google.com/route-image-globes/" +
+    newRoute["imageName"];
+  routeImg.alt = "Route image";
 
-  let routeDetails = addRouteDetails(newRoute);
+  let routeDetails = addRouteDetails(container, newRoute);
   let routeRating = createRatingElement(newRoute);
 
   card.classList.add("card");
@@ -132,7 +134,7 @@ function addRoute(newRoute) {
   }
 }
 
-function addRouteDetails(newRoute) {
+function addRouteDetails(container, newRoute) {
   let routeDetails = document.createElement("div");
 
   let routeName = document.createElement("p");
@@ -162,15 +164,52 @@ function addRouteDetails(newRoute) {
     markAsCompleted(newRoute);
   };
 
+  let addImage = document.createElement("button");
+  addImage.className = "action-button";
+  addImage.innerHTML = "Change image";
+  addImage.onclick = function () {
+    addRouteImageForm(container, newRoute);
+  };
+
   routeDetails.appendChild(routeName);
   routeDetails.appendChild(viewButton);
   routeDetails.appendChild(editButton);
+  routeDetails.appendChild(addImage);
 
   if (!newRoute.isCompleted) {
     routeDetails.appendChild(completedButton);
   }
 
   return routeDetails;
+}
+
+function addRouteImageForm(container, newRoute) {
+  let imageForm = document.createElement("form");
+  imageForm.action = "/route-image";
+  imageForm.method = "POST";
+  imageForm.enctype = "multipart/form-data";
+  imageForm.id = "route-image-form";
+
+  let imageInput = document.createElement("input");
+  imageInput.type = "file";
+  imageInput.id = "route-image";
+  imageInput.name = "route-image";
+  imageInput.accept = "image/png, image/jpeg";
+
+  let imageName = document.createElement("input");
+  imageName.type = "text";
+  imageName.value = newRoute["routeId"];
+  imageName.id = "route-id";
+  imageName.name = "route-id";
+
+  let submitButton = document.createElement("input");
+  submitButton.type = "submit";
+  submitButton.value = "Submit";
+
+  imageForm.appendChild(imageInput);
+  imageForm.appendChild(imageName);
+  imageForm.appendChild(submitButton);
+  container.appendChild(imageForm);
 }
 
 function createRatingElement(newRoute) {

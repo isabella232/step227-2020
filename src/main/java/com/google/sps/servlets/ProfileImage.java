@@ -18,8 +18,8 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
+import com.google.sps.data.Images;
 import com.google.sps.data.Result;
-import com.google.sps.data.UserImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -31,6 +31,11 @@ import javax.servlet.http.Part;
 
 @SuppressWarnings("serial")
 public class ProfileImage extends HttpServlet {
+
+  String bucketName = "user-image-globes";
+  String projectId = "theglobetrotter-step-2020";
+  String defaultImage = "default.png";
+
   /** Store user's image. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -42,7 +47,7 @@ public class ProfileImage extends HttpServlet {
       Key userKey = KeyFactory.createKey("User", userId);
       Entity userEntity = datastore.get(userKey);
       String fileName = (String) userEntity.getProperty("avatarName");
-      if (fileName.equals("default.png")) {
+      if (fileName.equals(defaultImage)) {
         fileName = userId + ".png";
         userEntity.setProperty("avatarName", fileName);
         datastore.put(userEntity);
@@ -53,7 +58,7 @@ public class ProfileImage extends HttpServlet {
       // Get the InputStream to store the file until it processed.
       InputStream fileInputStream = filePart.getInputStream();
 
-      UserImage.uploadObject("theglobetrotter-step-2020", fileName, fileInputStream);
+      Images.uploadObject(bucketName, projectId, fileName, fileInputStream);
       // TODO(#14) Log exceptions using cloud logging service.
     } catch (EntityNotFoundException e) {
       response.getWriter().println("<p>Error getting user from datastore!</p>");
@@ -65,7 +70,7 @@ public class ProfileImage extends HttpServlet {
   /** Return response with the name for user's profile picture. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String fileName = "default.png";
+    String fileName = defaultImage;
     Result<String> result;
     try {
       UserService userService = UserServiceFactory.getUserService();

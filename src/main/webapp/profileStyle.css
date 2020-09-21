@@ -34,6 +34,20 @@
   z-index: 1;
 }
 
+#route-image-form {
+  position: absolute;
+  bottom: 60px;
+  padding: 7px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgb(202, 202, 202);
+  border-radius: 7px;
+  z-index: 1;
+}
+
+#route-id {
+  display: none;
+}
+
 #submit-avatar.show {
   visibility: visible;
   -webkit-animation: fadeIn 1s;

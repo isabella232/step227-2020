@@ -21,10 +21,10 @@ import com.google.cloud.storage.StorageOptions;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class UserImage {
-  public static void uploadObject(String projectId, String objectName, InputStream fileToUpload)
+public class Images {
+  public static void uploadObject(
+      String bucketName, String projectId, String objectName, InputStream fileToUpload)
       throws IOException {
-    String bucketName = "user-image-globes";
 
     Storage storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();
     BlobId blobId = BlobId.of(bucketName, objectName);

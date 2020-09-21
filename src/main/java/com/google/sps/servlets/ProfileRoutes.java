@@ -70,6 +70,7 @@ public class ProfileRoutes extends HttpServlet {
                 (Double) connection.getProperty("sumOfRatings"));
         int numericValue = ((Long) results.get(i).getProperty("userAccess")).intValue();
         newRoute.setUserAccess(UserAccessType.getFromValue(numericValue));
+        newRoute.setImage((String) connection.getProperty("imageName"));
         connectedRoutes.add(newRoute);
         i++;
       }
