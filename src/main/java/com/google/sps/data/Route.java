@@ -153,6 +153,9 @@ public final class Route {
   }
 
   public double getRating() {
+    if (numberOfRatings == 0) {
+      return 0.0;
+    }
     return sumOfRatings / numberOfRatings;
   }
 

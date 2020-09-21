@@ -44,4 +44,14 @@ public final class RouteTest {
     double actualRating = ROUTE_0.getRating();
     Assert.assertEquals(actualRating, expectedRating, delta);
   }
+
+  @Test
+  public void getZeroRating() {
+    ROUTE_0.setNumberOfRatings(0);
+    ROUTE_0.setSumOfRatings(22);
+
+    double expectedRating = 0.0;
+    double actualRating = ROUTE_0.getRating();
+    Assert.assertEquals(actualRating, expectedRating, delta);
+  }
 }
