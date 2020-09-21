@@ -30,6 +30,7 @@ public final class Route {
   private long numberOfRatings;
   private double sumOfRatings;
   private UserAccessType userAccess;
+  private String imageName;
 
   public Route(
       long routeId,
@@ -109,6 +110,10 @@ public final class Route {
 
   public void setSumOfRatings(double sumOfRatings) {
     this.sumOfRatings = sumOfRatings;
+  }
+
+  public void setImage(String newName) {
+    this.imageName = newName;
   }
 
   public String getRouteName() {

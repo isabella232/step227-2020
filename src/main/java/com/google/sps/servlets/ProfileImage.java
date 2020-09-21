@@ -18,10 +18,12 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
-import com.google.sps.data.UserImage;
+import com.google.sps.data.Images;
+import com.google.sps.data.Result;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +31,11 @@ import javax.servlet.http.Part;
 
 @SuppressWarnings("serial")
 public class ProfileImage extends HttpServlet {
+
+  String bucketName = "user-image-globes";
+  String projectId = "theglobetrotter-step-2020";
+  String defaultImage = "default.png";
+
   /** Store user's image. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -40,7 +47,7 @@ public class ProfileImage extends HttpServlet {
       Key userKey = KeyFactory.createKey("User", userId);
       Entity userEntity = datastore.get(userKey);
       String fileName = (String) userEntity.getProperty("avatarName");
-      if (fileName.equals("default.png")) {
+      if (fileName.equals(defaultImage)) {
         fileName = userId + ".png";
         userEntity.setProperty("avatarName", fileName);
         datastore.put(userEntity);
@@ -51,18 +58,20 @@ public class ProfileImage extends HttpServlet {
       // Get the InputStream to store the file until it processed.
       InputStream fileInputStream = filePart.getInputStream();
 
-      UserImage.uploadObject("theglobetrotter-step-2020", fileName, fileInputStream);
-    } catch (Exception e) {
-      // TODO(#14): Catch more specific exceptions.
+      Images.uploadObject(bucketName, projectId, fileName, fileInputStream);
+      // TODO(#14) Log exceptions using cloud logging service.
+    } catch (EntityNotFoundException e) {
+      response.getWriter().println("<p>Error getting user from datastore!</p>");
+    } catch (ServletException e) {
+      response.getWriter().println("<p>Error uploading image to the server</p>");
     }
-
-    response.sendRedirect("/profile.html");
   }
 
   /** Return response with the name for user's profile picture. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String fileName = "default.png";
+    String fileName = defaultImage;
+    Result<String> result;
     try {
       UserService userService = UserServiceFactory.getUserService();
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -71,14 +80,15 @@ public class ProfileImage extends HttpServlet {
       Key userKey = KeyFactory.createKey("User", userId);
       Entity userEntity = datastore.get(userKey);
       fileName = (String) userEntity.getProperty("avatarName");
-    } catch (Exception e) {
-      // TODO(#14): Catch more specific exceptions.
+      result = new Result<String>(true, "File name successsfully retrieved", fileName);
+    } catch (EntityNotFoundException e) {
+      result = new Result<String>(false, "Error: User is not logged in!");
     }
 
     Gson gson = new Gson();
 
     // Respond with the user details.
     response.setContentType("application/json;");
-    response.getWriter().println(gson.toJson(fileName));
+    response.getWriter().println(gson.toJson(result));
   }
 }

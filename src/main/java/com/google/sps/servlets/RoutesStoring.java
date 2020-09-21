@@ -115,6 +115,7 @@ public class RoutesStoring extends HttpServlet {
       routeEntity.setProperty("startMinute", startMinute);
       routeEntity.setProperty("numberOfRatings", numberOfRatings);
       routeEntity.setProperty("sumOfRatings", sumOfRatings);
+      routeEntity.setProperty("imageName", "globe.jpg");
 
       datastore.put(routeEntity);
       if (routeStatus != RouteStatus.COPY) {

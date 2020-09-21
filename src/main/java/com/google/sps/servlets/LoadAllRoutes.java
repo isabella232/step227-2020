@@ -58,6 +58,7 @@ public class LoadAllRoutes extends HttpServlet {
       long startMinute = (Long) routeEntity.getProperty("startMinute");
       long numberOfRatings = (Long) routeEntity.getProperty("numberOfRatings");
       double sumOfRatings = (double) routeEntity.getProperty("sumOfRatings");
+      String routeImage = (String) routeEntity.getProperty("imageName");
 
       long routeId = routeEntity.getKey().getId();
       Route route =
@@ -70,6 +71,7 @@ public class LoadAllRoutes extends HttpServlet {
               startMinute,
               numberOfRatings,
               sumOfRatings);
+      route.setImage(routeImage);
 
       Query markersQuery = new Query("Marker").setAncestor(routeEntity.getKey());
       PreparedQuery associatedMarkers = datastore.prepare(markersQuery);
