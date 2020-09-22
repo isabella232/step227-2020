@@ -14,15 +14,6 @@
 
 const mapScript = require("../src/main/webapp/mapScript.js");
 
-/*
-describe("FindPlaceId function", function() {
-    it('should track that the callback function is called', function() {
-        let location = { lat: -34.397, lng: 150.644 },
-          placeIdFunction = function() {};
-        expect(mapScript.findPlaceId(location, placeIdFunction)).toBe(true);
-    });
-});*/
-
 describe("createMarker function", function () {
   it("should add new value to the markersArray array", function () {
     var position = {
@@ -63,22 +54,6 @@ describe("createMarker function", function () {
     expect(markersArray.length).toBe(1);
   });
 });
-
-/*
-describe("addNewTableItem function", function() {
-    it('should add new item in the table', function() {
-    
-      let name = "name",
-        placeId = 0;
-
-      var dummyElement = document.createElement('div');
-      document.getElementById = jasmine.createSpy('HTML Element').and.returnValue(dummyElement);
-
-      mapScript.addNewTableItem(name, placeId);
-
-      expect(dummyElement.innerHTML).not.toEqual("");
-    });
-});*/
 
 describe("findIndex function", function () {
   it("should return -1 when the id is not found", function () {
@@ -134,15 +109,3 @@ describe("deletePlaceFromArray function", function () {
     expect(markersArray[0].data.id).toEqual(125);
   });
 });
-
-/*
-describe("fetchEdittedData function", function () {
-  it("should call fetch function", function (done) {
-    spyOn(global, "fetch");
-
-    mapScript.fetchEdittedData().then(() => {
-      expect(global.fetch).toHaveBeenCalle();
-      done();
-    });
-  });
-});*/
