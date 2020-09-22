@@ -18,14 +18,14 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +39,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public final class LoginServletTest {
-  private final LocalServiceTestHelper helper =
-      new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig());
+  private LocalServiceTestHelper helper;
 
   @Mock HttpServletRequest request;
 
@@ -48,6 +47,12 @@ public final class LoginServletTest {
 
   @Before
   public void setUp() {
+    LocalUserServiceTestConfig localUserServices =
+        new LocalUserServiceTestConfig().setOAuthUserId("12345678");
+    localUserServices.setOAuthEmail("test@example.com");
+    LocalDatastoreServiceTestConfig localDatastore = new LocalDatastoreServiceTestConfig();
+    helper = new LocalServiceTestHelper(localDatastore, localUserServices);
+    // helper.setEnvIsLoggedIn(true);
     helper.setUp();
   }
 
@@ -60,14 +65,18 @@ public final class LoginServletTest {
   @Test
   public void testNewCreatedUser() throws IOException {
     when(response.getWriter()).thenReturn(new PrintWriter(System.out));
+    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
     LoginServlet loginServlet = spy(new LoginServlet());
     loginServlet.doGet(request, response);
 
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-    UserService userService = UserServiceFactory.getUserService();
-
-    Query userQuery = new Query("User");
+    Query userQuery =
+        new Query("User")
+            .setFilter(
+                new Query.FilterPredicate(
+                    "__key__",
+                    Query.FilterOperator.EQUAL,
+                    KeyFactory.createKey("User", "12345678")));
     assertEquals(1, ds.prepare(userQuery).countEntities(FetchOptions.Builder.withDefaults()));
   }
 }
