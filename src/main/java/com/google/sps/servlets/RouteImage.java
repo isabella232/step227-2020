@@ -45,8 +45,7 @@ public class RouteImage extends HttpServlet {
       Boolean userAccess = true;
 
       UserService userService = UserServiceFactory.getUserService();
-      User u = userService.getCurrentUser();
-      String userId = u.getUserId();
+      String userId = userService.getCurrentUser().getUserId();
       Key userKey = KeyFactory.createKey("User", userId);
 
       // Check if user has access to change the image.
