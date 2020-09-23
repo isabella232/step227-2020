@@ -62,7 +62,7 @@ public class ProfileInfoServlet extends HttpServlet {
 
       datastore.put(userEntity);
     } catch (EntityNotFoundException e) {
-      response.getWriter().println("<p>ERROR: User not found!</p>");
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, "Error user not found");
     }
 
     // Redirect back to the profile page.

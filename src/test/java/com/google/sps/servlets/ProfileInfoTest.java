@@ -15,13 +15,13 @@
 package com.google.sps.servlets;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.users.UserService;
 import com.google.appengine.repackaged.com.google.common.collect.ImmutableMap;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
@@ -39,14 +39,12 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public final class LoginServletTest {
+public final class ProfileInfoTest {
   private LocalServiceTestHelper helper;
 
   @Mock HttpServletRequest request;
 
   @Mock HttpServletResponse response;
-
-  @Mock UserService userService;
 
   @Before
   public void setUp() {
@@ -80,9 +78,9 @@ public final class LoginServletTest {
     helper.tearDown();
   }
 
-  /** Check that user can be created with our system. */
+  /** Check for new user's information. */
   @Test
-  public void testCreateUser() throws IOException {
+  public void testNotSetInfo() throws IOException {
     when(response.getWriter()).thenReturn(new PrintWriter(System.out));
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
@@ -92,38 +90,38 @@ public final class LoginServletTest {
     Query userQuery = new Query("User");
     List<Entity> userList = ds.prepare(userQuery).asList(FetchOptions.Builder.withDefaults());
 
-    assertEquals(1, userList.size());
+    if (userList.size() > 0) {
+      assertEquals("Not set", userList.get(0).getProperty("firstName"));
+    }
   }
 
-  /** Check that system won't create two accounts for one user. */
+  /** Check if existing user can change their information. */
   @Test
-  public void testTwoUsers() throws IOException {
+  public void testSetNewInfo() throws IOException {
     when(response.getWriter()).thenReturn(new PrintWriter(System.out));
     DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 
     LoginServlet loginServlet = new LoginServlet();
     loginServlet.doGet(request, response);
-    loginServlet.doGet(request, response);
+
+    when(request.getParameter("first-name")).thenReturn("Alice");
+    ProfileInfoServlet profileInfo = new ProfileInfoServlet();
+    profileInfo.doPost(request, response);
 
     Query userQuery = new Query("User");
     List<Entity> userList = ds.prepare(userQuery).asList(FetchOptions.Builder.withDefaults());
 
-    assertEquals(1, userList.size());
+    if (userList.size() > 0) {
+      assertEquals("Alice", userList.get(0).getProperty("firstName"));
+    }
   }
 
-  /** Tests that no user is created if user is not logged in. */
+  /** Check if non-existent user can't change their information. */
   @Test
-  public void testNoUserCreated() throws IOException {
-    helper.setEnvIsLoggedIn(false);
-    when(response.getWriter()).thenReturn(new PrintWriter(System.out));
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+  public void testNullUser() throws IOException {
+    ProfileInfoServlet profileInfo = new ProfileInfoServlet();
+    profileInfo.doPost(request, response);
 
-    LoginServlet loginServlet = new LoginServlet();
-    loginServlet.doGet(request, response);
-
-    Query userQuery = new Query("User");
-    List<Entity> userList = ds.prepare(userQuery).asList(FetchOptions.Builder.withDefaults());
-
-    assertEquals(0, userList.size());
+    verify(response).sendError(HttpServletResponse.SC_NOT_FOUND, "Error user not found");
   }
 }
