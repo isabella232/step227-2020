@@ -61,9 +61,9 @@ public class ProfileImage extends HttpServlet {
       Images.uploadObject(bucketName, projectId, fileName, fileInputStream);
       // TODO(#14) Log exceptions using cloud logging service.
     } catch (EntityNotFoundException e) {
-      response.getWriter().println("<p>Error getting user from datastore!</p>");
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, "Error getting data from Datastore");
     } catch (ServletException e) {
-      response.getWriter().println("<p>Error uploading image to the server</p>");
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
     }
   }
 

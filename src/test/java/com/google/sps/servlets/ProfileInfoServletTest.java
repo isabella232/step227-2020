@@ -14,23 +14,16 @@
 
 package com.google.sps.servlets;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Query;
-import com.google.appengine.api.users.UserService;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,21 +31,19 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public final class LoginServletTest {
+public final class ProfileInfoServletTest {
+  private final String DEFAULT = "default";
+  private final String INPUT_TEST = "test";
   private LocalServiceTestHelper helper;
 
   @Mock HttpServletRequest request;
 
   @Mock HttpServletResponse response;
 
-  @Mock UserService userService;
-
   @Before
   public void setUp() {
-    LocalUserServiceTestConfig localUserServices = new LocalUserServiceTestConfig();
     LocalDatastoreServiceTestConfig localDatastore = new LocalDatastoreServiceTestConfig();
-    helper = new LocalServiceTestHelper(localDatastore, localUserServices);
-    helper.setEnvIsLoggedIn(false);
+    helper = new LocalServiceTestHelper(localDatastore);
     helper.setUp();
   }
 
@@ -61,16 +52,27 @@ public final class LoginServletTest {
     helper.tearDown();
   }
 
-  /** Tests that no user is created if user is not logged in. */
+  /** Tests if the appropriate parameter is returned. */
   @Test
-  public void testNoUserIsCreated() throws IOException {
-    when(response.getWriter()).thenReturn(new PrintWriter(System.out));
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+  public void testGetParameterValue() throws IOException {
+    when(request.getParameter("input")).thenReturn(INPUT_TEST);
+    ProfileInfoServlet profileInfoRequest = new ProfileInfoServlet();
 
-    LoginServlet loginServlet = spy(new LoginServlet());
-    loginServlet.doGet(request, response);
+    String actual = profileInfoRequest.getParameter(request, "input", DEFAULT);
+    String expected = INPUT_TEST;
 
-    Query userQuery = new Query("User");
-    assertEquals(0, ds.prepare(userQuery).countEntities(FetchOptions.Builder.withDefaults()));
+    Assert.assertEquals(actual, expected);
+  }
+
+  /** Tests if the default value is returned when the input is null. */
+  @Test
+  public void testGetParameterDefault() throws IOException {
+    when(request.getParameter("input")).thenReturn(null);
+    ProfileInfoServlet profileInfoRequest = new ProfileInfoServlet();
+
+    String actual = profileInfoRequest.getParameter(request, "input", DEFAULT);
+    String expected = DEFAULT;
+
+    Assert.assertEquals(actual, expected);
   }
 }
