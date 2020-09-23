@@ -14,18 +14,13 @@
 
 package com.google.sps.servlets;
 
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.appengine.api.datastore.*;
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
-import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
@@ -36,7 +31,8 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public final class LoginServletTest {
+public final class GetRouteTest {
+  private final String ROUTE_ID = "123456";
   private LocalServiceTestHelper helper;
 
   @Mock HttpServletRequest request;
@@ -45,12 +41,8 @@ public final class LoginServletTest {
 
   @Before
   public void setUp() {
-    LocalUserServiceTestConfig localUserServices =
-        new LocalUserServiceTestConfig().setOAuthUserId("12345678");
-    localUserServices.setOAuthEmail("test@example.com");
     LocalDatastoreServiceTestConfig localDatastore = new LocalDatastoreServiceTestConfig();
-    helper = new LocalServiceTestHelper(localDatastore, localUserServices);
-    // helper.setEnvIsLoggedIn(true);
+    helper = new LocalServiceTestHelper(localDatastore);
     helper.setUp();
   }
 
@@ -59,22 +51,18 @@ public final class LoginServletTest {
     helper.tearDown();
   }
 
-  /** Tests if new user is created. */
+  /**
+   * Tests that when the routeId is not found, the servlet will send
+   * HttpServletResponse.SC_NOT_FOUND
+   */
   @Test
-  public void testNewCreatedUser() throws IOException {
-    when(response.getWriter()).thenReturn(new PrintWriter(System.out));
-    DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+  public void testEntityNotFoundException() throws IOException {
+    when(request.getParameter("routeId")).thenReturn(ROUTE_ID);
 
-    LoginServlet loginServlet = spy(new LoginServlet());
-    loginServlet.doGet(request, response);
+    GetRoute routeRequest = new GetRoute();
+    routeRequest.doGet(request, response);
 
-    Query userQuery =
-        new Query("User")
-            .setFilter(
-                new Query.FilterPredicate(
-                    "__key__",
-                    Query.FilterOperator.EQUAL,
-                    KeyFactory.createKey("User", "12345678")));
-    // assertEquals(1, ds.prepare(userQuery).countEntities(FetchOptions.Builder.withDefaults()));
+    verify(response)
+        .sendError(HttpServletResponse.SC_NOT_FOUND, "Error getting Route from DataStore");
   }
 }
