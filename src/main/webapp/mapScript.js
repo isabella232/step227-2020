@@ -92,6 +92,8 @@ function findPlaceId(location, placeIdFunction) {
   });
 }
 
+exports.findPlaceId = findPlaceId;
+
 function findPlaceDetails(placeId, placeDetailsFunction) {
   var request = {
     placeId: placeId,
@@ -215,8 +217,14 @@ function createMarker(marker, place) {
     },
   });
 
+  createInfoWindow(place, marker);
+}
+
+exports.createMarker = createMarker;
+
+function createInfoWindow(place, marker) {
   // Create table item for marker.
-  addNewTableItem(markerName, id.toString());
+  addNewTableItem(place.name, globalIndex.toString());
   globalIndex = globalIndex + 1;
 
   // Add info window for marker.
@@ -261,7 +269,9 @@ function addNewTableItem(name, placeId) {
   tabel.appendChild(newPlace);
 }
 
-function findIndex(placeId) {
+exports.addNewTableItem = addNewTableItem;
+
+function findIndex(placeId, markersArray) {
   for (var i = 0; i < markersArray.length; i++) {
     if (markersArray[i].data.id == placeId) {
       return i;
@@ -270,11 +280,17 @@ function findIndex(placeId) {
   return -1;
 }
 
+exports.findIndex = findIndex;
+
 function deletePlace(placeId) {
   let tableItem = document.getElementById("place" + placeId);
   tableItem.parentNode.removeChild(tableItem);
 
-  var actualIndex = findIndex(placeId);
+  deletePlaceFromArray(placeId, markersArray);
+}
+
+function deletePlaceFromArray(placeId, markersArray) {
+  var actualIndex = findIndex(placeId, markersArray);
   if (actualIndex != -1) {
     markersArray[actualIndex].marker.setMap(null);
     markersArray.splice(actualIndex, 1);
@@ -282,8 +298,10 @@ function deletePlace(placeId) {
   drawRoute();
 }
 
+exports.deletePlaceFromArray = deletePlaceFromArray;
+
 function showSettings(placeId) {
-  var actualIndex = findIndex(placeId);
+  var actualIndex = findIndex(placeId, markersArray);
   if (actualIndex != -1) {
     var settings = document.getElementsByClassName("marker-setting")[0];
     document.getElementById("submit-button").onclick = function () {
@@ -307,7 +325,7 @@ function updateMarkerSettings(placeId) {
     stayHour = document.getElementById("stay-hour").value,
     stayMinute = document.getElementById("stay-minute").value;
 
-  var actualIndex = findIndex(placeId);
+  var actualIndex = findIndex(placeId, markersArray);
   if (actualIndex != -1) {
     markersArray[actualIndex].data.markerName = markerName;
     markersArray[actualIndex].data.stayHour = stayHour;
@@ -496,11 +514,15 @@ function editMode(route) {
   document.getElementById("additional").appendChild(backButton);
 }
 
-async function editRoute(route) {
+function editRoute(route) {
   let routeData = createRouteData();
   routeData.routeId = route.routeId;
   routeData.status = "EDIT";
 
+  fetchEdittedData(routeDate);
+}
+
+async function fetchEdittedData(routeData) {
   if (routeData.routeName == "") {
     alert("Please add a name to your new route!");
   } else {
@@ -519,3 +541,5 @@ async function editRoute(route) {
       });
   }
 }
+
+exports.fetchEdittedData = fetchEdittedData;
