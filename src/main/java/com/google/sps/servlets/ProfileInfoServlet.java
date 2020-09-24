@@ -62,7 +62,7 @@ public class ProfileInfoServlet extends HttpServlet {
 
       datastore.put(userEntity);
     } catch (EntityNotFoundException e) {
-      response.getWriter().println("<p>ERROR: User not found!</p>");
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, "Error user not found");
     }
 
     // Redirect back to the profile page.
@@ -73,7 +73,7 @@ public class ProfileInfoServlet extends HttpServlet {
    * Return the request parameter, or the default value if the parameter was not specified by the
    * client.
    */
-  private String getParameter(HttpServletRequest request, String name, String defaultValue) {
+  public String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
     if (value == null || value.isEmpty()) {
       return defaultValue;

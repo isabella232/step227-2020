@@ -93,8 +93,7 @@ public class GetRoute extends HttpServlet {
       response.getWriter().println(gson.toJson(routeObject));
 
     } catch (EntityNotFoundException e) {
-      Result<Route> routeError = new Result<Route>(false, "Error getting Route from DataStore");
-      response.getWriter().println(gson.toJson(routeError));
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, "Error getting Route from DataStore");
     }
   }
 }

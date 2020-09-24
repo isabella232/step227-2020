@@ -26,6 +26,7 @@ import com.google.sps.data.Images;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -77,8 +78,10 @@ public class RouteImage extends HttpServlet {
         Images.uploadObject(
             "route-image-globes", "theglobetrotter-step-2020", fileName, fileInputStream);
       }
-    } catch (Exception e) {
-      // TODO(#14): Catch more specific exceptions.
+    } catch (EntityNotFoundException e) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, "Error getting data from Datastore");
+    } catch (ServletException e) {
+      response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     response.sendRedirect("/profile.html");
