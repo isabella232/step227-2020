@@ -19,22 +19,20 @@ import static org.mockito.Mockito.when;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
-import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
+import com.google.common.collect.ImmutableMap;
 import java.io.IOException;
-import com.google.common.collect.ImmutableMap; 
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import java.util.List;
-import java.io.PrintWriter;
-
 
 @RunWith(MockitoJUnitRunner.class)
 public final class LoginServletTest {
@@ -43,7 +41,6 @@ public final class LoginServletTest {
   @Mock HttpServletRequest request;
 
   @Mock HttpServletResponse response;
-
 
   @Before
   public void setUp() {
@@ -76,7 +73,6 @@ public final class LoginServletTest {
   public void tearDown() {
     helper.tearDown();
   }
-
 
   /** Check that user can be created with our system. */
   @Test
