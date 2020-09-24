@@ -22,7 +22,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Query;
-import com.google.appengine.repackaged.com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap; 
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
